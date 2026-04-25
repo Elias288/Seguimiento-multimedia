@@ -5,8 +5,8 @@
 }
 
 :root {
-    --primary-color: rgb(95, 139, 204);
-    --secondary-color: rgb(231, 231, 231);
+    --primary-color: #5f8bcc;
+    --secondary-color: #e7e7e7;
 }
 
 body {
@@ -39,7 +39,7 @@ article h2 {
 }
 
 article .content__container {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: #0000000d;
     border-radius: 10px;
 
     width: 100%;
