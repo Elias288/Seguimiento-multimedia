@@ -1,9 +1,15 @@
-import type { Multimedia, MultimediaItem } from "@/types/data.type";
+import {
+  mapToCategoria,
+  MultimediaTypes,
+  Status,
+  type Multimedia,
+  type MultimediaItem,
+} from "@/types/data.type";
 
-export async function getCSVData(data: string) {
+export async function getCSVData(data: string): Promise<Multimedia | null> {
   try {
     const lineas = data.split("\n").filter((linea) => linea.trim() !== "");
-    if (lineas.length < 2) return {};
+    if (lineas.length < 2) return null;
 
     const cabeceras: (keyof MultimediaItem | "type")[] = [
       "name",
@@ -21,21 +27,25 @@ export async function getCSVData(data: string) {
     if (indiceTipo === -1)
       throw new Error('La columna "type" no fue encontrada');
 
-    const datos: Multimedia = {};
+    const datos: Multimedia = {
+      [MultimediaTypes.ANIMES]: [],
+      [MultimediaTypes.COMICS]: [],
+      [MultimediaTypes.MAGAS]: [],
+      [MultimediaTypes.SERIES]: [],
+      [MultimediaTypes.SIN_CATEGORIZAR]: [],
+    };
+
     for (let i = 1; i < lineas.length; i++) {
       const valores = lineas[i].split(",").map((v) => v.trim());
-
       if (valores.length < cabeceras.length) continue;
 
-      const categoria = valores[indiceTipo]
-        ? valores[indiceTipo].trim().toLowerCase()
-        : "sin_categorizar";
+      const cat = mapToCategoria(valores[indiceTipo] || "");
 
       const objeto: MultimediaItem = {
         name: "",
         alternative_name: "",
         description: "",
-        status: "por ver",
+        status: Status.POR_VER,
       };
 
       cabeceras.forEach((cabecera, index) => {
@@ -66,9 +76,9 @@ export async function getCSVData(data: string) {
         (objeto as any)[cabecera] = valor;
       });
 
-      if (!datos[categoria]) datos[categoria] = [];
+      if (!datos[cat]) datos[cat] = [];
 
-      datos[categoria].push(objeto as MultimediaItem);
+      datos[cat].push(objeto as MultimediaItem);
     }
 
     return datos;

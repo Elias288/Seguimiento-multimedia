@@ -1,8 +1,23 @@
-export type Multimedia = Record<string, MultimediaItem[]>;
+export type Multimedia = Record<MultimediaTypes, MultimediaItem[]>;
 export type CompressedMultimedia = Record<
   string,
   Partial<CompressedMultimediaItem>[]
 >;
+
+export enum MultimediaTypes {
+  ANIMES = "anime",
+  SERIES = "serie",
+  MAGAS = "manga",
+  COMICS = "comic",
+  SIN_CATEGORIZAR = "sin_categorizar",
+}
+
+export enum Status {
+  VISTO = "visto",
+  POR_VER = "por ver",
+  VIENDO = "viendo",
+  DEJADO = "dejado",
+}
 
 export interface MultimediaItem {
   name: string;
@@ -12,7 +27,7 @@ export interface MultimediaItem {
   total_seasons?: number;
   actual_season?: number;
   actual_episode?: number;
-  status: "visto" | "por ver" | "viendo" | "dejado";
+  status: Status;
 }
 
 export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
@@ -22,7 +37,7 @@ export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
   total_seasons: undefined,
   actual_season: undefined,
   actual_episode: undefined,
-  status: "por ver",
+  status: Status.POR_VER,
 };
 
 export interface CompressedMultimediaItem {
@@ -33,5 +48,14 @@ export interface CompressedMultimediaItem {
   ts?: number;
   as?: number;
   ae?: number;
-  s?: "visto" | "por ver" | "viendo" | "dejado";
+  s?: Status;
 }
+
+export const mapToCategoria = (value: string): MultimediaTypes => {
+  const normalizado = value.toLocaleLowerCase().trim();
+
+  const match = Object.values(MultimediaTypes).find(
+    (tipo) => tipo === normalizado,
+  );
+  return match ?? MultimediaTypes.SIN_CATEGORIZAR;
+};

@@ -1,5 +1,7 @@
 import {
   DEFAULTS_VALUES,
+  mapToCategoria,
+  MultimediaTypes,
   type CompressedMultimedia,
   type CompressedMultimediaItem,
   type Multimedia,
@@ -68,20 +70,28 @@ export const compressMultimedia = (data: Multimedia): string => {
 };
 
 export const decompressMultimedia = (data: string): Multimedia => {
-  const result: Multimedia = {};
+  const result: Multimedia = {
+    [MultimediaTypes.ANIMES]: [],
+    [MultimediaTypes.COMICS]: [],
+    [MultimediaTypes.MAGAS]: [],
+    [MultimediaTypes.SERIES]: [],
+    [MultimediaTypes.SIN_CATEGORIZAR]: [],
+  };
   const dataObject = JSON.parse(data) as CompressedMultimediaItem;
 
   Object.entries(dataObject).forEach(([key, items]) => {
-    result[key] = items.map((item: Partial<CompressedMultimediaItem>) => ({
-      name: item.n ?? "",
-      alternative_name: item.an ?? "",
-      description: item.d ?? "",
-      total_caps: item.tc ?? DEFAULTS_VALUES.total_caps,
-      total_seasons: item.ts ?? DEFAULTS_VALUES.total_seasons,
-      actual_episode: item.ae ?? DEFAULTS_VALUES.actual_episode,
-      actual_season: item.as ?? DEFAULTS_VALUES.actual_season,
-      status: item.s ?? DEFAULTS_VALUES.status!,
-    }));
+    result[mapToCategoria(key)] = items.map(
+      (item: Partial<CompressedMultimediaItem>) => ({
+        name: item.n ?? "",
+        alternative_name: item.an ?? "",
+        description: item.d ?? "",
+        total_caps: item.tc ?? DEFAULTS_VALUES.total_caps,
+        total_seasons: item.ts ?? DEFAULTS_VALUES.total_seasons,
+        actual_episode: item.ae ?? DEFAULTS_VALUES.actual_episode,
+        actual_season: item.as ?? DEFAULTS_VALUES.actual_season,
+        status: item.s ?? DEFAULTS_VALUES.status!,
+      }),
+    );
   });
 
   return result;
