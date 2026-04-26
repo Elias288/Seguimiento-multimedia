@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getCSVData } from "@/bin/getCSVData";
 import { useMedia } from "@/context/useMedia";
 import { redirect, useNavigate } from "react-router";
@@ -13,13 +13,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 const LoadFile = () => {
-  const [error, setError] = useState<string | null>(null);
   const { data, setData: storageData } = useMedia();
-  let navigate = useNavigate();
-
-  useEffect(() => {
-    if (data) navigate("/home");
-  }, [data]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);

@@ -1,5 +1,9 @@
+import { useMedia } from "@/context/useMedia";
 import type { Route } from "./+types/home";
 import MainContent from "@/main/mainContent";
+import { Navigate } from "react-router";
+import type { ReactNode } from "react";
+import EmptySkeleton from "./EmptySkeleton";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,9 +13,27 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+  const { data, loaded } = useMedia();
+
+  const MainContainer = ({ children }: { children: ReactNode }) => (
+    <main className="flex-1 py-5 px-10 overflow-x-hidden">{children}</main>
+  );
+
+  if (!loaded)
+    return (
+      <MainContainer>
+        <EmptySkeleton title="Anime" />
+        <EmptySkeleton title="Series" />
+        <EmptySkeleton title="Manga" />
+        <EmptySkeleton title="Comics" />
+      </MainContainer>
+    );
+
+  if (!data) return <Navigate to="/" />;
+
   return (
-    <>
+    <MainContainer>
       <MainContent />
-    </>
+    </MainContainer>
   );
 }

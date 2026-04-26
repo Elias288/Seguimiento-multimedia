@@ -6,6 +6,7 @@
 
   --color-principal: #10BAB9;
   --color-secondary: #25252525;
+  --color-card: rgba(255, 255, 255, .5);
 }
 
 html,
