@@ -4,6 +4,7 @@ import MainContent from "@/main/mainContent";
 import { Navigate } from "react-router";
 import type { ReactNode } from "react";
 import EmptySkeleton from "../components/EmptySkeleton";
+import ButtonAdd from "@/components/buttonAdd";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -34,6 +35,8 @@ export default function Home() {
   return (
     <MainContainer>
       <MainContent />
+
+      <ButtonAdd />
     </MainContainer>
   );
 }

@@ -23,7 +23,7 @@ export const RenderMultimediaType = ({ content, title }: Props) => {
         </div>
 
         <div
-          className={`w-full py-2 px-4 ${showType ? "flex gap-4 overflow-x-auto" : "grid grid-cols-[repeat(auto-fit,300px)] justify-center gap-4"}`}
+          className={`w-full pt-2 pb-5 px-5 ${showType ? "flex gap-4 overflow-x-auto" : "grid grid-cols-[repeat(auto-fit,300px)] justify-center gap-4"}`}
         >
           {content.map((item, key) => {
             return (
