@@ -3,7 +3,7 @@ import type { Route } from "./+types/home";
 import MainContent from "@/main/mainContent";
 import { Navigate } from "react-router";
 import type { ReactNode } from "react";
-import EmptySkeleton from "./EmptySkeleton";
+import EmptySkeleton from "../components/EmptySkeleton";
 
 export function meta({}: Route.MetaArgs) {
   return [

@@ -4,6 +4,7 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
+  --color-dark: #030712;
   --color-principal: #10BAB9;
   --color-secondary: #25252525;
   --color-card: rgba(255, 255, 255, .5);

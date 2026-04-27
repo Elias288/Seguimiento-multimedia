@@ -1,7 +1,10 @@
+import { useMedia } from "@/context/useMedia";
 import { NavLink } from "react-router";
 
 type Props = {};
 const Header = ({}: Props) => {
+  const { clearData } = useMedia();
+
   return (
     <header className="bg-principal py-2 px-4 font-bold sticky top-0 flex items-center justify-between z-10">
       <h1 className="text-2xl">Seguimiento Multimedia</h1>
@@ -9,10 +12,15 @@ const Header = ({}: Props) => {
       <nav className="flex gap-2.5">
         <NavLink to={"/home"} className="hover:opacity-70">
           Home
-        </NavLink>
+        </NavLink>{" "}
+        |
         <NavLink to="/info" className="hover:opacity-70">
           Info
-        </NavLink>
+        </NavLink>{" "}
+        |
+        <button onClick={clearData} className="hover:opacity-70 cursor-pointer">
+          Cerrar
+        </button>
       </nav>
     </header>
   );
