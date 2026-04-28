@@ -1,10 +1,10 @@
 import { useState } from "react";
 import AddMultimedia from "./addMultimedia";
-import { MultimediaTypes, type MultimediaItem } from "@/types/data.type";
+import { MultimediaTypes } from "@/types/data.type";
 import { useMedia } from "@/context/useMedia";
 
 const ButtonAdd = () => {
-  const { data, updated, setData } = useMedia();
+  const { status, clearError } = useMedia();
   const [open, setOpen] = useState<Boolean>(false);
   const [showForm, setShowForm] = useState<Boolean>(false);
   const [multimediaType, setMultimediaType] = useState<MultimediaTypes>(
@@ -17,28 +17,18 @@ const ButtonAdd = () => {
     setShowForm(true);
   };
 
-  const pushMultimedia = (item: MultimediaItem, type: MultimediaTypes) => {
-    if (data) {
-      const newData = JSON.parse(JSON.stringify(data));
-      newData[type].push(item);
-      setData(newData);
-    }
+  const handleSubmit = () => {
     setShowForm(false);
+    status.isError && clearError();
   };
 
   return (
     <>
       {showForm && (
-        <AddMultimedia
-          submit={pushMultimedia}
-          cancel={() => setShowForm(false)}
-          type={multimediaType}
-        />
+        <AddMultimedia action={handleSubmit} type={multimediaType} />
       )}
 
-      <div
-        className={`fixed right-2.5 ${updated ? " bottom-14" : "bottom-2.5"}`}
-      >
+      <div className="fixed right-2.5 bottom-2.5">
         <ul
           className={`bg-white flex flex-col gap-2.5 rounded-sm text-black overflow-x-hidden shadow-2xl shadow-black ${open ? "w-auto px-4 py-2" : "w-0"}`}
         >

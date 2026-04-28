@@ -4,8 +4,9 @@ import { useState } from "react";
 interface Props {
   content: MultimediaItem[];
   title: string;
+  selectItem: (item: MultimediaItem) => void;
 }
-export const RenderMultimediaType = ({ content, title }: Props) => {
+export const RenderMultimediaType = ({ content, title, selectItem }: Props) => {
   const [showType, setShowType] = useState<boolean>(true);
 
   if (content.length === 0) return;
@@ -31,6 +32,14 @@ export const RenderMultimediaType = ({ content, title }: Props) => {
                 key={key}
                 className="anime__card bg-card rounded-lg p-2.5 h-100 min-w-75"
               >
+                <div className="bg-black opacity-30 aspect-square rounded-xs cursor-pointer">
+                  <img
+                    src="/"
+                    alt="img"
+                    onClick={() => selectItem(item)}
+                    className="w-full h-full"
+                  />
+                </div>
                 <p className="text-black">{item.name}</p>
               </div>
             );

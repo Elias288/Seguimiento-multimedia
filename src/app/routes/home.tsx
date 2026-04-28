@@ -4,7 +4,6 @@ import MainContent from "@/main/mainContent";
 import { Navigate } from "react-router";
 import type { ReactNode } from "react";
 import EmptySkeleton from "../components/EmptySkeleton";
-import ButtonAdd from "@/components/buttonAdd";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -14,13 +13,13 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const { data, loaded } = useMedia();
+  const { data, status } = useMedia();
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
     <main className="flex-1 py-5 px-10 overflow-x-hidden">{children}</main>
   );
 
-  if (!loaded)
+  if (!status.loaded)
     return (
       <MainContainer>
         <EmptySkeleton title="Anime" />
@@ -35,8 +34,6 @@ export default function Home() {
   return (
     <MainContainer>
       <MainContent />
-
-      <ButtonAdd />
     </MainContainer>
   );
 }

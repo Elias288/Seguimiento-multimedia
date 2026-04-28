@@ -3,7 +3,7 @@ import { NavLink } from "react-router";
 
 type Props = {};
 const Header = ({}: Props) => {
-  const { updated, clearData, downloadData } = useMedia();
+  const { status, clearData, downloadData } = useMedia();
 
   return (
     <header className="bg-principal py-2 px-4 font-bold sticky top-0 flex items-center justify-between z-10">
@@ -24,7 +24,7 @@ const Header = ({}: Props) => {
           className={`cursor-pointer flex items-center gap-1 hover:opacity-70`}
         >
           Descargar
-          {updated && (
+          {status.different && (
             <span className="text-sm bg-red-900 size-4 rounded-[50%] flex justify-center items-center">
               !
             </span>

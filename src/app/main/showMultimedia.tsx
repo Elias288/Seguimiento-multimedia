@@ -1,5 +1,6 @@
 import { useMedia } from "@/context/useMedia";
 import {
+  type Multimedia,
   type MultimediaItem,
   MultimediaTypes,
   Status,
@@ -13,27 +14,25 @@ import {
 } from "react";
 
 interface Props {
-  action: () => void;
+  item: MultimediaItem;
   type: MultimediaTypes;
+  action: () => void;
 }
-
-const EMPTY_FORMDATA = {
-  name: "",
-  alternative_name: "",
-  description: "",
-  status: Status.POR_VER,
-  actual_episode: 0,
-  actual_season: 1,
-  total_caps: undefined,
-  total_seasons: 1,
-};
-
-const AddMultimedia = ({ type, action }: Props) => {
-  const { status, addData } = useMedia();
-  const [formData, setFormData] = useState<MultimediaItem>(EMPTY_FORMDATA);
+const ShowMultimedia = ({ item, type, action }: Props) => {
+  const { data, updateItem, deleteItem } = useMedia();
+  const [formData, setFormData] = useState<MultimediaItem>({
+    name: item.name,
+    alternative_name: item.alternative_name,
+    description: item.description,
+    status: item.status ?? Status.POR_VER,
+    actual_episode: item.actual_episode ?? 1,
+    actual_season: item.actual_season ?? 0,
+    total_caps: item.total_caps ?? 0,
+    total_seasons: item.total_seasons ?? 1,
+  });
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (
+  const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
@@ -46,9 +45,13 @@ const AddMultimedia = ({ type, action }: Props) => {
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    updateItem({ item: formData, type });
+  };
 
-    addData({ item: formData, type });
-    setFormData(EMPTY_FORMDATA);
+  const handleDelete = () => {
+    if (data) {
+      deleteItem({ item, type });
+    }
   };
 
   useEffect(() => {
@@ -59,99 +62,91 @@ const AddMultimedia = ({ type, action }: Props) => {
     <div className="fixed top-0 left-0 z-20 flex items-center justify-center w-full h-full bg-[#00000085]">
       <form
         onSubmit={handleSubmit}
-        className="bg-dark border border-principal w-100  rounded-2xl p-4"
+        className="bg-dark border border-principal w-100 rounded-2xl p-4 flex flex-col gap-4"
       >
-        <h2 className="text-2xl font-bold mb-4">Agregar {type}</h2>
+        {/* <h2 className="text-2xl font-bold mb-4">Agregar {type}</h2> */}
 
-        <label className="mb-4 block">
-          *Nombre
-          <input
-            type="text"
-            name="name"
-            ref={inputRef}
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
-            required
-          />
-          {status.message && status.isError && (
-            <span className="text-red-500">Multimedia ya registrada</span>
-          )}
-        </label>
+        <p>
+          Nombre
+          <span className="block text-gray-400 bg-gray-900 px-2 outline-gray-700 rounded-sm ">
+            {formData.name}
+          </span>
+        </p>
 
-        <label className="mb-4 block">
+        <label>
           Nombre alternativo
           <input
             type="text"
             name="alternative_name"
             value={formData.alternative_name}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
-        <label className="mb-4 block">
+        <label>
           Descripción
           <input
             type="text"
             name="description"
             value={formData.description}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
-        <label className="mb-4 block">
+        <label>
           Capítulos
           <input
             type="number"
             name="total_caps"
             value={formData.total_caps}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
-        <label className="mb-4 block">
+        <label>
           Temporadas
           <input
             type="number"
             name="total_seasons"
             value={formData.total_seasons}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
-        <label className="mb-4 block">
+        <label>
           Capítulo Actual
           <input
             type="number"
             name="actual_cap"
             value={formData.actual_episode}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
-        <label className="mb-4 block">
+        <label>
           Temporada Actual
           <input
             type="number"
             name="actual_season"
             value={formData.actual_season}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
-        <label className="mb-4 block">
+        <label>
           Estado
           <select
             name="status"
             id="status"
-            onChange={handleChange}
-            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            value={formData.status}
+            onChange={handleInputChange}
+            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2 cursor-pointer h-6"
           >
             <option value={Status.POR_VER}>Por ver</option>
             <option value={Status.VIENDO}>Viendo</option>
@@ -160,20 +155,27 @@ const AddMultimedia = ({ type, action }: Props) => {
           </select>
         </label>
 
-        <div className="border-t border-gray-700 pt-2 flex flex-row-reverse gap-2">
+        <div className="border-t border-gray-700 pt-4 flex flex-row-reverse gap-2">
           <button
             type="submit"
-            className="px-4 py-2 cursor-pointer bg-blue-500 text-white rounded"
+            className="px-4 py-2 cursor-pointer bg-blue-500 text-white rounded hover:opacity-70"
           >
-            Agregar
+            Actualizar
+          </button>
+          <button
+            onClick={() => handleDelete()}
+            type="button"
+            className="px-4 py-2 cursor-pointer bg-blue-500 text-white rounded hover:opacity-70"
+          >
+            Eliminar
           </button>
 
           <button
             type="reset"
-            className="px-4 py-2 cursor-pointer bg-red-900 text-white rounded"
+            className="px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70"
             onClick={action}
           >
-            Cerrar
+            Cancelar
           </button>
         </div>
       </form>
@@ -181,4 +183,4 @@ const AddMultimedia = ({ type, action }: Props) => {
   );
 };
 
-export default AddMultimedia;
+export default ShowMultimedia;
