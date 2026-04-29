@@ -51,6 +51,16 @@ export interface CompressedMultimediaItem {
   s?: Status;
 }
 
+export interface MultimediaInfo {
+  type: MultimediaTypes;
+  item: MultimediaItem;
+}
+
+export interface TypeList {
+  type: MultimediaTypes;
+  data: MultimediaItem[];
+}
+
 export const mapToCategoria = (value: string): MultimediaTypes => {
   const normalizado = value.toLocaleLowerCase().trim();
 

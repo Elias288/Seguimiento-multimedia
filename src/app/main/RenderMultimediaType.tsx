@@ -11,7 +11,7 @@ export const RenderMultimediaType = ({ content, title, selectItem }: Props) => {
 
   if (content.length === 0) return;
   return (
-    <article className="mb-10">
+    <article>
       <div className="bg-[#ffffff1c] w-full rounded-lg overflow-x-hidden">
         <div className="flex justify-between py-2 px-4">
           <h2 className="text-2xl">{title}</h2>

@@ -1,19 +1,19 @@
 import { useMedia } from "@/context/useMedia";
 import { RenderMultimediaType } from "./RenderMultimediaType";
 import { useState } from "react";
-import { type MultimediaItem, MultimediaTypes } from "@/types/data.type";
+import {
+  type MultimediaInfo,
+  type MultimediaItem,
+  MultimediaTypes,
+} from "@/types/data.type";
 import ShowMultimedia from "./showMultimedia";
 
-interface Info {
-  type: MultimediaTypes;
-  data: MultimediaItem;
-}
 const MainContent = () => {
   const { data } = useMedia();
-  const [selectedItem, setSelectedItem] = useState<Info | null>(null);
+  const [selectedItem, setSelectedItem] = useState<MultimediaInfo | null>(null);
 
   const handleSelected = (data: MultimediaItem, type: MultimediaTypes) => {
-    setSelectedItem({ data, type });
+    setSelectedItem({ item: data, type });
   };
 
   const handleAction = () => setSelectedItem(null);
@@ -44,7 +44,7 @@ const MainContent = () => {
 
       {selectedItem && (
         <ShowMultimedia
-          item={selectedItem.data}
+          item={selectedItem.item}
           type={selectedItem.type}
           action={handleAction}
         />

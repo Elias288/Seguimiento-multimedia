@@ -16,7 +16,9 @@ export default function Home() {
   const { data, status } = useMedia();
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
-    <main className="flex-1 py-5 px-10 overflow-x-hidden">{children}</main>
+    <main className="flex-1 py-5 px-10 overflow-x-hidden flex flex-col gap-10 min-h-screen">
+      {children}
+    </main>
   );
 
   if (!status.loaded)

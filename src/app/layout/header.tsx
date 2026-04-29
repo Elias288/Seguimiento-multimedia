@@ -1,15 +1,19 @@
 import { useMedia } from "@/context/useMedia";
+import MenuIcon from "@/icons/menu";
 import { NavLink } from "react-router";
 
-type Props = {};
-const Header = ({}: Props) => {
+type Props = {
+  sideBarOpen: boolean;
+  toggleSideBar: () => void;
+};
+const Header = ({ sideBarOpen, toggleSideBar }: Props) => {
   const { status, clearData, downloadData } = useMedia();
 
   return (
-    <header className="bg-principal py-2 px-4 font-bold sticky top-0 flex items-center justify-between z-10">
+    <header className="bg-principal py-2 px-4 h-header font-bold sticky top-0 flex items-center justify-between z-10 col-span-full">
       <h1 className="text-2xl">Seguimiento Multimedia</h1>
 
-      <nav className="flex gap-2.5">
+      <nav className="flex gap-4">
         <NavLink to={"/home"} className="hover:opacity-70">
           Home
         </NavLink>{" "}
@@ -33,6 +37,13 @@ const Header = ({}: Props) => {
         |
         <button onClick={clearData} className="hover:opacity-70 cursor-pointer">
           Cerrar
+        </button>
+        |
+        <button
+          onClick={() => toggleSideBar()}
+          className="hover:opacity-70 cursor-pointer"
+        >
+          <MenuIcon isOpen={sideBarOpen} />
         </button>
       </nav>
     </header>
