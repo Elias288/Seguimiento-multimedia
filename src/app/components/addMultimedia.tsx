@@ -1,4 +1,4 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import {
   type MultimediaItem,
   MultimediaTypes,
@@ -29,7 +29,7 @@ const EMPTY_FORMDATA = {
 };
 
 const AddMultimedia = ({ type, action }: Props) => {
-  const { status, addData } = useMedia();
+  const { status, addData } = useMediaContext();
   const [formData, setFormData] = useState<MultimediaItem>(EMPTY_FORMDATA);
   const inputRef = useRef<HTMLInputElement>(null);
 

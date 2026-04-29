@@ -1,16 +1,14 @@
-import { useEffect, useMemo, useReducer, useState } from "react";
-import { compressMultimedia, decompressMultimedia } from "@/bin/compressData";
+import { useEffect, useReducer } from "react";
+import { decompressMultimedia } from "@/bin/compressData";
 import type {
   MultimediaInfo,
   Multimedia,
   MultimediaItem,
-  MultimediaTypes,
 } from "@/types/data.type";
 import { downloadCSV, jsonToCSV } from "@/bin/JSONtoCSV";
 
 export type MediaContextType = {
   data: Multimedia | null;
-  filteredData: MultimediaInfo[];
   status: ReducerStatus;
   setData: (data: Multimedia | null) => void;
   updateItem: (data: MultimediaInfo) => void;
@@ -20,7 +18,6 @@ export type MediaContextType = {
   clearError: () => void;
   clearMessage: () => void;
   downloadData: () => void;
-  filterMultimedia: (query: string) => void;
 };
 
 type State = {
@@ -210,7 +207,6 @@ export const useMediaReducer = (): MediaContextType => {
       isError: false,
     },
   });
-  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -230,19 +226,6 @@ export const useMediaReducer = (): MediaContextType => {
 
     dispatch({ type: "SET_DIFFERENT", payload: updatedFlag === "true" });
   }, []);
-
-  useEffect(() => {
-    if (state.data === null) {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(UPDATED_FLAG);
-      return;
-    }
-    localStorage.setItem(STORAGE_KEY, compressMultimedia(state.data));
-  }, [state.data]);
-
-  useEffect(() => {
-    localStorage.setItem(UPDATED_FLAG, String(state.reducerStatus.different));
-  }, [state.reducerStatus.different]);
 
   const setData = (data: Multimedia | null) =>
     dispatch({ type: "SET_DATA", payload: data });
@@ -270,30 +253,8 @@ export const useMediaReducer = (): MediaContextType => {
 
   const clearMessage = () => dispatch({ type: "CLEAR_MESSAGE" });
 
-  const filterMultimedia = (query: string) => setQuery(query);
-
-  const filteredData = useMemo(() => {
-    if (!state.data || query.length < 3) return [];
-
-    const normalize = (str: string) => str.toLowerCase().trim();
-    const q = normalize(query);
-
-    return Object.entries(state.data)
-      .flatMap(([type, items]) => items.map((item) => ({ ...item, type })))
-      .filter(
-        (item) =>
-          normalize(item.name).includes(q) ||
-          normalize(item.alternative_name).includes(q),
-      )
-      .map(({ type, ...item }) => ({
-        type: type as MultimediaTypes,
-        item,
-      }));
-  }, [state.data, query]);
-
   return {
     data: state.data,
-    filteredData,
     status: state.reducerStatus,
     setData,
     updateItem,
@@ -303,6 +264,5 @@ export const useMediaReducer = (): MediaContextType => {
     clearError,
     clearMessage,
     downloadData,
-    filterMultimedia,
   };
 };

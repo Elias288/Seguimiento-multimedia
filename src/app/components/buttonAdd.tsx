@@ -1,10 +1,10 @@
 import { useState } from "react";
 import AddMultimedia from "./addMultimedia";
 import { MultimediaTypes } from "@/types/data.type";
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 
 const ButtonAdd = () => {
-  const { status, clearError } = useMedia();
+  const { status, clearError } = useMediaContext();
   const [open, setOpen] = useState<Boolean>(false);
   const [showForm, setShowForm] = useState<Boolean>(false);
   const [multimediaType, setMultimediaType] = useState<MultimediaTypes>(

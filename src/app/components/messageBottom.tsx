@@ -1,8 +1,8 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import { useEffect } from "react";
 /* clearMessage actualiza todo, no */
 const MessageBottom = () => {
-  const { status, clearMessage } = useMedia();
+  const { status, clearMessage } = useMediaContext();
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {

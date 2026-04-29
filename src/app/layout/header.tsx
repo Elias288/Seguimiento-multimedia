@@ -1,4 +1,4 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import MenuIcon from "@/icons/menu";
 import { NavLink } from "react-router";
 
@@ -7,7 +7,7 @@ type Props = {
   toggleSideBar: () => void;
 };
 const Header = ({ sideBarOpen, toggleSideBar }: Props) => {
-  const { status, clearData, downloadData } = useMedia();
+  const { status, clearData, downloadData } = useMediaContext();
 
   return (
     <header className="bg-principal py-2 px-4 h-header font-bold sticky top-0 flex items-center justify-between z-10 col-span-full">

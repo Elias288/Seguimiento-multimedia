@@ -1,11 +1,11 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import BuscadorIcon from "@/icons/buscadorIcon";
 import ShowMultimedia from "@/main/showMultimedia";
-import type { MultimediaInfo, MultimediaItem } from "@/types/data.type";
-import { useEffect, useState, type SubmitEvent } from "react";
+import type { MultimediaInfo } from "@/types/data.type";
+import { useState, type SubmitEvent } from "react";
 
 const BuscadorMultimedia = () => {
-  const { filteredData, filterMultimedia } = useMedia();
+  const { setQuery, filteredData } = useMediaContext();
   const [searchInput, setSearchInput] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<MultimediaInfo | null>(null);
   const [openList, setOpenList] = useState<boolean>(false);
@@ -13,7 +13,7 @@ const BuscadorMultimedia = () => {
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    filterMultimedia(searchInput);
+    setQuery(searchInput);
     setOpenList(true);
   };
 
@@ -24,7 +24,7 @@ const BuscadorMultimedia = () => {
   const handleChange = (query: string) => {
     setSearchInput(query);
     if (query.length >= 3) {
-      filterMultimedia(query);
+      setQuery(query);
       setOpenList(true);
     } else {
       setOpenList(false);
@@ -56,7 +56,7 @@ const BuscadorMultimedia = () => {
 
         {openList && filteredData.length > 0 && (
           <div
-            className={`absolute top-10 w-full bg-gray-900 max-h-50 rounded-b-sm shadow-xl  ${!filterMultimedia.length ? "" : "border-t-2 border-dark"}`}
+            className={`absolute top-10 w-full bg-gray-900 max-h-50 rounded-b-sm shadow-xl  ${!filteredData.length ? "" : "border-t-2 border-dark"}`}
           >
             <ul>
               {filteredData.map((item: MultimediaInfo, key) => (

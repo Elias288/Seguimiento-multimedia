@@ -1,4 +1,4 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import { RenderMultimediaType } from "./RenderMultimediaType";
 import { useState } from "react";
 import {
@@ -9,7 +9,7 @@ import {
 import ShowMultimedia from "./showMultimedia";
 
 const MainContent = () => {
-  const { data } = useMedia();
+  const { data } = useMediaContext();
   const [selectedItem, setSelectedItem] = useState<MultimediaInfo | null>(null);
 
   const handleSelected = (data: MultimediaItem, type: MultimediaTypes) => {

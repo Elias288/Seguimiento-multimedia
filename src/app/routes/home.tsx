@@ -1,4 +1,4 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import type { Route } from "./+types/home";
 import MainContent from "@/main/mainContent";
 import { Navigate } from "react-router";
@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const { data, status } = useMedia();
+  const { data, status } = useMediaContext();
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
     <main className="flex-1 py-5 px-10 overflow-x-hidden flex flex-col gap-10 min-h-screen">

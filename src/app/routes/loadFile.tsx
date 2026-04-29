@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getCSVData } from "@/bin/getCSVData";
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import { redirect, useNavigate } from "react-router";
 import UploadIcon from "@/icons/upload";
 import type { Route } from "../+types/root";
@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 const LoadFile = () => {
-  const { data, setData: storageData } = useMedia();
+  const { data, setData } = useMediaContext();
   const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +36,7 @@ const LoadFile = () => {
       try {
         const text = e.target?.result as string;
         const res = await getCSVData(text);
-        storageData(res);
+        setData(res);
 
         redirect("/home");
       } catch (err) {

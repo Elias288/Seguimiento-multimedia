@@ -1,4 +1,4 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import {
   type MultimediaItem,
   MultimediaTypes,
@@ -18,7 +18,7 @@ interface Props {
   callback: () => void;
 }
 const ShowMultimedia = ({ item, type, callback }: Props) => {
-  const { data, updateItem, deleteItem } = useMedia();
+  const { data, updateItem, deleteItem } = useMediaContext();
   const [formData, setFormData] = useState<MultimediaItem>({
     name: item.name,
     alternative_name: item.alternative_name,

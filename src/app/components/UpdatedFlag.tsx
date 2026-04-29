@@ -1,8 +1,8 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import { useEffect, useState } from "react";
 
 const UpdatedFlag = () => {
-  const { status, downloadData } = useMedia();
+  const { status, downloadData } = useMediaContext();
   const [show, setShow] = useState(false);
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import BuscadorMultimedia from "@/components/buscador";
-import { useMedia } from "@/context/useMedia";
 
 type Props = {
   isOpen: boolean;

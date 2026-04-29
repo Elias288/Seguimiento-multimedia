@@ -1,9 +1,9 @@
-import { useMedia } from "@/context/useMedia";
+import { useMediaContext } from "@/context/mediaContext";
 import Spinner from "@/icons/spinner";
 import { Navigate, Outlet } from "react-router";
 
 const PublicRoute = () => {
-  const { data, status } = useMedia();
+  const { data, status } = useMediaContext();
 
   if (!status.loaded)
     return (

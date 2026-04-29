@@ -23,7 +23,7 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-import { MediaProvider } from "@/context/useMedia";
+import { MediaProvider } from "@/context/mediaContext";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
