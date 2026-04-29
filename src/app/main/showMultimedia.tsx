@@ -1,6 +1,5 @@
 import { useMedia } from "@/context/useMedia";
 import {
-  type Multimedia,
   type MultimediaItem,
   MultimediaTypes,
   Status,
@@ -16,9 +15,9 @@ import {
 interface Props {
   item: MultimediaItem;
   type: MultimediaTypes;
-  action: () => void;
+  callback: () => void;
 }
-const ShowMultimedia = ({ item, type, action }: Props) => {
+const ShowMultimedia = ({ item, type, callback }: Props) => {
   const { data, updateItem, deleteItem } = useMedia();
   const [formData, setFormData] = useState<MultimediaItem>({
     name: item.name,
@@ -46,11 +45,13 @@ const ShowMultimedia = ({ item, type, action }: Props) => {
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateItem({ item: formData, type });
+    callback();
   };
 
   const handleDelete = () => {
     if (data) {
       deleteItem({ item, type });
+      callback();
     }
   };
 
@@ -173,7 +174,7 @@ const ShowMultimedia = ({ item, type, action }: Props) => {
           <button
             type="reset"
             className="px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70"
-            onClick={action}
+            onClick={callback}
           >
             Cancelar
           </button>

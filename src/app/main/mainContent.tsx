@@ -46,7 +46,7 @@ const MainContent = () => {
         <ShowMultimedia
           item={selectedItem.item}
           type={selectedItem.type}
-          action={handleAction}
+          callback={handleAction}
         />
       )}
     </>
