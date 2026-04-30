@@ -49,6 +49,7 @@ const AddMultimedia = ({ type, action }: Props) => {
 
     addData({ item: formData, type });
     setFormData(EMPTY_FORMDATA);
+    inputRef.current?.focus();
   };
 
   useEffect(() => {
@@ -56,10 +57,10 @@ const AddMultimedia = ({ type, action }: Props) => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 z-20 flex items-center justify-center w-full h-full bg-[#00000085]">
+    <div className="fixed top-0 left-0 z-20 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground">
       <form
         onSubmit={handleSubmit}
-        className="bg-dark border border-principal w-100  rounded-2xl p-4"
+        className="bg-background1 border border-principal w-100  rounded-2xl p-4"
       >
         <h2 className="text-2xl font-bold mb-4">Agregar {type}</h2>
 

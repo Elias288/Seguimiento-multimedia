@@ -60,19 +60,12 @@ const ShowMultimedia = ({ item, type, callback }: Props) => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 z-20 flex items-center justify-center w-full h-full bg-[#00000085]">
+    <div className="fixed top-0 left-0 z-20 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground">
       <form
         onSubmit={handleSubmit}
-        className="bg-dark border border-principal w-100 rounded-2xl p-4 flex flex-col gap-4"
+        className="bg-background1 border border-principal w-100 rounded-2xl p-4 flex flex-col gap-4"
       >
-        {/* <h2 className="text-2xl font-bold mb-4">Agregar {type}</h2> */}
-
-        <p>
-          Nombre
-          <span className="block text-gray-400 bg-gray-900 px-2 outline-gray-700 rounded-sm ">
-            {formData.name}
-          </span>
-        </p>
+        <h2 className="text-2xl font-bold mb-4">{formData.name}</h2>
 
         <label>
           Nombre alternativo

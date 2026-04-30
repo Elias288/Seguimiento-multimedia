@@ -1,3 +1,4 @@
+import MultimediaCard from "@/components/multimediaCard";
 import type { MultimediaItem } from "@/types/data.type";
 import { useState } from "react";
 
@@ -12,7 +13,7 @@ export const RenderMultimediaType = ({ content, title, selectItem }: Props) => {
   if (content.length === 0) return;
   return (
     <article>
-      <div className="bg-[#ffffff1c] w-full rounded-lg overflow-x-hidden">
+      <div className="bg-background2 w-full rounded-lg overflow-x-hidden">
         <div className="flex justify-between py-2 px-4">
           <h2 className="text-2xl">{title}</h2>
           <button
@@ -28,20 +29,20 @@ export const RenderMultimediaType = ({ content, title, selectItem }: Props) => {
         >
           {content.map((item, key) => {
             return (
-              <div
-                key={key}
-                className="anime__card bg-card rounded-lg p-2.5 h-100 min-w-75"
-              >
-                <div className="bg-black opacity-30 aspect-square rounded-xs cursor-pointer">
-                  <img
-                    src="/"
-                    alt="img"
-                    onClick={() => selectItem(item)}
-                    className="w-full h-full"
-                  />
+              <MultimediaCard key={key} item={item}>
+                <div className="cursor-pointer">
+                  <div className="bg-gray-500 aspect-square">
+                    <img
+                      src="/"
+                      alt="img"
+                      onClick={() => selectItem(item)}
+                      className="w-full h-full"
+                    />
+                  </div>
+
+                  <p className="text-black">{item.name}</p>
                 </div>
-                <p className="text-black">{item.name}</p>
-              </div>
+              </MultimediaCard>
             );
           })}
         </div>

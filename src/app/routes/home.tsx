@@ -16,7 +16,7 @@ export default function Home() {
   const { data, status } = useMediaContext();
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
-    <main className="flex-1 py-5 px-10 overflow-x-hidden flex flex-col gap-10 min-h-screen">
+    <main className="flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 min-h-screen md:py-5 md:px-10">
       {children}
     </main>
   );

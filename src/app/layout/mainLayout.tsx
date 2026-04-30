@@ -7,14 +7,14 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import SideBar from "./sideBar";
 
-const Layout = () => {
+const MainLayout = () => {
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
 
   const toggleSideBar = () => setShowSideBar(!showSideBar);
 
   return (
     <div
-      className={`min-h-screen ${showSideBar ? "grid grid-cols-[350px_auto]" : "flex flex-col "}`}
+      className={`min-h-screen min-w-screenMinWidth md:grid duration-100 ease-in-out ${showSideBar ? "md:grid-cols-[350px_auto]" : "md:grid-cols-[0_auto]"}`}
     >
       <Header sideBarOpen={showSideBar} toggleSideBar={toggleSideBar} />
       <SideBar isOpen={showSideBar} />
@@ -37,4 +37,4 @@ const FloatedCards = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default Layout;
+export default MainLayout;

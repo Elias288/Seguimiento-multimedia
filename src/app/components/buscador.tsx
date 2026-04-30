@@ -56,13 +56,13 @@ const BuscadorMultimedia = () => {
 
         {openList && filteredData.length > 0 && (
           <div
-            className={`absolute top-10 w-full bg-gray-900 max-h-50 rounded-b-sm shadow-xl  ${!filteredData.length ? "" : "border-t-2 border-dark"}`}
+            className={`absolute top-10 w-full bg-gray-900 max-h-50 rounded-b-sm shadow-xl  ${!filteredData.length ? "" : "border-t-2 border-background1"}`}
           >
             <ul>
               {filteredData.map((item: MultimediaInfo, key) => (
                 <li
                   key={key}
-                  className="hover:bg-dark px-4 py-2 cursor-pointer"
+                  className="hover:bg-background1 px-4 py-2 cursor-pointer"
                   onClick={() => openItem(item)}
                 >
                   {item.item.name}
