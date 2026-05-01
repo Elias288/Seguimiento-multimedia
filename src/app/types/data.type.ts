@@ -28,6 +28,7 @@ export interface MultimediaItem {
   actual_season?: number;
   actual_episode?: number;
   status: Status;
+  images?: { image?: string; smallImage?: string; largeImage?: string };
 }
 
 export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
@@ -38,6 +39,7 @@ export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
   actual_season: undefined,
   actual_episode: undefined,
   status: Status.POR_VER,
+  images: undefined,
 };
 
 export interface CompressedMultimediaItem {
@@ -49,6 +51,9 @@ export interface CompressedMultimediaItem {
   as?: number;
   ae?: number;
   s?: Status;
+  i?: string;
+  smi?: string;
+  lgi?: string;
 }
 
 export interface MultimediaInfo {
@@ -69,3 +74,7 @@ export const mapToCategoria = (value: string): MultimediaTypes => {
   );
   return match ?? MultimediaTypes.SIN_CATEGORIZAR;
 };
+
+export interface MediaApi {
+  search(query: string): Promise<MultimediaInfo[]>;
+}

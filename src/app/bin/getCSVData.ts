@@ -21,6 +21,7 @@ export async function getCSVData(data: string): Promise<Multimedia | null> {
       "actual_season",
       "actual_episode",
       "status",
+      "images",
     ];
 
     const indiceTipo = cabeceras.indexOf("type");
@@ -55,6 +56,7 @@ export async function getCSVData(data: string): Promise<Multimedia | null> {
 
         if (valor === "") return;
 
+        /* Variables numéricas */
         if (
           cabecera === "total_caps" ||
           cabecera === "total_seasons" ||
@@ -73,6 +75,22 @@ export async function getCSVData(data: string): Promise<Multimedia | null> {
           return;
         }
 
+        if (cabecera === "images" && valor !== undefined) {
+          const images = {
+            image: !valor ? "" : valor.split("image:")[1]?.split(";")[0],
+            smallImage: !valor
+              ? ""
+              : valor.split("smallImage:")[1]?.split(";")[0],
+            largeImage: !valor
+              ? ""
+              : valor.split("largeImage:")[1]?.split(";")[0],
+          };
+
+          (objeto as any)[cabecera] = images;
+          return;
+        }
+
+        /* Variable por defecto */
         (objeto as any)[cabecera] = valor;
       });
 

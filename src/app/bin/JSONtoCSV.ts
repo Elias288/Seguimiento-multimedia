@@ -11,6 +11,7 @@ export function jsonToCSV(data: Multimedia): string {
     "actual_season",
     "actual_episode",
     "status",
+    "images",
   ];
   const rows: string[] = [];
 
@@ -28,6 +29,7 @@ export function jsonToCSV(data: Multimedia): string {
         item.actual_episode,
         item.actual_season,
         item.status,
+        `image:${item.images?.image};smallImage:${item.images?.smallImage};largeImage:${item.images?.largeImage};`,
       ]
         .map((val) => `${String(val).replace(/''/g, '""')}`)
         .join(",");

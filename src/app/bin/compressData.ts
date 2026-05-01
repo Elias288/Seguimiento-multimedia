@@ -9,7 +9,7 @@ import {
 } from "@/types/data.type";
 
 const isEmpty = (value: any) =>
-  value === "" || value === null || value === undefined;
+  value === "" || value === null || value === undefined || value.length === 0;
 
 export const compressMultimedia = (data: Multimedia): string => {
   const result: CompressedMultimedia = {};
@@ -62,6 +62,12 @@ export const compressMultimedia = (data: Multimedia): string => {
       if (!isEmpty(item.status) && item.status !== DEFAULTS_VALUES.status)
         compressed.s = item.status;
 
+      if (!isEmpty(item.images) && item.images !== DEFAULTS_VALUES.images) {
+        compressed.i = item.images?.image;
+        compressed.smi = item.images?.smallImage;
+        compressed.lgi = item.images?.largeImage;
+      }
+
       return compressed;
     });
   });
@@ -90,6 +96,11 @@ export const decompressMultimedia = (data: string): Multimedia => {
         actual_episode: item.ae ?? DEFAULTS_VALUES.actual_episode,
         actual_season: item.as ?? DEFAULTS_VALUES.actual_season,
         status: item.s ?? DEFAULTS_VALUES.status!,
+        images: {
+          image: item.i ?? DEFAULTS_VALUES.images,
+          smallImage: item.smi ?? DEFAULTS_VALUES.images,
+          largeImage: item.lgi ?? DEFAULTS_VALUES.images,
+        },
       }),
     );
   });
