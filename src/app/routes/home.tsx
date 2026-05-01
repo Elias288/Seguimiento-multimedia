@@ -2,7 +2,7 @@ import { useMediaContext } from "@/context/mediaContext";
 import type { Route } from "./+types/home";
 import MainContent from "@/main/mainContent";
 import { Navigate } from "react-router";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import EmptySkeleton from "../components/EmptySkeleton";
 
 export function meta({}: Route.MetaArgs) {
@@ -13,13 +13,23 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const { data, status } = useMediaContext();
+  const { data, status, setLoaded } = useMediaContext();
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setLoaded(true);
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
     <main className="flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 min-h-screen md:py-5 md:px-10">
       {children}
     </main>
   );
+
+  if (!data) return <Navigate to="/" />;
 
   if (!status.loaded)
     return (
@@ -30,8 +40,6 @@ export default function Home() {
         <EmptySkeleton title="Comics" />
       </MainContainer>
     );
-
-  if (!data) return <Navigate to="/" />;
 
   return (
     <MainContainer>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AddMultimedia from "./addMultimedia";
+import AddMultimedia from "./addMultimedia.form";
 import { MultimediaTypes } from "@/types/data.type";
 import { useMediaContext } from "@/context/mediaContext";
 import AddIcon from "@/icons/addIcon";

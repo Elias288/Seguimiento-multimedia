@@ -1,6 +1,6 @@
 import { useMediaContext } from "@/context/mediaContext";
 import BuscadorIcon from "@/icons/buscadorIcon";
-import ShowMultimedia from "@/main/showMultimedia";
+import ShowMultimedia from "@/components/showMultimedia.form";
 import type { MultimediaInfo } from "@/types/data.type";
 import { useState, type SubmitEvent } from "react";
 

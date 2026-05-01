@@ -14,6 +14,7 @@ export type MediaContextType = {
   updateItem: (data: MultimediaInfo) => void;
   deleteItem: (data: MultimediaInfo) => void;
   addData: (data: MultimediaInfo) => void;
+  setLoaded: (status: boolean) => void;
   clearData: () => void;
   clearError: () => void;
   clearMessage: () => void;
@@ -40,33 +41,35 @@ type Action =
   | { type: "DELETE_ITEM"; payload: MultimediaInfo }
   | { type: "ADD_DATA"; payload: MultimediaInfo }
   | { type: "SET_DIFFERENT"; payload: boolean }
+  | { type: "SET_LOADED"; payload: boolean }
   | { type: "CLEAR_DATA" }
   | { type: "CLEAR_MESSAGE" }
   | { type: "CLEAR_ERROR" };
 
 const STORAGE_KEY = "multimedia_data_v1";
 const UPDATED_FLAG = "multimedia_updated_flag";
+const DEBUG_LOG = false;
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "LOAD_FROM_STORAGE":
+      if (DEBUG_LOG) console.log("LOAD_FROM_STORAGE");
       return {
         ...state,
         data: action.payload,
-        reducerStatus: { ...state.reducerStatus, loaded: true },
+        reducerStatus: { ...state.reducerStatus },
       };
 
     case "SET_DATA":
-      // console.log("set_data");
-
+      if (DEBUG_LOG) console.log("set_data");
       return {
         ...state,
         data: action.payload,
-        reducerStatus: { ...state.reducerStatus, loaded: true },
+        reducerStatus: { ...state.reducerStatus },
       };
 
     case "UPDATE_ITEM":
-      // console.log("update_data");
+      if (DEBUG_LOG) console.log("update_data");
       if (state.data) {
         const { item: data, type } = action.payload;
         const newData: Multimedia = {
@@ -91,6 +94,7 @@ const reducer = (state: State, action: Action): State => {
       return state;
 
     case "DELETE_ITEM":
+      if (DEBUG_LOG) console.log("DELETE_ITEM");
       if (state.data) {
         const { item, type } = action.payload;
         const newData: Multimedia = {
@@ -115,7 +119,7 @@ const reducer = (state: State, action: Action): State => {
       return state;
 
     case "ADD_DATA":
-      // console.log("add_data");
+      if (DEBUG_LOG) console.log("add_data");
       const { item: data, type } = action.payload;
       if (state.data) {
         const exists = state.data[type].some(
@@ -154,11 +158,11 @@ const reducer = (state: State, action: Action): State => {
       return state;
 
     case "CLEAR_DATA":
-      // console.log("clear_data");
+      if (DEBUG_LOG) console.log("clear_data");
       return {
         data: null,
         reducerStatus: {
-          loaded: true,
+          loaded: false,
           message: null,
           updated: false,
           different: false,
@@ -167,14 +171,24 @@ const reducer = (state: State, action: Action): State => {
       };
 
     case "SET_DIFFERENT":
-      // console.log("set_update");
+      if (DEBUG_LOG) console.log("set_update");
       return {
         ...state,
         reducerStatus: { ...state.reducerStatus, different: action.payload },
       };
 
+    case "SET_LOADED":
+      if (DEBUG_LOG) console.log("SET_LOADED");
+      return {
+        ...state,
+        reducerStatus: {
+          ...state.reducerStatus,
+          loaded: action.payload,
+        },
+      };
+
     case "CLEAR_ERROR":
-      // console.log("clear_error");
+      if (DEBUG_LOG) console.log("clear_error");
       return {
         ...state,
         reducerStatus: {
@@ -186,6 +200,7 @@ const reducer = (state: State, action: Action): State => {
       };
 
     case "CLEAR_MESSAGE":
+      if (DEBUG_LOG) console.log("CLEAR_MESSAGE");
       return {
         ...state,
         reducerStatus: { ...state.reducerStatus, message: null },
@@ -230,6 +245,9 @@ export const useMediaReducer = (): MediaContextType => {
   const setData = (data: Multimedia | null) =>
     dispatch({ type: "SET_DATA", payload: data });
 
+  const setLoaded = (status: boolean) =>
+    dispatch({ type: "SET_LOADED", payload: status });
+
   const updateItem = (data: MultimediaInfo) =>
     dispatch({ type: "UPDATE_ITEM", payload: data });
 
@@ -260,6 +278,7 @@ export const useMediaReducer = (): MediaContextType => {
     updateItem,
     deleteItem,
     addData,
+    setLoaded,
     clearData,
     clearError,
     clearMessage,

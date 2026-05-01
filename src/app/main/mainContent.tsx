@@ -6,7 +6,7 @@ import {
   type MultimediaItem,
   MultimediaTypes,
 } from "@/types/data.type";
-import ShowMultimedia from "./showMultimedia";
+import ShowMultimedia from "../components/showMultimedia.form";
 
 const MainContent = () => {
   const { data } = useMediaContext();

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCSVData } from "@/bin/getCSVData";
 import { useMediaContext } from "@/context/mediaContext";
-import { redirect, useNavigate } from "react-router";
+import { redirect } from "react-router";
 import UploadIcon from "@/icons/upload";
 import type { Route } from "../+types/root";
+import Spinner from "@/icons/spinner";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -15,6 +16,9 @@ export function meta({}: Route.MetaArgs) {
 const LoadFile = () => {
   const { data, setData } = useMediaContext();
   const [error, setError] = useState<string | null>(null);
+  const [localLoaded, setLocalLoaded] = useState<boolean>(false);
+
+  useEffect(() => setLocalLoaded(true), []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -51,6 +55,12 @@ const LoadFile = () => {
     reader.readAsText(file);
   };
 
+  if (!localLoaded)
+    return (
+      <main className="h-screen flex-1 flex items-center justify-center">
+        <Spinner size={100} />
+      </main>
+    );
   return (
     <main className="h-screen flex-1 flex items-center justify-center flex-col">
       <div className="w-75 h-12.5 border flex flex-wrap relative rounded-lg overflow-hidden">
