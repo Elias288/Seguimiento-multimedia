@@ -1,3 +1,4 @@
+import { fetchWithTimeout } from "@/bin/fetchWithTimeout";
 import {
   MultimediaTypes,
   Status,
@@ -10,8 +11,14 @@ const LIMIT = 10;
 
 export class AnimeJikan implements MediaApi {
   async search(query: string): Promise<MultimediaInfo[]> {
-    const res = await fetch(`${URL}/anime?limit=${LIMIT}&q=${query}`);
+    const res = await fetchWithTimeout(
+      `${URL}/anime?limit=${LIMIT}&q=${query}`,
+      {},
+      2000,
+    );
+
     const { data, pagination } = await res.json();
+    if (data.error) return [];
 
     return data.map((item: any) => ({
       type: MultimediaTypes.ANIMES,
