@@ -25,22 +25,36 @@ export const RenderMultimediaType = ({ content, title, selectItem }: Props) => {
         </div>
 
         <div
-          className={`w-full pt-2 pb-5 px-5 ${showType ? "flex gap-4 overflow-x-auto" : "grid grid-cols-[repeat(auto-fit,300px)] justify-center gap-4"}`}
+          className={`w-full pt-2 pb-5 px-5 ${showType ? "flex items-start gap-4 overflow-x-auto snap-x" : "grid grid-cols-[repeat(auto-fit,300px)] justify-center gap-4"}`}
         >
           {content.map((item, key) => {
+            const { image, smallImage, largeImage } = item.images ?? {};
+            const img = image ? image : smallImage ? smallImage : largeImage;
+
             return (
               <MultimediaCard key={key} item={item}>
-                <div className="cursor-pointer">
-                  <div className="bg-gray-500 aspect-square">
+                <div
+                  className="bg-gray-500 w-full h-full rounded-sm overflow-hidden cursor-pointer"
+                  onClick={() => selectItem(item)}
+                >
+                  {img && (
                     <img
-                      src="/"
+                      src={img}
                       alt="img"
-                      onClick={() => selectItem(item)}
-                      className="w-full h-full"
+                      className="w-full h-full object-cover"
                     />
-                  </div>
+                  )}
+                </div>
 
-                  <p className="text-black">{item.name}</p>
+                <div className="bg-transparentBackground backdrop-blur-lg absolute bottom-2.5 left-2.5 right-2.5 rounded-b-sm py-2 px-1">
+                  <p className="border-b">{item.name}</p>
+                  <p>
+                    Temporadas: {item.actual_season ?? 0}/
+                    {item.total_seasons ?? 0}
+                  </p>
+                  <p>
+                    Capítulos: {item.actual_episode ?? 0}/{item.total_caps ?? 0}
+                  </p>
                 </div>
               </MultimediaCard>
             );

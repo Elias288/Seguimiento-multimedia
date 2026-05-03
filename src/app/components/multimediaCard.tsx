@@ -9,11 +9,11 @@ type Props = {
 const MultimediaCard = ({ item, children }: Props) => {
   if (!item)
     return (
-      <div className="bg-card rounded-lg p-2.5 h-100 min-w-75 animate-pulse"></div>
+      <div className="bg-card rounded-lg p-2.5 animate-pulse h-cardH w-cardW flex-[0_0_auto]"></div>
     );
 
   return (
-    <div className="anime__card bg-card rounded-lg p-2.5 h-100 min-w-75">
+    <div className="bg-card rounded-lg p-2.5 h-cardH w-cardW flex-[0_0_auto] overflow-hidden relative snap-center">
       {children}
     </div>
   );

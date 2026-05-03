@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCSVData } from "@/bin/getCSVData";
+import { readCSVData } from "@/bin/getCSVData";
 import { useMediaContext } from "@/context/mediaContext";
 import { redirect } from "react-router";
 import UploadIcon from "@/icons/upload";
@@ -38,10 +38,8 @@ const LoadFile = () => {
 
     reader.onload = async (e) => {
       try {
-        const text = e.target?.result as string;
-        const res = await getCSVData(text);
+        const res = await readCSVData(e.target?.result as string);
         setData(res);
-
         redirect("/home");
       } catch (err) {
         setError("Error al procesar el archivo");

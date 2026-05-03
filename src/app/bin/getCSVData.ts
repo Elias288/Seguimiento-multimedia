@@ -5,103 +5,100 @@ import {
   type Multimedia,
   type MultimediaItem,
 } from "@/types/data.type";
+import Papa from "papaparse";
 
-export async function getCSVData(data: string): Promise<Multimedia | null> {
-  try {
-    const lineas = data.split("\n").filter((linea) => linea.trim() !== "");
-    if (lineas.length < 2) return null;
+export function readCSVData(data: string): Promise<Multimedia> {
+  return new Promise((resolve, reject) => {
+    Papa.parse<string[]>(data, {
+      header: false,
+      skipEmptyLines: true,
+      complete: ({ data: rows }) => {
+        const CABECERAS = [
+          "name",
+          "alternative_name",
+          "description",
+          "type",
+          "total_caps",
+          "total_seasons",
+          "actual_season",
+          "actual_episode",
+          "status",
+          "images",
+        ] as const;
 
-    const cabeceras: (keyof MultimediaItem | "type")[] = [
-      "name",
-      "alternative_name",
-      "description",
-      "type",
-      "total_caps",
-      "total_seasons",
-      "actual_season",
-      "actual_episode",
-      "status",
-      "images",
-    ];
+        const datos: Multimedia = {
+          [MultimediaTypes.ANIMES]: [],
+          [MultimediaTypes.COMICS]: [],
+          [MultimediaTypes.MAGAS]: [],
+          [MultimediaTypes.SERIES]: [],
+          [MultimediaTypes.SIN_CATEGORIZAR]: [],
+        };
 
-    const indiceTipo = cabeceras.indexOf("type");
-    if (indiceTipo === -1)
-      throw new Error('La columna "type" no fue encontrada');
+        const parseNumber = (v: string) => {
+          const n = Number(v);
+          return isNaN(n) ? undefined : n;
+        };
 
-    const datos: Multimedia = {
-      [MultimediaTypes.ANIMES]: [],
-      [MultimediaTypes.COMICS]: [],
-      [MultimediaTypes.MAGAS]: [],
-      [MultimediaTypes.SERIES]: [],
-      [MultimediaTypes.SIN_CATEGORIZAR]: [],
-    };
+        const parseImages = (valor: string) => {
+          if (!valor) return undefined;
 
-    for (let i = 1; i < lineas.length; i++) {
-      const valores = lineas[i].split(",").map((v) => v.trim());
-      if (valores.length < cabeceras.length) continue;
-
-      const cat = mapToCategoria(valores[indiceTipo] || "");
-
-      const objeto: MultimediaItem = {
-        name: "",
-        alternative_name: "",
-        description: "",
-        status: Status.POR_VER,
-      };
-
-      cabeceras.forEach((cabecera, index) => {
-        if (cabecera === "type") return;
-
-        let valor = valores[index] ?? "";
-
-        if (valor === "") return;
-
-        /* Variables numéricas */
-        if (
-          cabecera === "total_caps" ||
-          cabecera === "total_seasons" ||
-          cabecera === "actual_season" ||
-          cabecera === "actual_episode"
-        ) {
-          const num = Number(valor);
-          if (!isNaN(num)) {
-            (objeto as any)[cabecera] = num;
-          }
-          return;
-        }
-
-        if (cabecera === "status") {
-          (objeto as any)[cabecera] = valor as MultimediaItem["status"];
-          return;
-        }
-
-        if (cabecera === "images" && valor !== undefined) {
-          const images = {
-            image: !valor ? "" : valor.split("image:")[1]?.split(";")[0],
-            smallImage: !valor
-              ? ""
-              : valor.split("smallImage:")[1]?.split(";")[0],
-            largeImage: !valor
-              ? ""
-              : valor.split("largeImage:")[1]?.split(";")[0],
+          const get = (key: string): string | undefined => {
+            const raw = valor.split(`${key}:`)[1]?.split(";")[0];
+            return raw !== "undefined" ? raw : undefined;
           };
 
-          (objeto as any)[cabecera] = images;
-          return;
-        }
+          return {
+            image: get("image"),
+            smallImage: get("smallImage"),
+            largeImage: get("largeImage"),
+          };
+        };
 
-        /* Variable por defecto */
-        (objeto as any)[cabecera] = valor;
-      });
+        rows.slice(1).forEach((linea) => {
+          const category = mapToCategoria(linea[3]);
 
-      if (!datos[cat]) datos[cat] = [];
+          const objeto: MultimediaItem = {
+            name: "",
+            alternative_name: "",
+            description: "",
+            status: Status.POR_VER,
+          };
 
-      datos[cat].push(objeto as MultimediaItem);
-    }
+          CABECERAS.forEach((key, i) => {
+            if (key === "type") return;
 
-    return datos;
-  } catch (error) {
-    console.error("Hubo un problema con la lectura del archivo:", error);
-    return null;
-  }
+            const valor = linea[i];
+            if (!valor) return;
+
+            switch (key) {
+              case "total_caps":
+              case "total_seasons":
+              case "actual_season":
+              case "actual_episode":
+                const num = parseNumber(valor);
+                if (num !== undefined) (objeto as any)[key] = num;
+                break;
+
+              case "status":
+                (objeto as any)[key] = valor;
+                break;
+
+              case "images":
+                const images = parseImages(valor);
+                if (images) (objeto as any)[key] = images;
+                break;
+
+              default:
+                (objeto as any)[key] = valor;
+            }
+          });
+
+          datos[category].push(objeto);
+        });
+
+        resolve(datos);
+      },
+      error: reject,
+    });
+  });
 }

@@ -39,7 +39,11 @@ export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
   actual_season: undefined,
   actual_episode: undefined,
   status: Status.POR_VER,
-  images: undefined,
+  images: {
+    image: undefined,
+    smallImage: undefined,
+    largeImage: undefined,
+  },
 };
 
 export interface CompressedMultimediaItem {

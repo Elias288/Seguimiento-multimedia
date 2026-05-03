@@ -20,9 +20,9 @@ export function jsonToCSV(data: Multimedia): string {
 
     items.forEach((item) => {
       const row = [
-        item.name,
-        item.alternative_name,
-        item.description,
+        normalizeAndEscapeCSV(item.name),
+        normalizeAndEscapeCSV(item.alternative_name),
+        normalizeAndEscapeCSV(item.description),
         type,
         item.total_caps,
         item.total_seasons,
@@ -39,6 +39,16 @@ export function jsonToCSV(data: Multimedia): string {
   });
 
   return [cabeceras.join(","), ...rows].join("\n");
+}
+
+function normalizeAndEscapeCSV(value: string) {
+  if (value == null) return "";
+  let str = String(value);
+  str = str.replace(/\r?\n|\r/g, " ");
+  str = str.replace(/\s+/g, " ").trim();
+  if (str.includes('"') && !str.includes('""')) str = str.replace(/"/g, '""');
+  if (str.includes(",") || str.includes('"')) str = `"${str}"`;
+  return str;
 }
 
 const defaultFileName = `data_${new Date().toISOString()}.csv`;

@@ -31,7 +31,7 @@ const MainLayout = () => {
 
 const FloatedCards = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="fixed bottom-2.5 left-2.5 w-fit flex flex-col gap-2 col-span-full">
+    <div className="fixed bottom-2.5 left-2.5 w-fit flex flex-col gap-2 col-span-full z-30">
       {children}
     </div>
   );

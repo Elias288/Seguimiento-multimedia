@@ -13,6 +13,9 @@
 
   --spacing-header: 60px;
   --spacing-screenMinWidth: 335px;
+  --spacing-formW: 400px;
+  --spacing-cardW: 300px;
+  --spacing-cardH: 400px;
 }
 
 html,

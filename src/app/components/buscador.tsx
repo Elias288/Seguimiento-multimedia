@@ -45,6 +45,7 @@ const BuscadorMultimedia = () => {
             value={searchInput}
             onFocus={(e) => handleChange(e.target.value)}
             onChange={(e) => handleChange(e.target.value)}
+            onBlur={() => setOpenList(false)}
             placeholder="Buscar..."
             className="w-full text-gray-400 outline-gray-700 focus-visible:outline-0 px-2"
           />
@@ -63,7 +64,7 @@ const BuscadorMultimedia = () => {
                 <li
                   key={key}
                   className="hover:bg-background1 px-4 py-2 cursor-pointer"
-                  onClick={() => openItem(item)}
+                  onMouseDown={() => openItem(item)}
                 >
                   {item.item.name}
                 </li>
