@@ -26,8 +26,8 @@ export function jsonToCSV(data: Multimedia): string {
         type,
         item.total_caps,
         item.total_seasons,
-        item.actual_episode,
         item.actual_season,
+        item.actual_episode,
         item.status,
         `image:${item.images?.image};smallImage:${item.images?.smallImage};largeImage:${item.images?.largeImage};`,
       ]
