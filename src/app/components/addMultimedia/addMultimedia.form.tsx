@@ -1,8 +1,8 @@
 import { getApi } from "@/apis/apiFactory";
 import { useMediaContext } from "@/context/mediaContext";
 import BuscadorIcon from "@/icons/buscadorIcon";
-import Spinner from "@/icons/spinner";
 import {
+  EMPTY_FORMDATA,
   type MultimediaInfo,
   type MultimediaItem,
   MultimediaTypes,
@@ -15,23 +15,13 @@ import {
   type ChangeEvent,
   type SubmitEvent,
 } from "react";
+import ListaSugerida from "./listaSugerida";
+import CustomInput from "../CustomInputProps";
 
 interface Props {
   action: () => void;
   type: MultimediaTypes;
 }
-
-const EMPTY_FORMDATA: MultimediaItem = {
-  name: "",
-  alternative_name: "",
-  description: "",
-  status: Status.POR_VER,
-  actual_episode: 0,
-  actual_season: 0,
-  total_caps: 0,
-  total_seasons: 1,
-  images: { image: undefined },
-};
 
 const AddMultimedia = ({ type, action }: Props) => {
   const { status, addData, clearError } = useMediaContext();
@@ -56,6 +46,13 @@ const AddMultimedia = ({ type, action }: Props) => {
     ) {
       setFormData((prev) => ({ ...prev, [name]: Number(value) }));
       return;
+    }
+
+    if (name === "image") {
+      setFormData((prev) => ({
+        ...prev,
+        images: { ...prev.images, image: value },
+      }));
     }
 
     setFormData((prev) => ({
@@ -89,8 +86,6 @@ const AddMultimedia = ({ type, action }: Props) => {
   };
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
-    if (!isSelectedItem) return;
-
     e.preventDefault();
 
     addData({ item: formData, type });
@@ -131,24 +126,21 @@ const AddMultimedia = ({ type, action }: Props) => {
     <div className="fixed top-0 left-0 z-30 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground">
       <form
         onSubmit={handleSubmit}
-        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-4 md:grid-cols-[300px_auto_auto] md:w-auto"
+        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-2 gap-x-3 overflow-auto md:grid-cols-[300px_auto_auto] md:w-auto"
       >
         <h2 className="text-2xl font-bold col-span-full">Agregar {type}</h2>
 
         <label className="block relative col-span-full">
           *Nombre
           <div className="flex gap-2">
-            <input
-              type="text"
+            <CustomInput
               name="name"
               ref={inputRef}
               value={formData.name}
               onChange={handleChange}
-              onBlur={() => setShowInfo(false)}
               onKeyDown={handleSearch}
-              className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
-              autoComplete="off"
-              required
+              onBlur={() => setShowInfo(false)}
+              required={true}
             />
             <button
               type="button"
@@ -183,88 +175,104 @@ const AddMultimedia = ({ type, action }: Props) => {
           )}
         </label>
 
-        <label className="block col-span-full md:col-start-2">
-          Nombre alternativo
-          <input
-            type="text"
+        <label className="block col-span-full">
+          <CustomInput
+            title="Nombre alternativo"
             name="alternative_name"
             value={formData.alternative_name}
             onChange={handleChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
         <label className="block col-span-full md:col-start-2">
-          Descripción
-          <textarea
+          <CustomInput
+            type="textarea"
             name="description"
+            title="Descripción"
             value={formData.description}
             onChange={handleChange}
-            className="w-full text-gray-400 h-35 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
-          ></textarea>
+          />
         </label>
 
-        <div className="col-start-1 row-span-4 w-full max-h-62.5 aspect-3/4 object-contain md:row-start-3 md:max-h-cardW">
+        <label className="block col-span-full md:col-start-2">
+          <CustomInput
+            type="text"
+            name="Image"
+            title="Imagen"
+            value={formData.images?.image ?? ""}
+            onChange={handleChange}
+          />
+        </label>
+
+        <div className="col-start-1 row-span-4 w-full object-contain overflow-hidden md:row-start-4 md:row-span-5 md:h-[400px]">
           {formData.images?.image && (
             <img
               src={formData.images?.image}
               alt=""
-              className="w-full max-h-62.5 aspect-3/4 object-contain md:max-h-87.5"
+              className="w-full h-full aspect-3/4 object-contain"
             />
           )}
         </div>
 
-        <label className="block">
-          Capítulos
-          <input
+        <label>
+          <CustomInput
+            title="Capítulos"
             type="number"
             name="total_caps"
             min={0}
-            value={formData.total_caps}
+            value={formData.total_caps ?? 0}
             onChange={handleChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
           />
         </label>
 
-        <label className="block">
-          Temporadas
-          <input
+        <label>
+          <CustomInput
+            title="Temporadas"
             type="number"
             name="total_seasons"
             min={0}
-            value={formData.total_seasons}
+            value={formData.total_seasons ?? 1}
             onChange={handleChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
           />
         </label>
 
-        <label className="block">
-          Temporada Actual
-          <input
+        <label>
+          <CustomInput
+            title="Temporada Actual"
             type="number"
             name="actual_season"
             max={formData.total_seasons}
             min={0}
-            value={formData.actual_season}
+            value={formData.actual_season ?? 0}
             onChange={handleChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
           />
         </label>
 
-        <label className="block">
-          Capítulo Actual
-          <input
+        <label>
+          <CustomInput
+            title="Capítulo Actual"
             type="number"
             name="actual_episode"
             max={formData.total_caps}
             min={0}
-            value={formData.actual_episode}
+            value={formData.actual_episode ?? 0}
             onChange={handleChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
           />
         </label>
 
-        <label className="block col-span-full">
+        <label className="col-span-full md:col-start-2">
           Estado
           <select
             name="status"
@@ -279,7 +287,7 @@ const AddMultimedia = ({ type, action }: Props) => {
           </select>
         </label>
 
-        <div className="border-t border-gray-700 pt-2 flex flex-row-reverse gap-2 col-span-full">
+        <div className="border-t border-gray-700 pt-4 flex flex-row-reverse gap-2 col-span-full">
           <button
             type="submit"
             className="px-4 py-2 cursor-pointer bg-principal text-white rounded hover:opacity-70"
@@ -304,65 +312,6 @@ const AddMultimedia = ({ type, action }: Props) => {
           </button>
         </div>
       </form>
-    </div>
-  );
-};
-
-type ListaSugeridaProps = {
-  lista: MultimediaInfo[];
-  query: string;
-  type: MultimediaTypes;
-  select: (item: MultimediaInfo) => void;
-};
-const ListaSugerida = ({ lista, query, type, select }: ListaSugeridaProps) => {
-  return (
-    <div className="bg-gray-700 rounded-b-sm w-full min-h-10 max-h-80 mb-4 overflow-y-auto absolute top-12.5">
-      {!lista.length && (
-        <li className="p-3 flex justify-center">
-          <Spinner />
-        </li>
-      )}
-
-      {lista.length > 0 && (
-        <ul>
-          <li
-            onMouseDown={() =>
-              select({ type, item: { ...EMPTY_FORMDATA, name: query } })
-            }
-            className="mb-2 p-3 cursor-pointer hover:bg-background2 rounded-sm"
-          >
-            Custom option
-          </li>
-
-          {lista.map((i, key) => {
-            const { image, smallImage, largeImage } = i.item.images ?? {};
-
-            return (
-              <li
-                key={key}
-                onMouseDown={() => select(i)}
-                className="mb-2 p-3 grid grid-rows-[auto_auto] grid-cols-[auto_auto_1fr] gap-2 cursor-pointer hover:bg-background2 rounded-sm"
-              >
-                <img
-                  src={image ? image : smallImage ? smallImage : largeImage}
-                  alt="img"
-                  className="aspect-square w-25 object-cover row-span-2"
-                />
-
-                <p className="col-span-2">{i.item.name}</p>
-                <p>
-                  Temporadas: {i.item.actual_season ?? 0}/
-                  {i.item.total_seasons ?? 0}
-                </p>
-                <p>
-                  Capítulos: {i.item.actual_episode ?? 0}/
-                  {i.item.total_caps ?? 0}
-                </p>
-              </li>
-            );
-          })}
-        </ul>
-      )}
     </div>
   );
 };

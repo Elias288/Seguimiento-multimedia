@@ -82,3 +82,15 @@ export const mapToCategoria = (value: string): MultimediaTypes => {
 export interface MediaApi {
   search(query: string): Promise<MultimediaInfo[]>;
 }
+
+export const EMPTY_FORMDATA: MultimediaItem = {
+  name: "",
+  alternative_name: "",
+  description: "",
+  status: Status.POR_VER,
+  actual_episode: 0,
+  actual_season: 0,
+  total_caps: 0,
+  total_seasons: 1,
+  images: { image: undefined },
+};

@@ -11,6 +11,7 @@ import {
   type ChangeEvent,
   type SubmitEvent,
 } from "react";
+import CustomInput from "./CustomInputProps";
 
 interface Props {
   item: MultimediaItem;
@@ -69,110 +70,116 @@ const ShowMultimedia = ({ item, type, callback }: Props) => {
     <div className="fixed top-0 left-0 z-30 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground">
       <form
         onSubmit={handleSubmit}
-        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-4 overflow-y-auto md:grid-cols-[300px_auto_auto] md:w-auto"
+        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-2 gap-x-3 overflow-y-auto md:grid-cols-[300px_auto_auto] md:w-auto"
       >
         <h2 className="text-2xl font-bold col-span-full">{formData.name}</h2>
 
         <label className="col-span-full row-start-2">
-          Nombre alternativo
-          <input
+          <CustomInput
+            title="Nombre alternativo"
             type="text"
             name="alternative_name"
             value={formData.alternative_name}
             onChange={handleInputChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
         <label className="col-span-full row-start-3 md:col-start-2">
-          Descripción
-          <textarea
+          <CustomInput
+            title="Descripción"
+            type="textarea"
             name="description"
             value={formData.description}
             onChange={handleInputChange}
-            className="w-full h-35 text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
         <label className="col-span-full row-start-4 md:col-start-2">
-          Image
-          <input
+          <CustomInput
+            title="Image"
             type="url"
             name="image"
-            value={formData.images?.image}
+            value={formData.images?.image ?? ""}
             onChange={handleInputChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
           />
         </label>
 
-        <div className="col-start-1 row-span-4 w-full max-h-62.5 aspect-3/4 object-contain md:row-start-3 md:max-h-cardW">
+        <div className="col-start-1 row-span-4 w-full overflow-hidden md:row-start-3 md:row-span-5 md:h-[400px]">
           {formData.images?.image && (
             <img
               src={formData.images?.image}
               alt=""
-              className="w-full max-h-62.5 aspect-3/4 object-contain md:max-h-87.5"
+              className="w-full h-full aspect-3/4 object-contain"
             />
           )}
         </div>
 
         <label>
-          Capítulos
-          <input
+          <CustomInput
+            title="Capítulos"
             type="number"
             name="total_caps"
             min={0}
-            value={formData.total_caps}
+            value={formData.total_caps ?? 0}
             onChange={handleInputChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
           />
         </label>
 
         <label>
-          Temporadas
-          <input
+          <CustomInput
+            title="Temporadas"
             type="number"
             name="total_seasons"
             min={0}
-            value={formData.total_seasons}
+            value={formData.total_seasons ?? 1}
             onChange={handleInputChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
           />
         </label>
 
         <label>
-          Temporada Actual
-          <input
+          <CustomInput
+            title="Temporada Actual"
             type="number"
             name="actual_season"
             max={formData.total_seasons}
             min={0}
-            value={formData.actual_season}
+            value={formData.actual_season ?? 0}
             onChange={handleInputChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
           />
         </label>
 
         <label>
-          Capítulo Actual
-          <input
+          <CustomInput
+            title="Capítulo Actual"
             type="number"
             name="actual_episode"
             max={formData.total_caps}
             min={0}
-            value={formData.actual_episode}
+            value={formData.actual_episode ?? 0}
             onChange={handleInputChange}
-            className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
           />
         </label>
 
-        <label className="col-span-full">
+        <label className="col-span-full md:col-start-2">
           Estado
           <select
             name="status"
             id="status"
             value={formData.status}
             onChange={handleInputChange}
-            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2 cursor-pointer h-6"
+            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 p-2 cursor-pointer"
           >
             <option value={Status.POR_VER}>Por ver</option>
             <option value={Status.VIENDO}>Viendo</option>
