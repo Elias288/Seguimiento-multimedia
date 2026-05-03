@@ -1,6 +1,7 @@
 import { getApi } from "@/apis/apiFactory";
 import { useMediaContext } from "@/context/mediaContext";
 import BuscadorIcon from "@/icons/buscadorIcon";
+import Spinner from "@/icons/spinner";
 import {
   type MultimediaInfo,
   type MultimediaItem,
@@ -34,7 +35,6 @@ const EMPTY_FORMDATA: MultimediaItem = {
 
 const AddMultimedia = ({ type, action }: Props) => {
   const { status, addData, clearError } = useMediaContext();
-  const api = getApi("jikan");
 
   const [formData, setFormData] = useState<MultimediaItem>(EMPTY_FORMDATA);
   const [apiResult, setApiResult] = useState<MultimediaInfo[]>([]);
@@ -64,11 +64,28 @@ const AddMultimedia = ({ type, action }: Props) => {
     }));
   };
 
-  const searchMultimedia = async () => {
-    const value = formData.name;
-    setApiResult(value.length <= 3 ? [] : await api.search(value));
+  const searchMultimedia = async (type: MultimediaTypes) => {
+    setShowInfo(formData.name.length > 3);
+
+    switch (type) {
+      case MultimediaTypes.ANIMES:
+        const api = getApi("jikan");
+        const value = formData.name;
+        setApiResult(value.length <= 3 ? [] : await api.search(value));
+        if (value.length === 0) setShowInfo(false);
+        break;
+
+      case MultimediaTypes.COMICS:
+      case MultimediaTypes.MAGAS:
+      case MultimediaTypes.SERIES:
+      default:
+        setTimeout(() => {
+          setShowInfo(false);
+        }, 500);
+        break;
+    }
+
     inputRef.current?.focus();
-    setShowInfo(value.length > 3);
   };
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
@@ -102,7 +119,7 @@ const AddMultimedia = ({ type, action }: Props) => {
       if (isSelectedItem) return;
 
       e.preventDefault();
-      searchMultimedia();
+      searchMultimedia(type);
     }
   };
 
@@ -137,7 +154,7 @@ const AddMultimedia = ({ type, action }: Props) => {
               type="button"
               title="buscar"
               className="rounded-sm bg-gray-900 px-4 cursor-pointer hover:opacity-70"
-              onClick={searchMultimedia}
+              onClick={() => searchMultimedia(type)}
             >
               <BuscadorIcon size={20} />
             </button>
@@ -156,8 +173,13 @@ const AddMultimedia = ({ type, action }: Props) => {
           {status.message && status.isError && (
             <span className="text-red-500">Multimedia ya registrada</span>
           )}
-          {apiResult && showInfo && (
-            <ListaSugerida lista={apiResult} select={selectOption} />
+          {showInfo && (
+            <ListaSugerida
+              type={type}
+              query={formData.name}
+              lista={apiResult}
+              select={selectOption}
+            />
           )}
         </label>
 
@@ -197,6 +219,7 @@ const AddMultimedia = ({ type, action }: Props) => {
           <input
             type="number"
             name="total_caps"
+            min={0}
             value={formData.total_caps}
             onChange={handleChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
@@ -208,6 +231,7 @@ const AddMultimedia = ({ type, action }: Props) => {
           <input
             type="number"
             name="total_seasons"
+            min={0}
             value={formData.total_seasons}
             onChange={handleChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
@@ -219,6 +243,8 @@ const AddMultimedia = ({ type, action }: Props) => {
           <input
             type="number"
             name="actual_season"
+            max={formData.total_seasons}
+            min={0}
             value={formData.actual_season}
             onChange={handleChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
@@ -230,6 +256,8 @@ const AddMultimedia = ({ type, action }: Props) => {
           <input
             type="number"
             name="actual_episode"
+            max={formData.total_caps}
+            min={0}
             value={formData.actual_episode}
             onChange={handleChange}
             className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
@@ -242,7 +270,7 @@ const AddMultimedia = ({ type, action }: Props) => {
             name="status"
             id="status"
             onChange={handleChange}
-            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 p-2 cursor-pointer"
           >
             <option value={Status.POR_VER}>Por ver</option>
             <option value={Status.VIENDO}>Viendo</option>
@@ -282,21 +310,38 @@ const AddMultimedia = ({ type, action }: Props) => {
 
 type ListaSugeridaProps = {
   lista: MultimediaInfo[];
+  query: string;
+  type: MultimediaTypes;
   select: (item: MultimediaInfo) => void;
 };
-const ListaSugerida = ({ lista, select }: ListaSugeridaProps) => {
+const ListaSugerida = ({ lista, query, type, select }: ListaSugeridaProps) => {
   return (
-    <div className="bg-gray-700 rounded-b-sm min-h-10 max-h-80 mb-4 overflow-y-auto absolute top-12.5">
-      <ul>
-        {lista &&
-          lista.map((i, key) => {
+    <div className="bg-gray-700 rounded-b-sm w-full min-h-10 max-h-80 mb-4 overflow-y-auto absolute top-12.5">
+      {!lista.length && (
+        <li className="p-3 flex justify-center">
+          <Spinner />
+        </li>
+      )}
+
+      {lista.length > 0 && (
+        <ul>
+          <li
+            onMouseDown={() =>
+              select({ type, item: { ...EMPTY_FORMDATA, name: query } })
+            }
+            className="mb-2 p-3 cursor-pointer hover:bg-background2 rounded-sm"
+          >
+            Custom option
+          </li>
+
+          {lista.map((i, key) => {
             const { image, smallImage, largeImage } = i.item.images ?? {};
 
             return (
               <li
                 key={key}
                 onMouseDown={() => select(i)}
-                className="mb-2 p-3 grid grid-rows-[auto_auto] grid-cols-3 gap-2 cursor-pointer hover:bg-background2 rounded-sm"
+                className="mb-2 p-3 grid grid-rows-[auto_auto] grid-cols-[auto_auto_1fr] gap-2 cursor-pointer hover:bg-background2 rounded-sm"
               >
                 <img
                   src={image ? image : smallImage ? smallImage : largeImage}
@@ -316,7 +361,8 @@ const ListaSugerida = ({ lista, select }: ListaSugeridaProps) => {
               </li>
             );
           })}
-      </ul>
+        </ul>
+      )}
     </div>
   );
 };
