@@ -8,6 +8,8 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { MediaProvider } from "@/context/mediaContext";
+import { MediaFilterProvider } from "./context/mediaFilterContext";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -22,8 +24,6 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
-
-import { MediaProvider } from "@/context/mediaContext";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -46,7 +46,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <MediaProvider>
-      <Outlet />
+      <MediaFilterProvider>
+        <Outlet />
+      </MediaFilterProvider>
     </MediaProvider>
   );
 }

@@ -18,6 +18,7 @@ const MainLayout = () => {
     >
       <Header sideBarOpen={showSideBar} toggleSideBar={toggleSideBar} />
       <SideBar isOpen={showSideBar} />
+
       <Outlet />
 
       <ButtonAdd />

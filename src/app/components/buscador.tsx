@@ -1,11 +1,11 @@
-import { useMediaContext } from "@/context/mediaContext";
 import BuscadorIcon from "@/icons/buscadorIcon";
 import ShowMultimedia from "@/components/showMultimedia.form";
 import type { MultimediaInfo } from "@/types/data.type";
 import { useState, type SubmitEvent } from "react";
+import { useMediaFilterContext } from "@/context/mediaFilterContext";
 
 const BuscadorMultimedia = () => {
-  const { setQuery, filteredData } = useMediaContext();
+  const { setQuery, filteredData } = useMediaFilterContext();
   const [searchInput, setSearchInput] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<MultimediaInfo | null>(null);
   const [openList, setOpenList] = useState<boolean>(false);
