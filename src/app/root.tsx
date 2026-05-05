@@ -9,8 +9,9 @@ import {
 
 import type { Route } from "./+types/root";
 import { MediaProvider } from "@/context/mediaContext";
-import { MediaFilterProvider } from "./context/mediaFilterContext";
 import "./app.css";
+import { MediaSearchProvider } from "./context/mediaSearchContext";
+import { MediaFilterProvider } from "./context/mediaFilter";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -47,7 +48,9 @@ export default function App() {
   return (
     <MediaProvider>
       <MediaFilterProvider>
-        <Outlet />
+        <MediaSearchProvider>
+          <Outlet />
+        </MediaSearchProvider>
       </MediaFilterProvider>
     </MediaProvider>
   );

@@ -1,4 +1,3 @@
-import { useMediaContext } from "@/context/mediaContext";
 import { RenderMultimediaType } from "./RenderMultimediaType";
 import { useState } from "react";
 import {
@@ -7,9 +6,11 @@ import {
   MultimediaTypes,
 } from "@/types/data.type";
 import ShowMultimedia from "../components/showMultimedia.form";
+import { useMediaFilterContext } from "@/context/mediaFilter";
 
 const MainContent = () => {
-  const { data } = useMediaContext();
+  const { filteredData: data } = useMediaFilterContext();
+
   const [selectedItem, setSelectedItem] = useState<MultimediaInfo | null>(null);
 
   const handleSelected = (data: MultimediaItem, type: MultimediaTypes) => {

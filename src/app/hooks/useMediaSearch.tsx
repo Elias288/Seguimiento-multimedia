@@ -1,3 +1,4 @@
+import { useMediaContext } from "@/context/mediaContext";
 import type {
   Multimedia,
   MultimediaInfo,
@@ -5,12 +6,13 @@ import type {
 } from "@/types/data.type";
 import { useMemo, useState } from "react";
 
-export type MediaFilterType = {
+export type MediaSearchType = {
   query: string | null;
   setQuery: (str: string) => void;
   filteredData: MultimediaInfo[];
 };
-const useMediaFilter = (data: Multimedia | null): MediaFilterType => {
+const useMediaSearch = (): MediaSearchType => {
+  const { data } = useMediaContext();
   const [query, setQuery] = useState<string>("");
 
   const filteredData = useMemo(() => {
@@ -39,4 +41,4 @@ const useMediaFilter = (data: Multimedia | null): MediaFilterType => {
   };
 };
 
-export default useMediaFilter;
+export default useMediaSearch;

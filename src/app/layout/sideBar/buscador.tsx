@@ -2,10 +2,10 @@ import BuscadorIcon from "@/icons/buscadorIcon";
 import ShowMultimedia from "@/components/showMultimedia.form";
 import type { MultimediaInfo } from "@/types/data.type";
 import { useState, type SubmitEvent } from "react";
-import { useMediaFilterContext } from "@/context/mediaFilterContext";
+import { useMediaSearchContext } from "@/context/mediaSearchContext";
 
 const BuscadorMultimedia = () => {
-  const { setQuery, filteredData } = useMediaFilterContext();
+  const { setQuery, filteredData } = useMediaSearchContext();
   const [searchInput, setSearchInput] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<MultimediaInfo | null>(null);
   const [openList, setOpenList] = useState<boolean>(false);
@@ -57,7 +57,7 @@ const BuscadorMultimedia = () => {
 
         {openList && filteredData.length > 0 && (
           <div
-            className={`absolute top-10 w-full bg-gray-900 max-h-50 rounded-b-sm shadow-xl  ${!filteredData.length ? "" : "border-t-2 border-background1"}`}
+            className={`absolute top-10 w-full bg-gray-900 max-h-90 overflow-y-auto rounded-b-sm shadow-xl  ${!filteredData.length ? "" : "border-t-2 border-background1"}`}
           >
             <ul>
               {filteredData.map((item: MultimediaInfo, key) => (

@@ -11,6 +11,11 @@
   --color-secondary: #25252525;
   --color-card: rgba(255, 255, 255, .5);
 
+  --color-viendo: var(--color-principal);
+  --color-dejado: #82181a;
+  --color-visto: #008236;
+  --color-porVer: var(--color-card);
+
   --spacing-header: 60px;
   --spacing-screenMinWidth: 335px;
   --spacing-formW: 400px;

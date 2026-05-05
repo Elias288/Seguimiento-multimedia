@@ -5,7 +5,7 @@ import ButtonAdd from "@/components/buttonAdd";
 import MessageBottom from "@/components/messageBottom";
 import type { ReactNode } from "react";
 import { useState } from "react";
-import SideBar from "./sideBar";
+import SideBar from "./sideBar/sideBar";
 
 const MainLayout = () => {
   const [showSideBar, setShowSideBar] = useState<boolean>(false);

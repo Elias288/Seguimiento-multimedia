@@ -1,13 +1,18 @@
 import { createContext, useContext } from "react";
-import { type MediaContextType } from "./useMediaReducer";
-import { useMedia } from "./useMedia";
+import {
+  useMediaReducer,
+  type MediaContextType,
+} from "../hooks/useMediaReducer";
+import { useMediaStorage } from "../hooks/useMediaStorage";
 
 const MediaContext = createContext<MediaContextType | undefined>(undefined);
 
 export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const media = useMedia();
+  const media = useMediaReducer();
+  useMediaStorage({ data: media.data, isDifferent: media.status.different });
+
   return (
     <MediaContext.Provider value={media}>{children}</MediaContext.Provider>
   );
