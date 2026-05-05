@@ -17,7 +17,7 @@ const MainLayout = () => {
       className={`min-h-screen min-w-screenMinWidth md:grid duration-100 ease-in-out ${showSideBar ? "md:grid-cols-[350px_auto]" : "md:grid-cols-[0_auto]"}`}
     >
       <Header sideBarOpen={showSideBar} toggleSideBar={toggleSideBar} />
-      <SideBar isOpen={showSideBar} />
+      <SideBar isOpen={showSideBar} toggleSideBar={toggleSideBar} />
 
       <Outlet />
 

@@ -1,13 +1,11 @@
 import BuscadorIcon from "@/icons/buscadorIcon";
-import ShowMultimedia from "@/components/showMultimedia.form";
 import type { MultimediaInfo } from "@/types/data.type";
 import { useState, type SubmitEvent } from "react";
 import { useMediaSearchContext } from "@/context/mediaSearchContext";
 
 const BuscadorMultimedia = () => {
-  const { setQuery, filteredData } = useMediaSearchContext();
+  const { filteredData, setQuery, selectMultimedia } = useMediaSearchContext();
   const [searchInput, setSearchInput] = useState<string>("");
-  const [selectedItem, setSelectedItem] = useState<MultimediaInfo | null>(null);
   const [openList, setOpenList] = useState<boolean>(false);
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
@@ -15,10 +13,6 @@ const BuscadorMultimedia = () => {
 
     setQuery(searchInput);
     setOpenList(true);
-  };
-
-  const handleAction = () => {
-    setSelectedItem(null);
   };
 
   const handleChange = (query: string) => {
@@ -31,7 +25,7 @@ const BuscadorMultimedia = () => {
     }
   };
 
-  const openItem = (item: MultimediaInfo) => setSelectedItem(item);
+  const openItem = (item: MultimediaInfo) => selectMultimedia(item);
 
   return (
     <>
@@ -73,14 +67,6 @@ const BuscadorMultimedia = () => {
           </div>
         )}
       </div>
-
-      {selectedItem && (
-        <ShowMultimedia
-          item={selectedItem.item}
-          type={selectedItem.type}
-          callback={handleAction}
-        />
-      )}
     </>
   );
 };

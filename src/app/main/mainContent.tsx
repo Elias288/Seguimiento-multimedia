@@ -1,23 +1,18 @@
 import { RenderMultimediaType } from "./RenderMultimediaType";
-import { useState } from "react";
-import {
-  type MultimediaInfo,
-  type MultimediaItem,
-  MultimediaTypes,
-} from "@/types/data.type";
+import { type MultimediaItem, MultimediaTypes } from "@/types/data.type";
 import ShowMultimedia from "../components/showMultimedia.form";
 import { useMediaFilterContext } from "@/context/mediaFilter";
+import { useMediaSearchContext } from "@/context/mediaSearchContext";
 
 const MainContent = () => {
+  const { selectedItem, selectMultimedia } = useMediaSearchContext();
   const { filteredData: data } = useMediaFilterContext();
 
-  const [selectedItem, setSelectedItem] = useState<MultimediaInfo | null>(null);
-
   const handleSelected = (data: MultimediaItem, type: MultimediaTypes) => {
-    setSelectedItem({ item: data, type });
+    selectMultimedia({ item: data, type });
   };
 
-  const handleAction = () => setSelectedItem(null);
+  const handleClose = () => selectMultimedia(undefined);
 
   if (!data) return;
   return (
@@ -47,7 +42,7 @@ const MainContent = () => {
         <ShowMultimedia
           item={selectedItem.item}
           type={selectedItem.type}
-          callback={handleAction}
+          close={handleClose}
         />
       )}
     </>

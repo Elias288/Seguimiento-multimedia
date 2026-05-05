@@ -17,7 +17,7 @@ const Header = ({ sideBarOpen, toggleSideBar }: Props) => {
         </div>
 
         <button
-          onClick={() => toggleSideBar()}
+          onClick={toggleSideBar}
           className="hover:opacity-70 cursor-pointer"
         >
           <MenuIcon isOpen={sideBarOpen} />

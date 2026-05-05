@@ -123,7 +123,12 @@ const AddMultimedia = ({ type, action }: Props) => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 z-30 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground">
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) action();
+      }}
+      className="fixed top-0 left-0 z-30 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground"
+    >
       <form
         onSubmit={handleSubmit}
         className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-2 gap-x-3 overflow-auto md:grid-cols-[300px_auto_auto] md:w-auto"

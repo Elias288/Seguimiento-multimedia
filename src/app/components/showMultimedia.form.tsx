@@ -16,9 +16,15 @@ import CustomInput from "./CustomInputProps";
 interface Props {
   item: MultimediaItem;
   type: MultimediaTypes;
-  callback: () => void;
+  callback?: () => void;
+  close?: () => void;
 }
-const ShowMultimedia = ({ item, type, callback }: Props) => {
+const ShowMultimedia = ({
+  item,
+  type,
+  callback = () => {},
+  close = () => {},
+}: Props) => {
   const { data, updateItem, deleteItem } = useMediaContext();
   const [formData, setFormData] = useState<MultimediaItem>({
     name: item.name,
@@ -52,13 +58,13 @@ const ShowMultimedia = ({ item, type, callback }: Props) => {
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateItem({ item: formData, type });
-    callback();
+    close();
   };
 
   const handleDelete = () => {
     if (data) {
       deleteItem({ item, type });
-      callback();
+      close();
     }
   };
 
@@ -67,7 +73,12 @@ const ShowMultimedia = ({ item, type, callback }: Props) => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 z-30 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground">
+    <div
+      className="fixed top-0 left-0 z-30 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) close();
+      }}
+    >
       <form
         onSubmit={handleSubmit}
         className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-2 gap-x-3 overflow-y-auto md:grid-cols-[300px_auto_auto] md:w-auto"
@@ -206,7 +217,7 @@ const ShowMultimedia = ({ item, type, callback }: Props) => {
           <button
             type="reset"
             className="px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70"
-            onClick={callback}
+            onClick={close}
           >
             Cancelar
           </button>
