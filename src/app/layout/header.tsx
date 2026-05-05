@@ -30,19 +30,17 @@ const Header = ({ sideBarOpen, toggleSideBar }: Props) => {
 export const NavBar = () => {
   const { status, clearData, downloadData } = useMediaContext();
   return (
-    <nav className="flex gap-4 flex-wrap">
-      <NavLink to={"/home"} className="hover:opacity-70">
+    <nav className="flex flex-wrap justify-center">
+      <NavLink to={"/home"} className="px-2 hover:opacity-70">
         Home
       </NavLink>{" "}
-      |
-      <NavLink to="/info" className="hover:opacity-70">
+      <NavLink to="/info" className="px-2 hover:opacity-70">
         Info
       </NavLink>{" "}
-      |
       <button
         onClick={downloadData}
         title="La información se guarda en el navegador, guárdala para no perderla"
-        className={`cursor-pointer flex items-center gap-1 hover:opacity-70`}
+        className="px-2 cursor-pointer flex items-center gap-1 hover:opacity-70"
       >
         Descargar
         {status.different && (
@@ -51,8 +49,10 @@ export const NavBar = () => {
           </span>
         )}
       </button>
-      |
-      <button onClick={clearData} className="hover:opacity-70 cursor-pointer">
+      <button
+        onClick={clearData}
+        className="px-2 cursor-pointer hover:opacity-70"
+      >
         Cerrar
       </button>
     </nav>
