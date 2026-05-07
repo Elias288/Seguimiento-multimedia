@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react";
 import type { MediaSearchType } from "../hooks/useMediaSearch";
 import useMediaSearch from "../hooks/useMediaSearch";
-import { useMediaContext } from "./mediaContext";
 
 const MediaSearchContext = createContext<MediaSearchType | undefined>(
   undefined,

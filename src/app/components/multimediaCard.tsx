@@ -2,10 +2,10 @@ import { type MultimediaItem, Status } from "@/types/data.type";
 import type { ReactNode } from "react";
 
 const borderColor: Record<Status, string> = {
-  [Status.VIENDO]: "viendo",
-  [Status.DEJADO]: "dejado",
-  [Status.POR_VER]: "porVer",
-  [Status.VISTO]: "visto",
+  [Status.VIENDO]: "outline-viendo",
+  [Status.DEJADO]: "outline-dejado",
+  [Status.POR_VER]: "outline-porVer",
+  [Status.VISTO]: "outline-visto",
 };
 
 type Props = {
@@ -21,7 +21,7 @@ const MultimediaCard = ({ item, children }: Props) => {
 
   return (
     <div
-      className={`bg-card rounded-lg p-2.5 h-cardH w-cardW flex-[0_0_auto] overflow-hidden relative snap-center outline-4 outline-${borderColor[item.status]}`}
+      className={`bg-card rounded-lg p-2.5 h-cardH w-cardW flex-[0_0_auto] overflow-hidden relative snap-center outline-4 ${borderColor[item.status]}`}
     >
       {children}
     </div>

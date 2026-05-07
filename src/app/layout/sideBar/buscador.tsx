@@ -2,9 +2,11 @@ import BuscadorIcon from "@/icons/buscadorIcon";
 import type { MultimediaInfo } from "@/types/data.type";
 import { useState, type SubmitEvent } from "react";
 import { useMediaSearchContext } from "@/context/mediaSearchContext";
+import { useInterfaceContext } from "@/context/interfaceContext";
 
 const BuscadorMultimedia = () => {
-  const { filteredData, setQuery, selectMultimedia } = useMediaSearchContext();
+  const { filteredData, setQuery } = useMediaSearchContext();
+  const { selectMultimedia } = useInterfaceContext();
   const [searchInput, setSearchInput] = useState<string>("");
   const [openList, setOpenList] = useState<boolean>(false);
 

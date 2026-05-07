@@ -12,6 +12,7 @@ import { MediaProvider } from "@/context/mediaContext";
 import "./app.css";
 import { MediaSearchProvider } from "./context/mediaSearchContext";
 import { MediaFilterProvider } from "./context/mediaFilter";
+import { InterfaceProvider } from "./context/interfaceContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -46,13 +47,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <MediaProvider>
-      <MediaFilterProvider>
-        <MediaSearchProvider>
-          <Outlet />
-        </MediaSearchProvider>
-      </MediaFilterProvider>
-    </MediaProvider>
+    <InterfaceProvider>
+      <MediaProvider>
+        <MediaFilterProvider>
+          <MediaSearchProvider>
+            <Outlet />
+          </MediaSearchProvider>
+        </MediaFilterProvider>
+      </MediaProvider>
+    </InterfaceProvider>
   );
 }
 

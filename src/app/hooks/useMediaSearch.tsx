@@ -9,19 +9,11 @@ import { useMemo, useState } from "react";
 export type MediaSearchType = {
   query: string | null;
   filteredData: MultimediaInfo[];
-  selectedItem: MultimediaInfo | undefined;
-  selectMultimedia: (multimedia: MultimediaInfo | undefined) => void;
   setQuery: (str: string) => void;
 };
 const useMediaSearch = (): MediaSearchType => {
   const { data } = useMediaContext();
   const [query, setQuery] = useState<string>("");
-  const [selectedItem, setSelectedItem] = useState<MultimediaInfo | undefined>(
-    undefined,
-  );
-
-  const selectMultimedia = (multimedia: MultimediaInfo | undefined) =>
-    setSelectedItem(multimedia);
 
   const filteredData = useMemo(() => {
     if (!data || query.length < 3) return [];
@@ -45,9 +37,7 @@ const useMediaSearch = (): MediaSearchType => {
   return {
     query,
     filteredData,
-    selectedItem,
     setQuery,
-    selectMultimedia,
   };
 };
 

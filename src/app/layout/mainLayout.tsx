@@ -6,8 +6,13 @@ import MessageBottom from "@/components/messageBottom";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import SideBar from "./sideBar/sideBar";
+import { useInterfaceContext } from "@/context/interfaceContext";
+import ShowMultimedia from "@/components/showMultimedia.form";
+import SearchInAPI from "@/components/searchInAPI";
 
 const MainLayout = () => {
+  const { selectedMultimedia, selectMultimedia, selectedApi, setSelectedApi } =
+    useInterfaceContext();
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
 
   const toggleSideBar = () => setShowSideBar(!showSideBar);
@@ -22,6 +27,22 @@ const MainLayout = () => {
       <Outlet />
 
       <ButtonAdd />
+
+      {selectedMultimedia && (
+        <ShowMultimedia
+          item={selectedMultimedia.item}
+          type={selectedMultimedia.type}
+          close={() => selectMultimedia(undefined)}
+        />
+      )}
+
+      {selectedApi && (
+        <SearchInAPI
+          apiLabel={selectedApi}
+          close={() => setSelectedApi(undefined)}
+        />
+      )}
+
       <FloatedCards>
         <MessageBottom />
         <UpdatedFlag />
