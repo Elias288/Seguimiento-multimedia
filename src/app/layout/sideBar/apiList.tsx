@@ -1,4 +1,5 @@
-import { getAvailableApis, type ApiOption } from "@/apis/apiFactory";
+import type { ApiOption } from "@/apis/api.types";
+import { getAvailableApis } from "@/apis/apiFactory";
 import { useInterfaceContext } from "@/context/interfaceContext";
 import { useEffect, useState } from "react";
 
@@ -14,7 +15,7 @@ const ApiList = () => {
     <div className="border-b border-gray-700 pb-4 relative">
       <h3 className="mb-2">Apis</h3>
 
-      <div className="flex flex-col gap-3 max-h-50 overflow-y-auto">
+      <div className="grid grid-cols-2 md:flex md:flex-col gap-3 max-h-50 overflow-y-auto">
         {apis.map((api, key) => (
           <button
             key={key}

@@ -3,16 +3,22 @@ import BuscadorIcon from "@/icons/buscadorIcon";
 import ListaSugerida from "./addMultimedia/listaSugerida";
 import { type MultimediaItem } from "@/types/data.type";
 import { getApi } from "@/apis/apiFactory";
+import type { ApiOption, MediaApi } from "@/apis/api.types";
+import { useInterfaceContext } from "@/context/interfaceContext";
 
 interface Props {
   apiLabel: ApiOption;
   close: () => void;
 }
 const SearchInAPI = ({ apiLabel, close }: Props) => {
+  const { selectMultimedia, toggleOpenAddMultimedia } = useInterfaceContext();
   const [inputText, setInputText] = useState<string>("");
   const [openList, setOpenList] = useState<boolean>(false);
   const [data, setData] = useState<MultimediaItem[] | undefined>([]);
   const [selectedApi, setSelectedApi] = useState<MediaApi | undefined>(
+    undefined,
+  );
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
   );
 
@@ -25,15 +31,28 @@ const SearchInAPI = ({ apiLabel, close }: Props) => {
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage(undefined);
 
-    setOpenList(inputText.length !== 0);
-    setData(await selectedApi?.search(inputText));
-
+    if (inputText.length > 0) {
+      setOpenList(true);
+      try {
+        const res = await selectedApi?.search(inputText);
+        setData(res);
+      } catch (error: any) {
+        console.error(error);
+        setErrorMessage(`${error.api}:  ${error.message}`);
+        setOpenList(false);
+      }
+    }
     inputRef.current?.focus();
   };
 
-  const selectItem = () => {
-    close();
+  const selectItem = async (item: MultimediaItem) => {
+    if (item.id) {
+      selectMultimedia(await selectedApi?.getInfo(item.id));
+      toggleOpenAddMultimedia();
+      close();
+    }
   };
 
   return (
@@ -43,13 +62,24 @@ const SearchInAPI = ({ apiLabel, close }: Props) => {
         if (e.target === e.currentTarget) close();
       }}
     >
-      <div className="bg-background1 p-4 pb-6 border border-principal rounded-xl w-formW max-w-200 h-[90%]">
-        <h3 className="text-xl mb-4">Buscar en: {apiLabel}</h3>
+      <div className="bg-background1 p-4 pb-6 border border-principal rounded-xl w-full max-w-200 h-[90%] overflow-y-scroll">
+        <div className="flex items-baseline">
+          <h3 className="text-xl mb-4 flex-1">Buscar en: {apiLabel}</h3>
+
+          <button
+            className="cursor-pointer px-2"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) close();
+            }}
+          >
+            X
+          </button>
+        </div>
 
         <div className="relative">
           <form
             onSubmit={handleSubmit}
-            className="w-full max-h-[90%] rounded-sm bg-gray-900 p-2 flex gap-2"
+            className="w-full max-h-[90%] rounded-sm bg-gray-900 p-2 flex gap-2 md:w-auto"
           >
             <input
               type="text"
@@ -69,10 +99,13 @@ const SearchInAPI = ({ apiLabel, close }: Props) => {
             </button>
           </form>
 
+          {errorMessage && <p className="text-red-600 mt-2">{errorMessage}</p>}
+
           {openList && (
             <ListaSugerida
               lista={data ?? []}
               query={inputText}
+              float={false}
               select={selectItem}
             />
           )}

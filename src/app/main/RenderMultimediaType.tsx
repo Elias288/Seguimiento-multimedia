@@ -8,13 +8,15 @@ interface Props {
   title: string;
 }
 export const RenderMultimediaType = ({ content, title }: Props) => {
-  const { selectMultimedia } = useInterfaceContext();
+  const { selectMultimedia, toggleOpenUpdateMultimedia } =
+    useInterfaceContext();
   const [showType, setShowType] = useState<boolean>(true);
 
   if (content.length === 0) return;
 
   const handleSelected = (data: MultimediaItem) => {
     selectMultimedia(data);
+    toggleOpenUpdateMultimedia();
   };
 
   return (

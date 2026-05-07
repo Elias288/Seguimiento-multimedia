@@ -1,39 +1,97 @@
+/**
+ * Documentación: https://docs.api.jikan.moe/
+ */
+
 import { fetchWithTimeout } from "@/bin/fetchWithTimeout";
 import {
   MultimediaTypes,
   Status,
   type MultimediaItem,
 } from "@/types/data.type";
+import type { MediaApi } from "./api.types";
+import { ApiError } from "./apiError";
 
 const URL = "https://api.jikan.moe/v4";
 const LIMIT = 10;
 
 export class AnimeJikan implements MediaApi {
-  async search(query: string): Promise<MultimediaInfo[]> {
-    const res = await fetchWithTimeout(
-      `${URL}/anime?limit=${LIMIT}&q=${query}`,
-      {},
-      2000,
-    );
+  async search(query: string): Promise<MultimediaItem[]> {
+    try {
+      const res = await fetchWithTimeout(
+        `${URL}/anime?limit=${LIMIT}&q=${query}`,
+        {},
+        2000,
+      );
 
-    const { data, pagination } = await res.json();
-    if (data.error) return [];
+      if (!res.ok) {
+        if (res.status === 404)
+          throw new ApiError("No encontrado", "NOT_FOUND", "JikanApi");
+        if (res.status === 429)
+          throw new ApiError("Rate limit", "RATE_LIMIT", "JikanApi");
+        throw new ApiError("Error desconocido", "UNKNOWN", "JikanApi");
+      }
 
-    return data.map((item: any) => ({
+      const { data, pagination } = await res.json();
+      return data.map((item: any) => ({
+        id: item.mal_id,
         name: item.title,
-        type: MultimediaTypes.ANIMES,
         alternative_name: item.title_english ?? "",
         description: item.synopsis ?? "",
-        total_caps: item.episodes ?? 0,
-        total_seasons: 1,
-        actual_season: 1,
-        actual_episode: 0,
-        status: Status.POR_VER,
         images: {
           image: item.images.webp.image_url,
           smallImage: item.images.webp.small_image_url,
           largeImage: item.images.webp.large_image_url,
         },
       })) as MultimediaItem[];
+    } catch (error: any) {
+      if (error.name === "AbortError")
+        throw new ApiError("Timeout", "TIMEOUT", "JikanApi");
+
+      if (error instanceof ApiError) throw error;
+
+      throw new ApiError("Error de red", "NETWORK", "JikanApi");
+    }
+  }
+
+  async getInfo(multimediaId: string): Promise<MultimediaItem> {
+    try {
+      const res = await fetchWithTimeout(
+        `${URL}/anime/${multimediaId}/full`,
+        {},
+        2000,
+      );
+
+      if (!res.ok) {
+        if (res.status === 404)
+          throw new ApiError("No encontrado", "NOT_FOUND", "JikanApi");
+        if (res.status === 429)
+          throw new ApiError("Rate limit", "RATE_LIMIT", "JikanApi");
+        throw new ApiError("Error desconocido", "UNKNOWN", "JikanApi");
+      }
+
+      const { data, pagination } = await res.json();
+      return {
+        id: data.mal_id,
+        name: data.title,
+        alternative_name: data.title_english ?? "",
+        description: data.synopsis ?? "",
+        type: MultimediaTypes.ANIMES,
+        status: Status.POR_VER,
+        total_caps: data.episodes,
+        total_seasons: 1,
+        images: {
+          image: data.images.webp.image_url,
+          smallImage: data.images.webp.small_image_url,
+          largeImage: data.images.webp.large_image_url,
+        },
+      } as MultimediaItem;
+    } catch (error: any) {
+      if (error.name === "AbortError")
+        throw new ApiError("Timeout", "TIMEOUT", "JikanApi");
+
+      if (error instanceof ApiError) throw error;
+
+      throw new ApiError("Error de red", "NETWORK", "JikanApi");
+    }
   }
 }

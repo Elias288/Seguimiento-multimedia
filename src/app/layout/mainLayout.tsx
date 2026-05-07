@@ -15,6 +15,7 @@ const MainLayout = () => {
   const {
     selectedMultimedia,
     selectedApi,
+    openUpdateMultimedia,
     openAddMultimedia,
     selectMultimedia,
     setSelectedApi,
@@ -34,12 +35,7 @@ const MainLayout = () => {
 
       <ButtonAdd />
 
-      {selectedMultimedia && (
-        <ShowMultimedia
-          item={selectedMultimedia}
-          close={() => selectMultimedia(undefined)}
-        />
-      )}
+      {openUpdateMultimedia && <ShowMultimedia />}
 
       {selectedApi && (
         <SearchInAPI

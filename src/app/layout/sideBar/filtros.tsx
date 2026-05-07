@@ -11,7 +11,7 @@ const Filtros = () => {
     <div className="border-b border-gray-700 pb-4">
       <h3 className="mb-2">Filtros</h3>
 
-      <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-2 md:flex md:flex-col gap-3">
         <button
           value={""}
           title="Todos"

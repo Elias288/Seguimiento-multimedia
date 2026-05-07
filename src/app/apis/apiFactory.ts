@@ -1,24 +1,4 @@
-import type { MediaApi } from "@/types/data.type";
-import { AnimeJikan } from "./anime_jikan";
-import { IMDb } from "./series_IMDb";
-
-type ApiConfig = {
-  label: string;
-  factory: () => MediaApi;
-};
-
-export const API_OPTIONS = ["jikan", "IMDb"] as const;
-export type ApiOption = (typeof API_OPTIONS)[number];
-const apiMap: Record<ApiOption, ApiConfig> = {
-  jikan: {
-    label: "Jikan (anime)",
-    factory: () => new AnimeJikan(),
-  },
-  IMDb: {
-    label: "IMDb",
-    factory: () => new IMDb(),
-  },
-};
+import { apiMap, type ApiOption, type MediaApi } from "./api.types";
 
 export const getApi = (type: ApiOption): MediaApi => {
   const { factory } = apiMap[type];

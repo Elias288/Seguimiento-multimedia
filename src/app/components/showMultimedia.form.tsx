@@ -12,29 +12,24 @@ import {
   type SubmitEvent,
 } from "react";
 import CustomInput from "./CustomInputProps";
+import { useInterfaceContext } from "@/context/interfaceContext";
 
-interface Props {
-  item: MultimediaItem;
-  callback?: () => void;
-  close?: () => void;
-}
-const ShowMultimedia = ({
-  item,
-  callback = () => {},
-  close = () => {},
-}: Props) => {
+interface Props {}
+const ShowMultimedia = ({}: Props) => {
+  const { selectedMultimedia, selectMultimedia, toggleOpenUpdateMultimedia } =
+    useInterfaceContext();
   const { data, updateItem, deleteItem } = useMediaContext();
   const [formData, setFormData] = useState<MultimediaItem>({
-    name: item.name,
-    type: item.type ?? MultimediaTypes.ANIMES,
-    alternative_name: item.alternative_name,
-    description: item.description,
-    status: item.status ?? Status.POR_VER,
-    actual_episode: item.actual_episode ?? 1,
-    actual_season: item.actual_season ?? 0,
-    total_caps: item.total_caps ?? 0,
-    total_seasons: item.total_seasons ?? 1,
-    images: item.images,
+    name: selectedMultimedia?.name ?? "",
+    type: selectedMultimedia?.type ?? MultimediaTypes.ANIMES,
+    alternative_name: selectedMultimedia?.alternative_name ?? "",
+    description: selectedMultimedia?.description ?? "",
+    status: selectedMultimedia?.status ?? Status.POR_VER,
+    actual_episode: selectedMultimedia?.actual_episode ?? 1,
+    actual_season: selectedMultimedia?.actual_season ?? 0,
+    total_caps: selectedMultimedia?.total_caps ?? 0,
+    total_seasons: selectedMultimedia?.total_seasons ?? 1,
+    images: selectedMultimedia?.images,
   });
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -54,6 +49,11 @@ const ShowMultimedia = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const close = () => {
+    selectMultimedia(undefined);
+    toggleOpenUpdateMultimedia();
+  };
+
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateItem(formData);
@@ -61,8 +61,8 @@ const ShowMultimedia = ({
   };
 
   const handleDelete = () => {
-    if (data) {
-      deleteItem(item);
+    if (data && selectedMultimedia) {
+      deleteItem(selectedMultimedia);
       close();
     }
   };

@@ -20,6 +20,7 @@ export enum Status {
 }
 
 export interface MultimediaItem {
+  id?: string;
   name: string;
   alternative_name: string;
   description: string;
@@ -71,12 +72,9 @@ export const mapToCategoria = (value: string): MultimediaTypes => {
   return match ?? MultimediaTypes.SIN_CATEGORIZAR;
 };
 
-export interface MediaApi {
-  search(query: string): Promise<MultimediaInfo[]>;
-}
-
 export const EMPTY_FORMDATA: MultimediaItem = {
   name: "",
+  type: MultimediaTypes.ANIMES,
   alternative_name: "",
   description: "",
   status: Status.POR_VER,

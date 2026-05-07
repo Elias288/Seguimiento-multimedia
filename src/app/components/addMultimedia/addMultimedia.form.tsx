@@ -1,4 +1,4 @@
-import { getApi } from "@/apis/apiFactory";
+import { getApi, getAvailableApis } from "@/apis/apiFactory";
 import { useMediaContext } from "@/context/mediaContext";
 import BuscadorIcon from "@/icons/buscadorIcon";
 import {
@@ -17,17 +17,21 @@ import {
 import ListaSugerida from "./listaSugerida";
 import CustomInput from "../CustomInputProps";
 import { useInterfaceContext } from "@/context/interfaceContext";
+import type { ApiOption, MediaApi } from "@/apis/api.types";
 
 interface Props {}
 
 const AddMultimedia = ({}: Props) => {
   const { status, addData, clearError } = useMediaContext();
-  const { toggleOpenAddMultimedia } = useInterfaceContext();
+  const { selectedMultimedia, toggleOpenAddMultimedia } = useInterfaceContext();
 
-  const [formData, setFormData] = useState<MultimediaItem>(EMPTY_FORMDATA);
+  const [formData, setFormData] = useState<MultimediaItem>(
+    selectedMultimedia ? selectedMultimedia : EMPTY_FORMDATA,
+  );
   const [apiResult, setApiResult] = useState<MultimediaItem[]>([]);
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [isSelectedItem, setIsSelectedItem] = useState<boolean>(false);
+  const [actualApi, setActualApi] = useState<MediaApi | undefined>(undefined);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -51,6 +55,10 @@ const AddMultimedia = ({}: Props) => {
         }));
         break;
 
+      case "selectApi":
+        setActualApi(getApi(value as ApiOption));
+        break;
+
       default:
         setFormData((prev) => ({
           ...prev,
@@ -63,22 +71,11 @@ const AddMultimedia = ({}: Props) => {
     const value = formData.name.trim();
     setShowInfo(value.length !== 0);
 
-    switch (type) {
-      case MultimediaTypes.ANIMES:
-        const api = getApi("jikan");
-        setApiResult(await api.search(value));
-        break;
-
-      case MultimediaTypes.COMICS:
-      case MultimediaTypes.MAGAS:
-      case MultimediaTypes.SERIES:
-      default:
-        setTimeout(() => {
-          setShowInfo(false);
-        }, 500);
-        break;
+    if (actualApi) {
+      setApiResult(await actualApi.search(value));
+    } else {
+      setShowInfo(false);
     }
-
     inputRef.current?.focus();
   };
 
@@ -91,10 +88,14 @@ const AddMultimedia = ({}: Props) => {
     inputRef.current?.focus();
   };
 
-  const selectOption = (info: MultimediaItem) => {
-    setFormData(info);
-    setIsSelectedItem(true);
-    setShowInfo(false);
+  const selectOption = async (info: MultimediaItem) => {
+    if (actualApi && info.id) {
+      const multimediaData = await actualApi.getInfo(info.id);
+      setFormData(multimediaData);
+      setIsSelectedItem(true);
+      setShowInfo(false);
+    }
+
     inputRef.current?.focus();
   };
 
@@ -116,8 +117,9 @@ const AddMultimedia = ({}: Props) => {
   };
 
   useEffect(() => {
+    setActualApi(getApi("jikan"));
     inputRef.current?.focus();
-  }, []);
+  }, [formData.type]);
 
   return (
     <div
@@ -128,39 +130,47 @@ const AddMultimedia = ({}: Props) => {
     >
       <form
         onSubmit={handleSubmit}
-        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-2 gap-x-3 overflow-auto md:grid-cols-[300px_auto_auto] md:w-auto"
+        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-1 gap-x-3 overflow-auto md:grid-cols-[300px_auto_auto] md:w-auto"
       >
         <h2 className="text-2xl font-bold col-span-full">
           Agregar
           <select
             name="type"
             id="type"
+            value={formData.type}
             onChange={handleChange}
             className="bg-background1 outline-0 border-0 px-2"
           >
-            {Object.values(MultimediaTypes).map((type) => (
-              <option value={type} key={type}>
-                {type}
-              </option>
-            ))}
+            {Object.values(MultimediaTypes)
+              .filter((i) => i !== MultimediaTypes.SIN_CATEGORIZAR)
+              .map((type) => (
+                <option value={type} key={type}>
+                  {type}
+                </option>
+              ))}
           </select>
         </h2>
 
         <label className="block relative col-span-full">
           *Nombre
-          <div className="flex gap-2 pb-1">
+          <div
+            className={`grid ${isSelectedItem ? "grid-cols-[1fr_auto_auto]" : "grid-cols-[1fr_auto]"} gap-2 pb-1 md:flex`}
+          >
             <CustomInput
               name="name"
               ref={inputRef}
               value={formData.name}
               onChange={handleChange}
               onKeyDown={handleSearch}
-              onBlur={() => setShowInfo(false)}
+              onBlur={() => {
+                setApiResult([]);
+                setShowInfo(false);
+              }}
               required={true}
             />
             <button
               type="button"
-              title="buscar"
+              title="Buscar"
               className="rounded-sm bg-gray-900 px-4 cursor-pointer hover:opacity-70"
               onClick={() =>
                 searchMultimedia(
@@ -181,12 +191,27 @@ const AddMultimedia = ({}: Props) => {
                 -
               </button>
             )}
+
+            <select
+              name="selectApi"
+              id="selected_api"
+              title="Buscador"
+              onChange={handleChange}
+              className={`bg-gray-900 cursor-pointer px-4 py-1 text-center ${isSelectedItem ? "col-span-3" : "col-span-2"} md:text-start`}
+            >
+              {getAvailableApis().map((api, key) => (
+                <option key={key} value={api.key}>
+                  {api.key}
+                </option>
+              ))}
+            </select>
           </div>
           {status.message && status.isError && (
             <span className="text-red-500">Multimedia ya registrada</span>
           )}
           {showInfo && (
             <ListaSugerida
+              type={formData.type}
               query={formData.name}
               lista={apiResult}
               select={selectOption}
