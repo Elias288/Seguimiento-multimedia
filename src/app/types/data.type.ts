@@ -28,6 +28,7 @@ export interface MultimediaItem {
   actual_season?: number;
   actual_episode?: number;
   status: Status;
+  type?: MultimediaTypes;
   images?: { image?: string; smallImage?: string; largeImage?: string };
 }
 
@@ -38,6 +39,7 @@ export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
   total_seasons: undefined,
   actual_season: undefined,
   actual_episode: undefined,
+  type: MultimediaTypes.ANIMES,
   status: Status.POR_VER,
   images: {
     image: undefined,
@@ -58,16 +60,6 @@ export interface CompressedMultimediaItem {
   i?: string;
   smi?: string;
   lgi?: string;
-}
-
-export interface MultimediaInfo {
-  type: MultimediaTypes;
-  item: MultimediaItem;
-}
-
-export interface TypeList {
-  type: MultimediaTypes;
-  data: MultimediaItem[];
 }
 
 export const mapToCategoria = (value: string): MultimediaTypes => {

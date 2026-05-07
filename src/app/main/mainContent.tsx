@@ -8,26 +8,10 @@ const MainContent = () => {
   if (!data) return;
   return (
     <>
-      <RenderMultimediaType
-        content={data.anime}
-        title="Anime"
-        type={MultimediaTypes.ANIMES}
-      />
-      <RenderMultimediaType
-        content={data.serie}
-        title="Serie"
-        type={MultimediaTypes.SERIES}
-      />
-      <RenderMultimediaType
-        content={data.manga}
-        title="Manga"
-        type={MultimediaTypes.MAGAS}
-      />
-      <RenderMultimediaType
-        content={data.comic}
-        title="Comic"
-        type={MultimediaTypes.COMICS}
-      />
+      <RenderMultimediaType content={data.anime} title="Anime" />
+      <RenderMultimediaType content={data.serie} title="Serie" />
+      <RenderMultimediaType content={data.manga} title="Manga" />
+      <RenderMultimediaType content={data.comic} title="Comic" />
     </>
   );
 };

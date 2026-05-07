@@ -1,14 +1,10 @@
 import { useMediaContext } from "@/context/mediaContext";
-import type {
-  Multimedia,
-  MultimediaInfo,
-  MultimediaTypes,
-} from "@/types/data.type";
+import type { MultimediaItem } from "@/types/data.type";
 import { useMemo, useState } from "react";
 
 export type MediaSearchType = {
   query: string | null;
-  filteredData: MultimediaInfo[];
+  filteredData: MultimediaItem[];
   setQuery: (str: string) => void;
 };
 const useMediaSearch = (): MediaSearchType => {
@@ -27,12 +23,8 @@ const useMediaSearch = (): MediaSearchType => {
         (item) =>
           normalize(item.name).includes(q) ||
           normalize(item.alternative_name).includes(q),
-      )
-      .map(({ type, ...item }) => ({
-        type: type as MultimediaTypes,
-        item,
-      }));
-  }, [data, query]);
+      );
+  }, [data, query]) as MultimediaItem[];
 
   return {
     query,

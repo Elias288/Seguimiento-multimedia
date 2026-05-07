@@ -1,5 +1,5 @@
 import BuscadorIcon from "@/icons/buscadorIcon";
-import type { MultimediaInfo } from "@/types/data.type";
+import type { MultimediaItem } from "@/types/data.type";
 import { useState, type SubmitEvent } from "react";
 import { useMediaSearchContext } from "@/context/mediaSearchContext";
 import { useInterfaceContext } from "@/context/interfaceContext";
@@ -27,7 +27,7 @@ const BuscadorMultimedia = () => {
     }
   };
 
-  const openItem = (item: MultimediaInfo) => selectMultimedia(item);
+  const openItem = (item: MultimediaItem) => selectMultimedia(item);
 
   return (
     <>
@@ -59,13 +59,13 @@ const BuscadorMultimedia = () => {
             className={`absolute w-full bg-gray-900 max-h-90 overflow-y-auto rounded-b-sm shadow-xl  ${!filteredData.length ? "" : "border-t-2 border-background1"}`}
           >
             <ul>
-              {filteredData.map((item: MultimediaInfo, key) => (
+              {filteredData.map((item: MultimediaItem, key) => (
                 <li
                   key={key}
                   className="hover:bg-background1 px-4 py-2 cursor-pointer"
                   onMouseDown={() => openItem(item)}
                 >
-                  {item.item.name}
+                  {item.name}
                 </li>
               ))}
             </ul>

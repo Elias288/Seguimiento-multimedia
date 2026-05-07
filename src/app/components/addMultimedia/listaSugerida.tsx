@@ -1,26 +1,24 @@
 import Spinner from "@/icons/spinner";
-import {
-  EMPTY_FORMDATA,
-  type MultimediaInfo,
-  type MultimediaTypes,
-} from "@/types/data.type";
+import { EMPTY_FORMDATA, type MultimediaItem } from "@/types/data.type";
 
 type ListaSugeridaProps = {
-  lista: MultimediaInfo[];
+  lista: MultimediaItem[];
   query: string;
-  type: MultimediaTypes;
   customOption?: boolean;
-  select: (item: MultimediaInfo) => void;
+  float?: boolean;
+  select: (item: MultimediaItem) => void;
 };
 const ListaSugerida = ({
   lista,
   query,
-  type,
   customOption = false,
+  float = true,
   select,
 }: ListaSugeridaProps) => {
   return (
-    <div className="bg-gray-700 rounded-b-sm w-full min-h-10 max-h-80 mb-4 overflow-y-auto absolute">
+    <div
+      className={`bg-gray-700 rounded-b-sm w-full min-h-10 mb-4 overflow-y-auto ${float ? "absolute" : ""}`}
+    >
       {!lista.length && (
         <li className="p-3 flex justify-center">
           <Spinner />
@@ -31,9 +29,7 @@ const ListaSugerida = ({
         <ul>
           {customOption && (
             <li
-              onMouseDown={() =>
-                select({ type, item: { ...EMPTY_FORMDATA, name: query } })
-              }
+              onMouseDown={() => select({ ...EMPTY_FORMDATA, name: query })}
               className="mb-2 p-3 cursor-pointer hover:bg-background2 rounded-sm"
             >
               Custom option
@@ -41,7 +37,7 @@ const ListaSugerida = ({
           )}
 
           {lista.map((i, key) => {
-            const { image, smallImage, largeImage } = i.item.images ?? {};
+            const { image, smallImage, largeImage } = i.images ?? {};
             const showImage = image
               ? image
               : smallImage
@@ -62,9 +58,9 @@ const ListaSugerida = ({
                   />
                 )}
 
-                <p className="col-span-2">{i.item.name}</p>
-                <p>Temporadas: {i.item.total_seasons ?? 0}</p>
-                <p>Capítulos: {i.item.total_caps ?? 0}</p>
+                <p className="col-span-2">{i.name}</p>
+                <p>Temporadas: {i.total_seasons ?? 0}</p>
+                <p>Capítulos: {i.total_caps ?? 0}</p>
               </li>
             );
           })}

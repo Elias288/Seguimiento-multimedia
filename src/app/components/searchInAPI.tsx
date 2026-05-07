@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import CustomInput from "./CustomInputProps";
 import BuscadorIcon from "@/icons/buscadorIcon";
 import ListaSugerida from "./addMultimedia/listaSugerida";
-import {
-  MultimediaTypes,
-  type MediaApi,
-  type MultimediaInfo,
-} from "@/types/data.type";
-import { getApi, type ApiOption } from "@/apis/apiFactory";
+import { type MultimediaItem } from "@/types/data.type";
+import { getApi } from "@/apis/apiFactory";
 
 interface Props {
   apiLabel: ApiOption;
@@ -16,7 +11,7 @@ interface Props {
 const SearchInAPI = ({ apiLabel, close }: Props) => {
   const [inputText, setInputText] = useState<string>("");
   const [openList, setOpenList] = useState<boolean>(false);
-  const [data, setData] = useState<MultimediaInfo[] | undefined>([]);
+  const [data, setData] = useState<MultimediaItem[] | undefined>([]);
   const [selectedApi, setSelectedApi] = useState<MediaApi | undefined>(
     undefined,
   );
@@ -76,7 +71,6 @@ const SearchInAPI = ({ apiLabel, close }: Props) => {
 
           {openList && (
             <ListaSugerida
-              type={MultimediaTypes.ANIMES}
               lista={data ?? []}
               query={inputText}
               select={selectItem}

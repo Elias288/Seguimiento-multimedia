@@ -3,7 +3,6 @@ import { useMediaContext } from "@/context/mediaContext";
 import BuscadorIcon from "@/icons/buscadorIcon";
 import {
   EMPTY_FORMDATA,
-  type MultimediaInfo,
   type MultimediaItem,
   MultimediaTypes,
   Status,
@@ -17,17 +16,16 @@ import {
 } from "react";
 import ListaSugerida from "./listaSugerida";
 import CustomInput from "../CustomInputProps";
+import { useInterfaceContext } from "@/context/interfaceContext";
 
-interface Props {
-  action: () => void;
-  type: MultimediaTypes;
-}
+interface Props {}
 
-const AddMultimedia = ({ type, action }: Props) => {
+const AddMultimedia = ({}: Props) => {
   const { status, addData, clearError } = useMediaContext();
+  const { toggleOpenAddMultimedia } = useInterfaceContext();
 
   const [formData, setFormData] = useState<MultimediaItem>(EMPTY_FORMDATA);
-  const [apiResult, setApiResult] = useState<MultimediaInfo[]>([]);
+  const [apiResult, setApiResult] = useState<MultimediaItem[]>([]);
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [isSelectedItem, setIsSelectedItem] = useState<boolean>(false);
 
@@ -38,27 +36,27 @@ const AddMultimedia = ({ type, action }: Props) => {
   ) => {
     const { name, value } = e.target;
 
-    if (
-      name === "total_caps" ||
-      name === "total_seasons" ||
-      name === "actual_season" ||
-      name === "actual_episode"
-    ) {
-      setFormData((prev) => ({ ...prev, [name]: Number(value) }));
-      return;
-    }
+    switch (name) {
+      case "total_caps":
+      case "total_seasons":
+      case "actual_season":
+      case "actual_episode":
+        setFormData((prev) => ({ ...prev, [name]: Number(value) }));
+        break;
 
-    if (name === "image") {
-      setFormData((prev) => ({
-        ...prev,
-        images: { ...prev.images, image: value },
-      }));
-    }
+      case "image":
+        setFormData((prev) => ({
+          ...prev,
+          images: { ...prev.images, image: value },
+        }));
+        break;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+      default:
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+    }
   };
 
   const searchMultimedia = async (type: MultimediaTypes) => {
@@ -87,14 +85,14 @@ const AddMultimedia = ({ type, action }: Props) => {
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    addData({ item: formData, type });
+    addData(formData);
     setFormData(EMPTY_FORMDATA);
     setIsSelectedItem(false);
     inputRef.current?.focus();
   };
 
-  const selectOption = (info: MultimediaInfo) => {
-    setFormData(info.item);
+  const selectOption = (info: MultimediaItem) => {
+    setFormData(info);
     setIsSelectedItem(true);
     setShowInfo(false);
     inputRef.current?.focus();
@@ -113,7 +111,7 @@ const AddMultimedia = ({ type, action }: Props) => {
       if (isSelectedItem) return;
 
       e.preventDefault();
-      searchMultimedia(type);
+      searchMultimedia(formData.type ? formData.type : MultimediaTypes.ANIMES);
     }
   };
 
@@ -124,7 +122,7 @@ const AddMultimedia = ({ type, action }: Props) => {
   return (
     <div
       onClick={(e) => {
-        if (e.target === e.currentTarget) action();
+        if (e.target === e.currentTarget) toggleOpenAddMultimedia();
       }}
       className="fixed top-0 left-0 z-30 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground"
     >
@@ -132,7 +130,21 @@ const AddMultimedia = ({ type, action }: Props) => {
         onSubmit={handleSubmit}
         className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-2 gap-x-3 overflow-auto md:grid-cols-[300px_auto_auto] md:w-auto"
       >
-        <h2 className="text-2xl font-bold col-span-full">Agregar {type}</h2>
+        <h2 className="text-2xl font-bold col-span-full">
+          Agregar
+          <select
+            name="type"
+            id="type"
+            onChange={handleChange}
+            className="bg-background1 outline-0 border-0 px-2"
+          >
+            {Object.values(MultimediaTypes).map((type) => (
+              <option value={type} key={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </h2>
 
         <label className="block relative col-span-full">
           *Nombre
@@ -150,7 +162,11 @@ const AddMultimedia = ({ type, action }: Props) => {
               type="button"
               title="buscar"
               className="rounded-sm bg-gray-900 px-4 cursor-pointer hover:opacity-70"
-              onClick={() => searchMultimedia(type)}
+              onClick={() =>
+                searchMultimedia(
+                  formData.type ? formData.type : MultimediaTypes.ANIMES,
+                )
+              }
             >
               <BuscadorIcon size={20} />
             </button>
@@ -171,7 +187,6 @@ const AddMultimedia = ({ type, action }: Props) => {
           )}
           {showInfo && (
             <ListaSugerida
-              type={type}
               query={formData.name}
               lista={apiResult}
               select={selectOption}
@@ -311,7 +326,7 @@ const AddMultimedia = ({ type, action }: Props) => {
           <button
             type="reset"
             className="px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70"
-            onClick={action}
+            onClick={toggleOpenAddMultimedia}
           >
             Cerrar
           </button>

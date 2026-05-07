@@ -1,19 +1,15 @@
 import { useEffect, useReducer } from "react";
 import { decompressMultimedia } from "@/bin/compressData";
-import type {
-  MultimediaInfo,
-  Multimedia,
-  MultimediaItem,
-} from "@/types/data.type";
+import type { MultimediaItem, Multimedia } from "@/types/data.type";
 import { downloadCSV, jsonToCSV } from "@/bin/JSONtoCSV";
 
 export type MediaContextType = {
   data: Multimedia | null;
   status: ReducerStatus;
   setData: (data: Multimedia | null) => void;
-  updateItem: (data: MultimediaInfo) => void;
-  deleteItem: (data: MultimediaInfo) => void;
-  addData: (data: MultimediaInfo) => void;
+  updateItem: (data: MultimediaItem) => void;
+  deleteItem: (data: MultimediaItem) => void;
+  addData: (data: MultimediaItem) => void;
   setLoaded: (status: boolean) => void;
   clearData: () => void;
   clearError: () => void;
@@ -37,9 +33,9 @@ type ReducerStatus = {
 type Action =
   | { type: "LOAD_FROM_STORAGE"; payload: Multimedia }
   | { type: "SET_DATA"; payload: Multimedia | null }
-  | { type: "UPDATE_ITEM"; payload: MultimediaInfo }
-  | { type: "DELETE_ITEM"; payload: MultimediaInfo }
-  | { type: "ADD_DATA"; payload: MultimediaInfo }
+  | { type: "UPDATE_ITEM"; payload: MultimediaItem }
+  | { type: "DELETE_ITEM"; payload: MultimediaItem }
+  | { type: "ADD_DATA"; payload: MultimediaItem }
   | { type: "SET_DIFFERENT"; payload: boolean }
   | { type: "SET_LOADED"; payload: boolean }
   | { type: "CLEAR_DATA" }
@@ -71,58 +67,62 @@ const reducer = (state: State, action: Action): State => {
     case "UPDATE_ITEM":
       if (DEBUG_LOG) console.log("update_data");
       if (state.data) {
-        const { item: data, type } = action.payload;
-        const newData: Multimedia = {
-          ...state.data,
-          [type]: state.data[type].map((i: MultimediaItem) =>
-            i.name === data.name ? data : i,
-          ),
-        };
+        const data = action.payload;
+        if (data.type) {
+          const newData: Multimedia = {
+            ...state.data,
+            [data.type]: state.data[data.type].map((i: MultimediaItem) =>
+              i.name === data.name ? data : i,
+            ),
+          };
 
-        return {
-          ...state,
-          data: newData,
-          reducerStatus: {
-            ...state.reducerStatus,
-            loaded: true,
-            different: true,
-            isError: false,
-            message: "Multimedia actualizada",
-          },
-        };
+          return {
+            ...state,
+            data: newData,
+            reducerStatus: {
+              ...state.reducerStatus,
+              loaded: true,
+              different: true,
+              isError: false,
+              message: "Multimedia actualizada",
+            },
+          };
+        }
       }
       return state;
 
     case "DELETE_ITEM":
       if (DEBUG_LOG) console.log("DELETE_ITEM");
       if (state.data) {
-        const { item, type } = action.payload;
-        const newData: Multimedia = {
-          ...state.data,
-          [type]: state.data[type].filter(
-            (i: MultimediaItem) => i.name !== item.name,
-          ),
-        };
+        const item = action.payload;
+        if (item.type) {
+          const newData: Multimedia = {
+            ...state.data,
+            [item.type]: state.data[item.type].filter(
+              (i: MultimediaItem) => i.name !== item.name,
+            ),
+          };
 
-        return {
-          ...state,
-          data: newData,
-          reducerStatus: {
-            ...state.reducerStatus,
-            loaded: true,
-            different: true,
-            isError: false,
-            message: "Multimedia eliminada",
-          },
-        };
+          return {
+            ...state,
+            data: newData,
+            reducerStatus: {
+              ...state.reducerStatus,
+              loaded: true,
+              different: true,
+              isError: false,
+              message: "Multimedia eliminada",
+            },
+          };
+        }
       }
       return state;
 
     case "ADD_DATA":
       if (DEBUG_LOG) console.log("add_data");
-      const { item: data, type } = action.payload;
-      if (state.data) {
-        const exists = state.data[type].some(
+      const data = action.payload;
+      if (state.data && data.type) {
+        const exists = state.data[data.type].some(
           (el) => el.name.toLowerCase() === data?.name.toLowerCase(),
         );
 
@@ -140,7 +140,7 @@ const reducer = (state: State, action: Action): State => {
 
         const newData: Multimedia = {
           ...state.data,
-          [type]: [...state.data[type], data],
+          [data.type]: [...state.data[data.type], data],
         };
 
         return {
@@ -248,15 +248,15 @@ export const useMediaReducer = (): MediaContextType => {
   const setLoaded = (status: boolean) =>
     dispatch({ type: "SET_LOADED", payload: status });
 
-  const updateItem = (data: MultimediaInfo) =>
+  const updateItem = (data: MultimediaItem) =>
     dispatch({ type: "UPDATE_ITEM", payload: data });
 
-  const deleteItem = (data: MultimediaInfo) =>
+  const deleteItem = (data: MultimediaItem) =>
     dispatch({ type: "DELETE_ITEM", payload: data });
 
   const clearData = () => dispatch({ type: "CLEAR_DATA" });
 
-  const addData = (data: MultimediaInfo) =>
+  const addData = (data: MultimediaItem) =>
     dispatch({ type: "ADD_DATA", payload: data });
 
   const clearError = () => dispatch({ type: "CLEAR_ERROR" });

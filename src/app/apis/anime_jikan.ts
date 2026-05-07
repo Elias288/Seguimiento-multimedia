@@ -2,8 +2,7 @@ import { fetchWithTimeout } from "@/bin/fetchWithTimeout";
 import {
   MultimediaTypes,
   Status,
-  type MediaApi,
-  type MultimediaInfo,
+  type MultimediaItem,
 } from "@/types/data.type";
 
 const URL = "https://api.jikan.moe/v4";
@@ -21,9 +20,8 @@ export class AnimeJikan implements MediaApi {
     if (data.error) return [];
 
     return data.map((item: any) => ({
-      type: MultimediaTypes.ANIMES,
-      item: {
         name: item.title,
+        type: MultimediaTypes.ANIMES,
         alternative_name: item.title_english ?? "",
         description: item.synopsis ?? "",
         total_caps: item.episodes ?? 0,
@@ -36,7 +34,6 @@ export class AnimeJikan implements MediaApi {
           smallImage: item.images.webp.small_image_url,
           largeImage: item.images.webp.large_image_url,
         },
-      },
-    })) as MultimediaInfo[];
+      })) as MultimediaItem[];
   }
 }

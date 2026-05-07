@@ -9,10 +9,16 @@ import SideBar from "./sideBar/sideBar";
 import { useInterfaceContext } from "@/context/interfaceContext";
 import ShowMultimedia from "@/components/showMultimedia.form";
 import SearchInAPI from "@/components/searchInAPI";
+import AddMultimedia from "@/components/addMultimedia/addMultimedia.form";
 
 const MainLayout = () => {
-  const { selectedMultimedia, selectMultimedia, selectedApi, setSelectedApi } =
-    useInterfaceContext();
+  const {
+    selectedMultimedia,
+    selectedApi,
+    openAddMultimedia,
+    selectMultimedia,
+    setSelectedApi,
+  } = useInterfaceContext();
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
 
   const toggleSideBar = () => setShowSideBar(!showSideBar);
@@ -30,8 +36,7 @@ const MainLayout = () => {
 
       {selectedMultimedia && (
         <ShowMultimedia
-          item={selectedMultimedia.item}
-          type={selectedMultimedia.type}
+          item={selectedMultimedia}
           close={() => selectMultimedia(undefined)}
         />
       )}
@@ -42,6 +47,8 @@ const MainLayout = () => {
           close={() => setSelectedApi(undefined)}
         />
       )}
+
+      {openAddMultimedia && <AddMultimedia />}
 
       <FloatedCards>
         <MessageBottom />

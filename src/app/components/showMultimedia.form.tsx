@@ -15,19 +15,18 @@ import CustomInput from "./CustomInputProps";
 
 interface Props {
   item: MultimediaItem;
-  type: MultimediaTypes;
   callback?: () => void;
   close?: () => void;
 }
 const ShowMultimedia = ({
   item,
-  type,
   callback = () => {},
   close = () => {},
 }: Props) => {
   const { data, updateItem, deleteItem } = useMediaContext();
   const [formData, setFormData] = useState<MultimediaItem>({
     name: item.name,
+    type: item.type ?? MultimediaTypes.ANIMES,
     alternative_name: item.alternative_name,
     description: item.description,
     status: item.status ?? Status.POR_VER,
@@ -57,13 +56,13 @@ const ShowMultimedia = ({
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateItem({ item: formData, type });
+    updateItem(formData);
     close();
   };
 
   const handleDelete = () => {
     if (data) {
-      deleteItem({ item, type });
+      deleteItem(item);
       close();
     }
   };

@@ -1,21 +1,20 @@
 import MultimediaCard from "@/components/multimediaCard";
-import { MultimediaTypes, type MultimediaItem } from "@/types/data.type";
+import { type MultimediaItem } from "@/types/data.type";
 import { useInterfaceContext } from "@/context/interfaceContext";
 import { useState } from "react";
 
 interface Props {
   content: MultimediaItem[];
   title: string;
-  type: MultimediaTypes;
 }
-export const RenderMultimediaType = ({ content, title, type }: Props) => {
+export const RenderMultimediaType = ({ content, title }: Props) => {
   const { selectMultimedia } = useInterfaceContext();
   const [showType, setShowType] = useState<boolean>(true);
 
   if (content.length === 0) return;
 
-  const handleSelected = (data: MultimediaItem, type: MultimediaTypes) => {
-    selectMultimedia({ item: data, type });
+  const handleSelected = (data: MultimediaItem) => {
+    selectMultimedia(data);
   };
 
   return (
@@ -42,7 +41,7 @@ export const RenderMultimediaType = ({ content, title, type }: Props) => {
               <MultimediaCard key={key} item={item}>
                 <div
                   className="bg-gray-500 w-full h-full rounded-sm overflow-hidden cursor-pointer border"
-                  onClick={() => handleSelected(item, type)}
+                  onClick={() => handleSelected(item)}
                 >
                   {img && (
                     <img
