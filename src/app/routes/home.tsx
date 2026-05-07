@@ -24,13 +24,22 @@ export default function Home() {
   }, []);
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
-    <main className="flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 min-h-screen md:py-5 md:px-10">
+    <main className="flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 min-h-mainH md:py-5 md:px-10">
       {children}
     </main>
   );
 
   if (!data) return <Navigate to="/" />;
 
+  if (Object.values(data).every((arr) => arr.length === 0)) {
+    return (
+      <div className="h-mainH flex flex-col justify-center md:h-full">
+        <p className="text-2xl font-bold text-gray-400 text-center">
+          Sin Contenido
+        </p>
+      </div>
+    );
+  }
   if (!status.loaded)
     return (
       <MainContainer>

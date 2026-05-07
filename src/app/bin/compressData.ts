@@ -1,7 +1,7 @@
 import {
   DEFAULTS_VALUES,
+  EMPTY_MULTIMEDIA,
   mapToCategoria,
-  MultimediaTypes,
   type CompressedMultimedia,
   type CompressedMultimediaItem,
   type Multimedia,
@@ -76,13 +76,7 @@ export const compressMultimedia = (data: Multimedia): string => {
 };
 
 export const decompressMultimedia = (data: string): Multimedia => {
-  const result: Multimedia = {
-    [MultimediaTypes.ANIMES]: [],
-    [MultimediaTypes.COMICS]: [],
-    [MultimediaTypes.MAGAS]: [],
-    [MultimediaTypes.SERIES]: [],
-    [MultimediaTypes.SIN_CATEGORIZAR]: [],
-  };
+  const result: Multimedia = EMPTY_MULTIMEDIA;
   const dataObject = JSON.parse(data) as CompressedMultimediaItem;
 
   Object.entries(dataObject).forEach(([key, items]) => {

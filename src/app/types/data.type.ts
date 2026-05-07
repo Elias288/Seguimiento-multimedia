@@ -84,3 +84,11 @@ export const EMPTY_FORMDATA: MultimediaItem = {
   total_seasons: 1,
   images: { image: undefined },
 };
+
+export const EMPTY_MULTIMEDIA = {
+  [MultimediaTypes.ANIMES]: [],
+  [MultimediaTypes.COMICS]: [],
+  [MultimediaTypes.MAGAS]: [],
+  [MultimediaTypes.SERIES]: [],
+  [MultimediaTypes.SIN_CATEGORIZAR]: [],
+};

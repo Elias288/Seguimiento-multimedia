@@ -1,5 +1,4 @@
 import { RenderMultimediaType } from "./RenderMultimediaType";
-import { MultimediaTypes } from "@/types/data.type";
 import { useMediaFilterContext } from "@/context/mediaFilter";
 
 const MainContent = () => {

@@ -2,7 +2,7 @@ import { useMediaFilterContext } from "@/context/mediaFilter";
 import { Status } from "@/types/data.type";
 
 const Filtros = () => {
-  const { setQuery } = useMediaFilterContext();
+  const { query, setQuery } = useMediaFilterContext();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setQuery(event.currentTarget.value);
@@ -16,7 +16,7 @@ const Filtros = () => {
           value={""}
           title="Todos"
           onClick={handleClick}
-          className="block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 "
+          className={`block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 ${query === "" ? "border border-principal" : ""}`}
         >
           Todos
         </button>
@@ -25,7 +25,7 @@ const Filtros = () => {
           value={Status.POR_VER}
           title="Por ver"
           onClick={handleClick}
-          className="block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 text-porVer"
+          className={`block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 text-porVer ${query === Status.POR_VER ? "border border-principal" : ""}`}
         >
           Por ver
         </button>
@@ -34,7 +34,7 @@ const Filtros = () => {
           value={Status.VIENDO}
           title="Viendo"
           onClick={handleClick}
-          className="block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 text-viendo"
+          className={`block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 text-viendo ${query === Status.VIENDO ? "border border-principal" : ""}`}
         >
           Viendo
         </button>
@@ -43,7 +43,7 @@ const Filtros = () => {
           value={Status.VISTO}
           title="Visto"
           onClick={handleClick}
-          className="block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 text-visto"
+          className={`block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 text-visto ${query === Status.VISTO ? "border border-principal" : ""}`}
         >
           Visto
         </button>
@@ -52,7 +52,7 @@ const Filtros = () => {
           value={Status.DEJADO}
           title="Dejado"
           onClick={handleClick}
-          className="block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 text-dejado"
+          className={`block bg-gray-900 rounded-sm py-3 cursor-pointer hover:opacity-70 text-dejado ${query === Status.DEJADO ? "border border-principal" : ""}`}
         >
           Dejado
         </button>

@@ -5,6 +5,8 @@ import { redirect } from "react-router";
 import UploadIcon from "@/icons/upload";
 import type { Route } from "../+types/root";
 import Spinner from "@/icons/spinner";
+import IconNew from "@/icons/iconNew";
+import { EMPTY_MULTIMEDIA } from "@/types/data.type";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -53,38 +55,62 @@ const LoadFile = () => {
     reader.readAsText(file);
   };
 
+  const handleNew = () => {
+    setData(EMPTY_MULTIMEDIA);
+    redirect("/home");
+  };
+
   if (!localLoaded)
     return (
       <main className="h-screen flex-1 flex items-center justify-center">
         <Spinner size={100} />
       </main>
     );
+
   return (
-    <main className="h-screen flex-1 flex items-center justify-center flex-col">
-      <div className="w-75 h-12.5 border flex flex-wrap relative rounded-lg overflow-hidden">
+    <main className="h-screen flex-1 flex gap-4 items-center justify-center flex-col">
+      <div className="w-cardW h-12.5 border flex flex-wrap relative rounded-lg overflow-hidden">
         <label
-          htmlFor="file_input"
-          className="w-[83%] flex items-center text-[1.5rem] py-0 px-3.75 m-0"
+          htmlFor="nuevo"
+          className="w-[83%] flex items-center text-[1.5rem] py-0 px-3.75 m-0 cursor-pointer"
         >
-          Subir archivo CSV
+          Iniciar nuevo
         </label>
-
-        <button className="w-[17%] text-[2rem] bg-principal flex items-center justify-center">
-          <UploadIcon />
+        <button
+          id="nuevo"
+          onClick={handleNew}
+          className="w-[17%] text-[2rem] bg-principal flex items-center justify-center cursor-pointer"
+        >
+          <IconNew />
         </button>
-
-        <input
-          id="file_input"
-          type="file"
-          accept=".csv"
-          onChange={handleFileChange}
-          className="absolute w-full h-full left-0 top-0 opacity-0 cursor-pointer"
-        />
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div>
+        <div className="w-cardW h-12.5 border flex flex-wrap relative rounded-lg overflow-hidden">
+          <label
+            htmlFor="file_input"
+            className="w-[83%] flex items-center text-[1.5rem] py-0 px-3.75 m-0"
+          >
+            Abrir archivo CSV
+          </label>
 
-      {data && <p className="text-green-500">data cargada</p>}
+          <button className="w-[17%] text-[2rem] bg-principal flex items-center justify-center">
+            <UploadIcon />
+          </button>
+
+          <input
+            id="file_input"
+            type="file"
+            accept=".csv"
+            onChange={handleFileChange}
+            className="absolute w-full h-full left-0 top-0 opacity-0 cursor-pointer"
+          />
+        </div>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
+        {data && <p className="text-green-500">data cargada</p>}
+      </div>
     </main>
   );
 };
