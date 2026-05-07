@@ -9,7 +9,7 @@ const Filtros = () => {
 
   return (
     <div className="border-b border-gray-700 pb-4">
-      <h3 className="text-xl mb-4">Filtros</h3>
+      <h3 className="mb-2">Filtros</h3>
 
       <div className="flex flex-col gap-3">
         <button

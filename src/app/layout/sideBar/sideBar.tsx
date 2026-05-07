@@ -1,6 +1,7 @@
 import BuscadorMultimedia from "@/layout/sideBar/buscador";
 import { NavBar } from "../header";
 import Filtros from "./filtros";
+import ApiList from "./apiList";
 
 type Props = {
   isOpen: boolean;
@@ -24,6 +25,8 @@ const SideBar = ({ isOpen, toggleSideBar }: Props) => {
         <BuscadorMultimedia />
 
         <Filtros />
+
+        <ApiList />
       </div>
     </aside>
   );

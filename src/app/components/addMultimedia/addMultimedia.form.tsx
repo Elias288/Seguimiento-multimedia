@@ -62,14 +62,13 @@ const AddMultimedia = ({ type, action }: Props) => {
   };
 
   const searchMultimedia = async (type: MultimediaTypes) => {
-    setShowInfo(formData.name.length > 3);
+    const value = formData.name.trim();
+    setShowInfo(value.length !== 0);
 
     switch (type) {
       case MultimediaTypes.ANIMES:
         const api = getApi("jikan");
-        const value = formData.name;
-        setApiResult(value.length <= 3 ? [] : await api.search(value));
-        if (value.length === 0) setShowInfo(false);
+        setApiResult(await api.search(value));
         break;
 
       case MultimediaTypes.COMICS:
@@ -137,7 +136,7 @@ const AddMultimedia = ({ type, action }: Props) => {
 
         <label className="block relative col-span-full">
           *Nombre
-          <div className="flex gap-2">
+          <div className="flex gap-2 pb-1">
             <CustomInput
               name="name"
               ref={inputRef}
@@ -176,6 +175,7 @@ const AddMultimedia = ({ type, action }: Props) => {
               query={formData.name}
               lista={apiResult}
               select={selectOption}
+              customOption
             />
           )}
         </label>
