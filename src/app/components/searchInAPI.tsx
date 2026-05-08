@@ -79,7 +79,7 @@ const SearchInAPI = ({ apiLabel, close }: Props) => {
         <div className="relative">
           <form
             onSubmit={handleSubmit}
-            className="w-full max-h-[90%] rounded-sm bg-gray-900 p-2 flex gap-2 md:w-auto"
+            className="w-full max-h-[90%] rounded-sm bg-input p-2 flex gap-2 md:w-auto"
           >
             <input
               type="text"

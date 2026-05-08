@@ -36,7 +36,7 @@ const BuscadorMultimedia = () => {
 
         <form
           onSubmit={handleSubmit}
-          className={`flex bg-gray-900 p-2 ${!filteredData.length ? "rounded-sm" : "rounded-t-sm"}`}
+          className={`flex bg-input p-2 ${!filteredData.length ? "rounded-sm" : "rounded-t-sm"}`}
         >
           <input
             type="text"
@@ -56,7 +56,7 @@ const BuscadorMultimedia = () => {
 
         {openList && filteredData.length > 0 && (
           <div
-            className={`absolute w-full bg-gray-900 max-h-90 overflow-y-auto rounded-b-sm shadow-xl  ${!filteredData.length ? "" : "border-t-2 border-background1"}`}
+            className={`absolute w-full bg-input max-h-90 overflow-y-auto rounded-b-sm shadow-xl  ${!filteredData.length ? "" : "border-t-2 border-background1"}`}
           >
             <ul>
               {filteredData.map((item: MultimediaItem, key) => (

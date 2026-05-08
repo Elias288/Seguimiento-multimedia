@@ -189,7 +189,7 @@ const ShowMultimedia = ({}: Props) => {
             id="status"
             value={formData.status}
             onChange={handleInputChange}
-            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 p-2 cursor-pointer"
+            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-input p-2 cursor-pointer"
           >
             <option value={Status.POR_VER}>Por ver</option>
             <option value={Status.VIENDO}>Viendo</option>

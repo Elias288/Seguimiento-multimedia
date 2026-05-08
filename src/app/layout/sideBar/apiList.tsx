@@ -20,7 +20,7 @@ const ApiList = () => {
           <button
             key={key}
             onClick={() => setSelectedApi(api.key)}
-            className="bg-gray-900 block w-full rounded-sm py-3 cursor-pointer hover:opacity-70"
+            className="bg-input block w-full rounded-sm py-3 cursor-pointer hover:opacity-70"
           >
             {api.label}
           </button>

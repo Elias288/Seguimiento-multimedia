@@ -47,7 +47,7 @@ const CustomInput = ({
           onBlur={onBlur}
           onKeyDown={onKeyDown}
           onFocus={onFocus}
-          className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+          className="w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-input px-2"
           autoComplete={autoComplete}
           required={required}
         />
@@ -56,7 +56,7 @@ const CustomInput = ({
           name={name}
           value={value}
           onChange={onChange}
-          className="w-full text-gray-400 h-20 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 px-2"
+          className="w-full text-gray-400 h-20 rounded-sm outline-gray-700 focus-visible:outline-0 bg-input px-2"
         ></textarea>
       )}
     </>

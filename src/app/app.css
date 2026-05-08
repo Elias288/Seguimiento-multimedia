@@ -4,17 +4,13 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
+  --color-principal: #10BAB9;
   --color-background1: #030712;
   --color-background2: #20252f;
+  --color-input: #101828;
   --color-transparentBackground: #00000085;
-  --color-principal: #10BAB9;
   --color-secondary: #25252525;
   --color-card: rgba(255, 255, 255, .5);
-
-  --color-viendo: var(--color-principal);
-  --color-dejado: #82181a;
-  --color-visto: #008236;
-  --color-porVer: var(--color-card);
 
   --spacing-header: 60px;
   --spacing-screenMinWidth: 335px;
@@ -22,13 +18,19 @@
   --spacing-cardW: 300px;
   --spacing-cardH: 400px;
   --spacing-mainH: calc(100dvh - var(--spacing-header));
+
+  --color-viendo: var(--color-principal);
+  --color-dejado: #82181a;
+  --color-visto: #008236;
+  --color-porVer: var(--color-card);
 }
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-gray-950 dark:bg-gray-950;
 
-  @media (prefers-color-scheme: dark) {
+  color-scheme: dark;
+  /* @media (prefers-color-scheme: dark) {
     color-scheme: dark;
-  }
+  } */
 }

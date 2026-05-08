@@ -171,7 +171,7 @@ const AddMultimedia = ({}: Props) => {
             <button
               type="button"
               title="Buscar"
-              className="rounded-sm bg-gray-900 px-4 cursor-pointer hover:opacity-70"
+              className="rounded-sm bg-input px-4 cursor-pointer hover:opacity-70"
               onClick={() =>
                 searchMultimedia(
                   formData.type ? formData.type : MultimediaTypes.ANIMES,
@@ -185,7 +185,7 @@ const AddMultimedia = ({}: Props) => {
               <button
                 type="button"
                 title="limpiar"
-                className="rounded-sm bg-gray-900 px-4 cursor-pointer hover:opacity-70"
+                className="rounded-sm bg-input px-4 cursor-pointer hover:opacity-70"
                 onClick={clearData}
               >
                 -
@@ -197,7 +197,7 @@ const AddMultimedia = ({}: Props) => {
               id="selected_api"
               title="Buscador"
               onChange={handleChange}
-              className={`bg-gray-900 cursor-pointer px-4 py-1 text-center ${isSelectedItem ? "col-span-3" : "col-span-2"} md:text-start`}
+              className={`bg-input cursor-pointer px-4 py-1 text-center ${isSelectedItem ? "col-span-3" : "col-span-2"} md:text-start`}
             >
               {getAvailableApis().map((api, key) => (
                 <option key={key} value={api.key}>
@@ -323,7 +323,7 @@ const AddMultimedia = ({}: Props) => {
             name="status"
             id="status"
             onChange={handleChange}
-            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-gray-900 p-2 cursor-pointer"
+            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-input p-2 cursor-pointer"
           >
             <option value={Status.POR_VER}>Por ver</option>
             <option value={Status.VIENDO}>Viendo</option>
