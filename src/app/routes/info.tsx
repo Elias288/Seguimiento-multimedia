@@ -3,13 +3,12 @@ import type { Route } from "../+types/root";
 import Spinner from "@/icons/spinner";
 import { Navigate } from "react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { NavBar } from "@/layout/header";
 import type { Status } from "@/types/data.type";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Seguimiento Multimedia" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Seguimiento Multimedia - Info" },
+    { name: "description", content: "Información de la sesión" },
   ];
 }
 
@@ -51,17 +50,25 @@ const Info = () => {
     );
   };
 
+  const Main = ({ children }: { children: ReactNode }) => {
+    return (
+      <main className="py-5 px-3 overflow-x-hidden flex flex-col gap-10 md:py-5 md:px-10">
+        {children}
+      </main>
+    );
+  };
+
   if (status.loaded && !data) return <Navigate to="/" />;
 
   if (!status.loaded)
     return (
-      <MainContainer>
+      <Main>
         <Spinner />
-      </MainContainer>
+      </Main>
     );
 
   return (
-    <MainContainer>
+    <Main>
       <div className="bg-background2 rounded-lg px-5 pt-5 pb-10 grid md:grid-cols-2 gap-5 md:gap-x-20">
         <h2 className="text-2xl col-span-full">Información</h2>
 
@@ -87,38 +94,7 @@ const Info = () => {
           </section>
         )}
       </div>
-    </MainContainer>
-  );
-};
-
-const MainContainer = ({ children }: { children: ReactNode }) => {
-  return (
-    <main className="flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 min-h-mainH md:py-5 md:px-10">
-      {children}
-    </main>
-  );
-};
-
-type Props = {
-  isOpen: boolean;
-  toggleSideBar: () => void;
-};
-const SideBar = ({ isOpen, toggleSideBar }: Props) => {
-  return (
-    <aside
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) toggleSideBar();
-      }}
-      className={`fixed bg-transparentBackground h-mainH z-10 overflow-hidden duration-200 ease-out ${isOpen ? "w-screen md:w-auto" : "w-0 md:w-auto"} md:relative md:h-auto md:flex md:bg-transparent`}
-    >
-      <div
-        className={`bg-background2 col-1 overflow-x-hidden z-30 rounded-lg flex flex-col gap-4 h-full min-w-62.5 duration-200 ease-in-out ${isOpen ? "w-[80%] p-5 md:w-full md:mx-3 md:my-5 md:py-3 " : "w-0"} md:h-auto`}
-      >
-        <div className="md:hidden flex justify-center border-b border-gray-700 pb-4">
-          <NavBar />
-        </div>
-      </div>
-    </aside>
+    </Main>
   );
 };
 

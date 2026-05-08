@@ -11,7 +11,11 @@ import { EMPTY_MULTIMEDIA } from "@/types/data.type";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Seguimiento Multimedia" },
-    { name: "description", content: "Welcome to React Router!" },
+    {
+      name: "description",
+      content:
+        "Seguimiento Multimedia - tracker de Animes, Series, Mangas y Comics",
+    },
   ];
 }
 
@@ -60,15 +64,21 @@ const LoadFile = () => {
     redirect("/home");
   };
 
+  const Main = ({ children }: { children: React.ReactNode }) => (
+    <main className="flex-1 flex gap-4 items-center justify-center flex-col">
+      {children}
+    </main>
+  );
+
   if (!localLoaded)
     return (
-      <main className="h-screen flex-1 flex items-center justify-center">
+      <Main>
         <Spinner size={100} />
-      </main>
+      </Main>
     );
 
   return (
-    <main className="h-screen flex-1 flex gap-4 items-center justify-center flex-col">
+    <Main>
       <div className="w-cardW h-12.5 border flex flex-wrap relative rounded-lg overflow-hidden">
         <label
           htmlFor="nuevo"
@@ -111,7 +121,7 @@ const LoadFile = () => {
 
         {data && <p className="text-green-500">data cargada</p>}
       </div>
-    </main>
+    </Main>
   );
 };
 

@@ -7,8 +7,11 @@ import EmptySkeleton from "../components/EmptySkeleton";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Seguimiento Multimedia" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Seguimiento Multimedia - Home" },
+    {
+      name: "description",
+      content: "Página principal de Seguimiento Multimedia",
+    },
   ];
 }
 
@@ -24,7 +27,7 @@ export default function Home() {
   }, []);
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
-    <main className="flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 min-h-mainH md:py-5 md:px-10">
+    <main className="flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 md:py-5 md:px-10">
       {children}
     </main>
   );
@@ -33,11 +36,13 @@ export default function Home() {
 
   if (data && Object.values(data).every((arr) => arr.length === 0)) {
     return (
-      <div className="h-mainH flex flex-col justify-center md:h-full">
-        <p className="text-2xl font-bold text-gray-400 text-center">
-          Sin Contenido
-        </p>
-      </div>
+      <MainContainer>
+        <div className="flex-1 flex flex-col justify-center md:h-full">
+          <p className="text-2xl font-bold text-gray-400 text-center">
+            Sin Contenido
+          </p>
+        </div>
+      </MainContainer>
     );
   }
   if (!status.loaded)
