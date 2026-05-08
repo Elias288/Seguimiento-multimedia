@@ -13,11 +13,9 @@ import AddMultimedia from "@/components/addMultimedia/addMultimedia.form";
 
 const MainLayout = () => {
   const {
-    selectedMultimedia,
     selectedApi,
     openUpdateMultimedia,
     openAddMultimedia,
-    selectMultimedia,
     setSelectedApi,
   } = useInterfaceContext();
   const [showSideBar, setShowSideBar] = useState<boolean>(false);

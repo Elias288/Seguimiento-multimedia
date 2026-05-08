@@ -29,9 +29,9 @@ export default function Home() {
     </main>
   );
 
-  if (!data) return <Navigate to="/" />;
+  if (status.loaded && !data) return <Navigate to="/" />;
 
-  if (Object.values(data).every((arr) => arr.length === 0)) {
+  if (data && Object.values(data).every((arr) => arr.length === 0)) {
     return (
       <div className="h-mainH flex flex-col justify-center md:h-full">
         <p className="text-2xl font-bold text-gray-400 text-center">

@@ -9,7 +9,9 @@ type Props = {
 const Header = ({ sideBarOpen, toggleSideBar }: Props) => {
   return (
     <header className="bg-principal py-2 px-4 h-header min-w-screenMinWidth font-bold sticky top-0 flex items-center justify-between z-20 col-span-full">
-      <h1 className="text-2xl">Seguimiento Multimedia</h1>
+      <h1 className="text-2xl">
+        <NavLink to={"/home"}>Seguimiento Multimedia</NavLink>
+      </h1>
 
       <div className="flex gap-4">
         <div className="hidden md:flex md:items-center">

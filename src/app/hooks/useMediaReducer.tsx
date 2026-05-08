@@ -162,7 +162,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         data: null,
         reducerStatus: {
-          loaded: false,
+          loaded: true,
           message: null,
           updated: false,
           different: false,
