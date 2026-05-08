@@ -76,7 +76,7 @@ export const compressMultimedia = (data: Multimedia): string => {
 };
 
 export const decompressMultimedia = (data: string): Multimedia => {
-  const result: Multimedia = EMPTY_MULTIMEDIA;
+  const result: Multimedia = EMPTY_MULTIMEDIA();
   const dataObject = JSON.parse(data) as CompressedMultimediaItem;
 
   Object.entries(dataObject).forEach(([key, items]) => {

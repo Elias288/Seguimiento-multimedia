@@ -56,7 +56,7 @@ const LoadFile = () => {
   };
 
   const handleNew = () => {
-    setData(EMPTY_MULTIMEDIA);
+    setData(EMPTY_MULTIMEDIA());
     redirect("/home");
   };
 

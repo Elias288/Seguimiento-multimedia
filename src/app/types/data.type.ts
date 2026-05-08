@@ -85,10 +85,10 @@ export const EMPTY_FORMDATA: MultimediaItem = {
   images: { image: undefined },
 };
 
-export const EMPTY_MULTIMEDIA = {
+export const EMPTY_MULTIMEDIA = () => ({
   [MultimediaTypes.ANIMES]: [],
   [MultimediaTypes.COMICS]: [],
   [MultimediaTypes.MAGAS]: [],
   [MultimediaTypes.SERIES]: [],
   [MultimediaTypes.SIN_CATEGORIZAR]: [],
-};
+});
