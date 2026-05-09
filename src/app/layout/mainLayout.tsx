@@ -28,7 +28,7 @@ const MainLayout = () => {
       <div
         className={`min-h-screen flex flex-col md:grid duration-100 ease-in-out grid-rows-[auto_1fr] ${showSideBar ? "md:grid-cols-[350px_auto]" : "md:grid-cols-[0_auto] "}`}
       >
-        <Header sideBarOpen={showSideBar} toggleSideBar={toggleSideBar} />
+        <Header sideBarOpen={showSideBar} setShowSideBar={setShowSideBar} />
         <SideBar isOpen={showSideBar} toggleSideBar={toggleSideBar} />
 
         <Outlet />

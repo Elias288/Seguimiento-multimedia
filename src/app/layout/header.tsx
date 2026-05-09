@@ -4,9 +4,9 @@ import { NavLink } from "react-router";
 
 type Props = {
   sideBarOpen: boolean;
-  toggleSideBar: () => void;
+  setShowSideBar: (val: boolean) => void;
 };
-const Header = ({ sideBarOpen, toggleSideBar }: Props) => {
+const Header = ({ sideBarOpen, setShowSideBar }: Props) => {
   return (
     <header className="bg-principal py-2 px-4 h-header min-w-screenMinWidth font-bold sticky top-0 flex items-center justify-between z-20 col-span-full">
       <h1 className="text-2xl">
@@ -15,11 +15,11 @@ const Header = ({ sideBarOpen, toggleSideBar }: Props) => {
 
       <div className="flex gap-4">
         <div className="hidden md:flex md:items-center">
-          <NavBar />
+          <NavBar action={(e: boolean) => setShowSideBar(e)} />
         </div>
 
         <button
-          onClick={toggleSideBar}
+          onClick={() => setShowSideBar(!sideBarOpen)}
           className="hover:opacity-70 cursor-pointer"
         >
           <MenuIcon isOpen={sideBarOpen} />
@@ -29,20 +29,31 @@ const Header = ({ sideBarOpen, toggleSideBar }: Props) => {
   );
 };
 
-export const NavBar = () => {
+export const NavBar = ({ action }: { action: (e: boolean) => void }) => {
   const { status, clearData, downloadData } = useMediaContext();
   return (
     <nav className="flex flex-wrap justify-center">
-      <NavLink to={"/home"} className="px-2 hover:opacity-70">
+      <NavLink
+        to={"/home"}
+        onClick={() => action(false)}
+        className="px-2 hover:opacity-70 select-none"
+      >
         Home
       </NavLink>{" "}
-      <NavLink to="/info" className="px-2 hover:opacity-70">
+      <NavLink
+        to="/info"
+        onClick={() => action(false)}
+        className="px-2 hover:opacity-70 select-none"
+      >
         Info
       </NavLink>{" "}
       <button
-        onClick={downloadData}
+        onClick={() => {
+          downloadData();
+          action(false);
+        }}
         title="La información se guarda en el navegador, guárdala para no perderla"
-        className="px-2 cursor-pointer flex items-center gap-1 hover:opacity-70"
+        className="px-2 cursor-pointer flex items-center gap-1 hover:opacity-70 select-none"
       >
         Descargar
         {status.different && (
@@ -53,7 +64,7 @@ export const NavBar = () => {
       </button>
       <button
         onClick={clearData}
-        className="px-2 cursor-pointer hover:opacity-70"
+        className="px-2 cursor-pointer hover:opacity-70 select-none"
       >
         Cerrar
       </button>
