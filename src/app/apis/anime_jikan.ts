@@ -14,11 +14,18 @@ import { ApiError } from "./apiError";
 const URL = "https://api.jikan.moe/v4";
 const LIMIT = 10;
 
+type JikanType = "anime" | "manga";
 export class AnimeJikan implements MediaApi {
+  type: JikanType;
+
+  constructor(type: JikanType) {
+    this.type = type;
+  }
+
   async search(query: string): Promise<MultimediaItem[]> {
     try {
       const res = await fetchWithTimeout(
-        `${URL}/anime?limit=${LIMIT}&q=${query}`,
+        `${URL}/${this.type}?limit=${LIMIT}&q=${query}`,
         {},
         2000,
       );
@@ -56,7 +63,7 @@ export class AnimeJikan implements MediaApi {
   async getInfo(multimediaId: string): Promise<MultimediaItem> {
     try {
       const res = await fetchWithTimeout(
-        `${URL}/anime/${multimediaId}/full`,
+        `${URL}/${this.type}/${multimediaId}/full`,
         {},
         2000,
       );
@@ -70,6 +77,26 @@ export class AnimeJikan implements MediaApi {
       }
 
       const { data, pagination } = await res.json();
+      // console.log(data);
+
+      if (this.type.toLocaleLowerCase().trim() === "manga") {
+        return {
+          id: data.mal_id,
+          name: data.title,
+          alternative_name: data.title_english ?? "",
+          description: data.synopsis ?? "",
+          type: MultimediaTypes.MAGAS,
+          status: Status.POR_VER,
+          total_caps: data.chapters,
+          total_seasons: data.volumes,
+          images: {
+            image: data.images.webp.image_url,
+            smallImage: data.images.webp.small_image_url,
+            largeImage: data.images.webp.large_image_url,
+          },
+        } as MultimediaItem;
+      }
+
       return {
         id: data.mal_id,
         name: data.title,
@@ -91,6 +118,7 @@ export class AnimeJikan implements MediaApi {
 
       if (error instanceof ApiError) throw error;
 
+      console.error(error);
       throw new ApiError("Error de red", "NETWORK", "JikanApi");
     }
   }

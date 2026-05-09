@@ -32,6 +32,8 @@ const SearchInAPI = ({ apiLabel, close }: Props) => {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(undefined);
+    setOpenList(false);
+    setData([]);
 
     if (inputText.length > 0) {
       setOpenList(true);
@@ -49,9 +51,19 @@ const SearchInAPI = ({ apiLabel, close }: Props) => {
 
   const selectItem = async (item: MultimediaItem) => {
     if (item.id) {
-      selectMultimedia(await selectedApi?.getInfo(item.id));
-      toggleOpenAddMultimedia();
-      close();
+      try {
+        const info = await selectedApi?.getInfo(item.id);
+        selectMultimedia(info);
+        toggleOpenAddMultimedia();
+        close();
+      } catch (error: any) {
+        console.error(error);
+        setErrorMessage(error.message);
+
+        selectMultimedia(item);
+        toggleOpenAddMultimedia();
+        close();
+      }
     }
   };
 

@@ -23,14 +23,17 @@ interface Props {}
 
 const AddMultimedia = ({}: Props) => {
   const { status, addData, clearError } = useMediaContext();
-  const { selectedMultimedia, toggleOpenAddMultimedia } = useInterfaceContext();
+  const { selectedMultimedia, selectMultimedia, toggleOpenAddMultimedia } =
+    useInterfaceContext();
 
   const [formData, setFormData] = useState<MultimediaItem>(
     selectedMultimedia ? selectedMultimedia : EMPTY_FORMDATA,
   );
   const [apiResult, setApiResult] = useState<MultimediaItem[]>([]);
   const [showInfo, setShowInfo] = useState<boolean>(false);
-  const [isSelectedItem, setIsSelectedItem] = useState<boolean>(false);
+  const [isSelectedItem, setIsSelectedItem] = useState<boolean>(
+    selectedMultimedia !== undefined,
+  );
   const [actualApi, setActualApi] = useState<MediaApi | undefined>(undefined);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -83,8 +86,7 @@ const AddMultimedia = ({}: Props) => {
     e.preventDefault();
 
     addData(formData);
-    setFormData(EMPTY_FORMDATA);
-    setIsSelectedItem(false);
+    clearData();
     inputRef.current?.focus();
   };
 
@@ -101,10 +103,12 @@ const AddMultimedia = ({}: Props) => {
 
   const clearData = () => {
     setFormData(EMPTY_FORMDATA);
+    setActualApi(getApi("jikan_anime"));
     setShowInfo(false);
     setIsSelectedItem(false);
     clearError();
     setApiResult([]);
+    selectMultimedia(undefined);
   };
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -117,7 +121,7 @@ const AddMultimedia = ({}: Props) => {
   };
 
   useEffect(() => {
-    setActualApi(getApi("jikan"));
+    setActualApi(getApi("jikan_anime"));
     inputRef.current?.focus();
   }, [formData.type]);
 

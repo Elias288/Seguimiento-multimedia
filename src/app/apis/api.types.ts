@@ -19,12 +19,16 @@ export type ApiConfig = {
   label: string;
   factory: () => MediaApi;
 };
-export const API_OPTIONS = ["jikan", "IMDb"] as const;
+export const API_OPTIONS = ["jikan_anime", "jikan_manga", "IMDb"] as const;
 export type ApiOption = (typeof API_OPTIONS)[number];
 export const apiMap: Record<ApiOption, ApiConfig> = {
-  jikan: {
+  jikan_anime: {
     label: "Jikan (anime)",
-    factory: () => new AnimeJikan(),
+    factory: () => new AnimeJikan("anime"),
+  },
+  jikan_manga: {
+    label: "Jikan (manga)",
+    factory: () => new AnimeJikan("manga"),
   },
   IMDb: {
     label: "IMDb",

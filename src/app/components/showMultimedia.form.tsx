@@ -25,7 +25,7 @@ const ShowMultimedia = ({}: Props) => {
     alternative_name: selectedMultimedia?.alternative_name ?? "",
     description: selectedMultimedia?.description ?? "",
     status: selectedMultimedia?.status ?? Status.POR_VER,
-    actual_episode: selectedMultimedia?.actual_episode ?? 1,
+    actual_episode: selectedMultimedia?.actual_episode ?? 0,
     actual_season: selectedMultimedia?.actual_season ?? 0,
     total_caps: selectedMultimedia?.total_caps ?? 0,
     total_seasons: selectedMultimedia?.total_seasons ?? 1,
