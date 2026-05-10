@@ -1,13 +1,14 @@
 import MultimediaCard from "@/components/multimediaCard";
-import { type MultimediaItem } from "@/types/data.type";
+import { MultimediaTypes, type MultimediaItem } from "@/types/data.type";
 import { useInterfaceContext } from "@/context/interfaceContext";
 import { useState } from "react";
 
 interface Props {
   content: MultimediaItem[];
   title: string;
+  type: MultimediaTypes;
 }
-export const RenderMultimediaType = ({ content, title }: Props) => {
+export const RenderMultimediaType = ({ content, title, type }: Props) => {
   const { selectMultimedia, toggleOpenUpdateMultimedia } =
     useInterfaceContext();
   const [showType, setShowType] = useState<boolean>(true);
@@ -15,7 +16,7 @@ export const RenderMultimediaType = ({ content, title }: Props) => {
   if (content.length === 0) return;
 
   const handleSelected = (data: MultimediaItem) => {
-    selectMultimedia(data);
+    selectMultimedia({ ...data, type });
     toggleOpenUpdateMultimedia();
   };
 

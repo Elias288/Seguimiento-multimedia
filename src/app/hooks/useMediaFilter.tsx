@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 export type MediaFilterType = {
   query: string | null;
   setQuery: (str: string) => void;
-  filteredData: Multimedia | null;
+  filteredData: Multimedia | undefined;
 };
 const useMediaFilter = (): MediaFilterType => {
   const { data } = useMediaContext();

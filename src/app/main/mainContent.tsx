@@ -1,3 +1,4 @@
+import { MultimediaTypes } from "@/types/data.type";
 import { RenderMultimediaType } from "./RenderMultimediaType";
 import { useMediaFilterContext } from "@/context/mediaFilter";
 
@@ -7,10 +8,26 @@ const MainContent = () => {
   if (!data) return;
   return (
     <>
-      <RenderMultimediaType content={data.anime} title="Anime" />
-      <RenderMultimediaType content={data.serie} title="Serie" />
-      <RenderMultimediaType content={data.manga} title="Manga" />
-      <RenderMultimediaType content={data.comic} title="Comic" />
+      <RenderMultimediaType
+        content={data.anime}
+        type={MultimediaTypes.ANIMES}
+        title="Anime"
+      />
+      <RenderMultimediaType
+        content={data.serie}
+        type={MultimediaTypes.SERIES}
+        title="Serie"
+      />
+      <RenderMultimediaType
+        content={data.manga}
+        type={MultimediaTypes.MAGAS}
+        title="Manga"
+      />
+      <RenderMultimediaType
+        content={data.comic}
+        type={MultimediaTypes.COMICS}
+        title="Comic"
+      />
     </>
   );
 };

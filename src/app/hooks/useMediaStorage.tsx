@@ -6,7 +6,7 @@ const STORAGE_KEY = "multimedia_data_v1";
 const UPDATED_FLAG = "multimedia_updated_flag";
 
 export const useMediaStorage = (storage: {
-  data: Multimedia | null;
+  data: Multimedia | undefined;
   isDifferent: boolean;
 }) => {
   useEffect(() => {

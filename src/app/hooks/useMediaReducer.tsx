@@ -4,9 +4,9 @@ import type { MultimediaItem, Multimedia } from "@/types/data.type";
 import { downloadCSV, jsonToCSV } from "@/bin/JSONtoCSV";
 
 export type MediaContextType = {
-  data: Multimedia | null;
+  data: Multimedia | undefined;
   status: ReducerStatus;
-  setData: (data: Multimedia | null) => void;
+  setData: (data: Multimedia) => void;
   updateItem: (data: MultimediaItem) => void;
   deleteItem: (data: MultimediaItem) => void;
   addData: (data: MultimediaItem) => void;
@@ -18,7 +18,7 @@ export type MediaContextType = {
 };
 
 type State = {
-  data: Multimedia | null;
+  data: Multimedia | undefined;
   reducerStatus: ReducerStatus;
 };
 
@@ -26,13 +26,13 @@ type ReducerStatus = {
   loaded: boolean;
   updated: boolean;
   different: boolean;
-  message: string | null;
+  message: string | undefined;
   isError: boolean;
 };
 
 type Action =
   | { type: "LOAD_FROM_STORAGE"; payload: Multimedia }
-  | { type: "SET_DATA"; payload: Multimedia | null }
+  | { type: "SET_DATA"; payload: Multimedia | undefined }
   | { type: "UPDATE_ITEM"; payload: MultimediaItem }
   | { type: "DELETE_ITEM"; payload: MultimediaItem }
   | { type: "ADD_DATA"; payload: MultimediaItem }
@@ -66,104 +66,98 @@ const reducer = (state: State, action: Action): State => {
 
     case "UPDATE_ITEM":
       if (DEBUG_LOG) console.log("update_data");
-      if (state.data) {
-        const data = action.payload;
-        if (data.type) {
-          const newData: Multimedia = {
-            ...state.data,
-            [data.type]: state.data[data.type].map((i: MultimediaItem) =>
-              i.name === data.name ? data : i,
-            ),
-          };
+      const updatedItem = action.payload;
+      if (!state.data || !updatedItem || !updatedItem.type) return state;
 
-          return {
-            ...state,
-            data: newData,
-            reducerStatus: {
-              ...state.reducerStatus,
-              loaded: true,
-              different: true,
-              isError: false,
-              message: "Multimedia actualizada",
-            },
-          };
-        }
-      }
-      return state;
+      const newData: Multimedia = {
+        ...state.data,
+        [updatedItem.type]: state.data[updatedItem.type].map(
+          (i: MultimediaItem) =>
+            i.name === updatedItem.name ? updatedItem : i,
+        ),
+      };
+
+      return {
+        ...state,
+        data: newData,
+        reducerStatus: {
+          ...state.reducerStatus,
+          loaded: true,
+          different: true,
+          isError: false,
+          message: "Multimedia actualizada",
+        },
+      };
 
     case "DELETE_ITEM":
       if (DEBUG_LOG) console.log("DELETE_ITEM");
-      if (state.data) {
-        const item = action.payload;
-        if (item.type) {
-          const newData: Multimedia = {
-            ...state.data,
-            [item.type]: state.data[item.type].filter(
-              (i: MultimediaItem) => i.name !== item.name,
-            ),
-          };
+      const item = action.payload;
+      if (!state.data || !item.type) return state;
 
-          return {
-            ...state,
-            data: newData,
-            reducerStatus: {
-              ...state.reducerStatus,
-              loaded: true,
-              different: true,
-              isError: false,
-              message: "Multimedia eliminada",
-            },
-          };
-        }
-      }
-      return state;
+      const newData2: Multimedia = {
+        ...state.data,
+        [item.type]: state.data[item.type].filter(
+          (i: MultimediaItem) => i.name !== item.name,
+        ),
+      };
+
+      return {
+        ...state,
+        data: newData2,
+        reducerStatus: {
+          ...state.reducerStatus,
+          loaded: true,
+          different: true,
+          isError: false,
+          message: "Multimedia eliminada",
+        },
+      };
 
     case "ADD_DATA":
       if (DEBUG_LOG) console.log("add_data");
       const data = action.payload;
-      if (state.data && data.type) {
-        const exists = state.data[data.type].some(
-          (el) => el.name.toLowerCase() === data?.name.toLowerCase(),
-        );
+      if (!state.data || !data.type) return state;
 
-        if (exists) {
-          console.warn("Item duplicado:", data?.name);
-          return {
-            ...state,
-            reducerStatus: {
-              ...state.reducerStatus,
-              isError: true,
-              message: "Item duplicado",
-            },
-          };
-        }
+      const exists = state.data[data.type].some(
+        (el) => el.name.toLowerCase() === data?.name.toLowerCase(),
+      );
 
-        const newData: Multimedia = {
-          ...state.data,
-          [data.type]: [...state.data[data.type], data],
-        };
-
+      if (exists) {
+        console.warn("Item duplicado:", data?.name);
         return {
           ...state,
-          data: newData,
           reducerStatus: {
-            loaded: true,
-            updated: false,
-            different: true,
-            message: "Multimedia agregada",
-            isError: false,
+            ...state.reducerStatus,
+            isError: true,
+            message: "Item duplicado",
           },
         };
       }
-      return state;
+
+      const newData3: Multimedia = {
+        ...state.data,
+        [data.type]: [...state.data[data.type], data],
+      };
+
+      return {
+        ...state,
+        data: newData3,
+        reducerStatus: {
+          loaded: true,
+          updated: false,
+          different: true,
+          message: "Multimedia agregada",
+          isError: false,
+        },
+      };
 
     case "CLEAR_DATA":
       if (DEBUG_LOG) console.log("clear_data");
       return {
-        data: null,
+        data: undefined,
         reducerStatus: {
           loaded: true,
-          message: null,
+          message: undefined,
           updated: false,
           different: false,
           isError: false,
@@ -194,7 +188,7 @@ const reducer = (state: State, action: Action): State => {
         reducerStatus: {
           ...state.reducerStatus,
           loaded: true,
-          message: null,
+          message: undefined,
           isError: false,
         },
       };
@@ -203,7 +197,7 @@ const reducer = (state: State, action: Action): State => {
       if (DEBUG_LOG) console.log("CLEAR_MESSAGE");
       return {
         ...state,
-        reducerStatus: { ...state.reducerStatus, message: null },
+        reducerStatus: { ...state.reducerStatus, message: undefined },
       };
 
     default:
@@ -213,11 +207,11 @@ const reducer = (state: State, action: Action): State => {
 
 export const useMediaReducer = (): MediaContextType => {
   const [state, dispatch] = useReducer(reducer, {
-    data: null,
+    data: undefined,
     reducerStatus: {
       loaded: false,
       updated: false,
-      message: null,
+      message: undefined,
       different: false,
       isError: false,
     },
@@ -242,7 +236,7 @@ export const useMediaReducer = (): MediaContextType => {
     dispatch({ type: "SET_DIFFERENT", payload: updatedFlag === "true" });
   }, []);
 
-  const setData = (data: Multimedia | null) =>
+  const setData = (data: Multimedia) =>
     dispatch({ type: "SET_DATA", payload: data });
 
   const setLoaded = (status: boolean) =>
