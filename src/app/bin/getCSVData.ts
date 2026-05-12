@@ -18,6 +18,7 @@ export function readCSVData(data: string): Promise<Multimedia> {
           "alternative_name",
           "description",
           "type",
+          "timestamp",
           "total_caps",
           "total_seasons",
           "actual_season",
@@ -62,6 +63,7 @@ export function readCSVData(data: string): Promise<Multimedia> {
             alternative_name: "",
             description: "",
             status: Status.POR_VER,
+            timestamp: "",
           };
 
           CABECERAS.forEach((key, i) => {

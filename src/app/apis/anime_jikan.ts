@@ -44,6 +44,7 @@ export class AnimeJikan implements MediaApi {
         name: item.title,
         alternative_name: item.title_english ?? "",
         description: item.synopsis ?? "",
+        timestamp: new Date().toISOString(),
         images: {
           image: item.images.webp.image_url,
           smallImage: item.images.webp.small_image_url,
@@ -85,6 +86,7 @@ export class AnimeJikan implements MediaApi {
           name: data.title,
           alternative_name: data.title_english ?? "",
           description: data.synopsis ?? "",
+          timestamp: new Date().toISOString(),
           type: MultimediaTypes.MAGAS,
           status: Status.POR_VER,
           total_caps: data.chapters,
@@ -103,6 +105,7 @@ export class AnimeJikan implements MediaApi {
         alternative_name: data.title_english ?? "",
         description: data.synopsis ?? "",
         type: MultimediaTypes.ANIMES,
+        timestamp: new Date().toISOString(),
         status: Status.POR_VER,
         total_caps: data.episodes,
         total_seasons: 1,

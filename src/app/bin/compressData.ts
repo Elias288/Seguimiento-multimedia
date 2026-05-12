@@ -32,6 +32,8 @@ export const compressMultimedia = (data: Multimedia): string => {
       )
         compressed.d = item.description;
 
+      if (!isEmpty(item.timestamp)) compressed.t = item.timestamp;
+
       if (!isEmpty(item.status) && item.status !== DEFAULTS_VALUES.status)
         compressed.s = item.status;
 

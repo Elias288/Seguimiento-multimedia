@@ -41,6 +41,7 @@ export class IMDb implements MediaApi {
           name: item.originalTitle,
           alternative_name: item.primaryTitle,
           description: "",
+          timestamp: new Date().toISOString(),
           images: {
             image: item?.primaryImage?.url ?? "",
           },
@@ -80,6 +81,7 @@ export class IMDb implements MediaApi {
         alternative_name: data.originalTitle ?? "",
         description: data.plot,
         type: MultimediaTypes.SERIES,
+        timestamp: new Date().toISOString(),
         status: Status.POR_VER,
         total_caps: seasons.totalEpisodes,
         total_seasons: seasons.totalSeasons,

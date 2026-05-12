@@ -85,7 +85,10 @@ const AddMultimedia = ({}: Props) => {
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    addData(formData);
+    addData({
+      ...formData,
+      timestamp: new Date().toISOString(),
+    });
     clearData();
     inputRef.current?.focus();
   };
@@ -102,7 +105,7 @@ const AddMultimedia = ({}: Props) => {
   };
 
   const clearData = () => {
-    setFormData(EMPTY_FORMDATA);
+    setFormData({ ...EMPTY_FORMDATA, timestamp: new Date().toISOString() });
     setActualApi(getApi("jikan_anime"));
     setShowInfo(false);
     setIsSelectedItem(false);
@@ -124,6 +127,13 @@ const AddMultimedia = ({}: Props) => {
     setActualApi(getApi("jikan_anime"));
     inputRef.current?.focus();
   }, [formData.type]);
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      timestamp: new Date().toISOString(),
+    });
+  }, []);
 
   return (
     <div
@@ -359,6 +369,9 @@ const AddMultimedia = ({}: Props) => {
           >
             Cerrar
           </button>
+          <span className="flex-1 text-gray-600">
+            {new Date(formData.timestamp).toLocaleString()}
+          </span>
         </div>
       </form>
     </div>

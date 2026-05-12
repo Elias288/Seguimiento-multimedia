@@ -22,6 +22,7 @@ export enum Status {
 export interface MultimediaItem {
   id?: string;
   name: string;
+  timestamp: string;
   alternative_name: string;
   description: string;
   total_caps?: number;
@@ -36,6 +37,7 @@ export interface MultimediaItem {
 export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
   alternative_name: "",
   description: "",
+  timestamp: "",
   total_caps: undefined,
   total_seasons: undefined,
   actual_season: undefined,
@@ -53,6 +55,7 @@ export interface CompressedMultimediaItem {
   n: string;
   an?: string;
   d?: string;
+  t: string;
   tc?: number;
   ts?: number;
   as?: number;
@@ -76,6 +79,7 @@ export const EMPTY_FORMDATA: MultimediaItem = {
   name: "",
   type: MultimediaTypes.ANIMES,
   alternative_name: "",
+  timestamp: "",
   description: "",
   status: Status.POR_VER,
   actual_episode: 0,

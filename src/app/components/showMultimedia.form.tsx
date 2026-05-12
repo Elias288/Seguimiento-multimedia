@@ -25,6 +25,7 @@ const ShowMultimedia = ({}: Props) => {
     alternative_name: selectedMultimedia?.alternative_name ?? "",
     description: selectedMultimedia?.description ?? "",
     status: selectedMultimedia?.status ?? Status.POR_VER,
+    timestamp: selectedMultimedia?.timestamp ?? "",
     actual_episode: selectedMultimedia?.actual_episode ?? 0,
     actual_season: selectedMultimedia?.actual_season ?? 0,
     total_caps: selectedMultimedia?.total_caps ?? 0,
@@ -56,7 +57,10 @@ const ShowMultimedia = ({}: Props) => {
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateItem(formData);
+    updateItem({
+      ...formData,
+      timestamp: new Date().toISOString(),
+    });
     close();
   };
 
@@ -220,6 +224,10 @@ const ShowMultimedia = ({}: Props) => {
           >
             Cancelar
           </button>
+
+          <span className="flex-1 text-gray-600">
+            {new Date(formData.timestamp).toLocaleString()}
+          </span>
         </div>
       </form>
     </div>
