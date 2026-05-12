@@ -20,57 +20,70 @@ export const RenderMultimediaType = ({ content, title, type }: Props) => {
     toggleOpenUpdateMultimedia();
   };
 
+  const toggleShowType = () => setShowType(!showType);
+
   return (
-    <article>
-      <div className="bg-background2 w-full rounded-lg overflow-x-hidden">
-        <div className="flex justify-between py-2 px-4">
-          <h2 className="text-2xl">{title}</h2>
-          <button
-            onClick={() => setShowType(!showType)}
-            className="cursor-pointer text-2xl hover:opacity-70"
-          >
-            {showType ? "↧" : "↦"}
-          </button>
-        </div>
+    <section className={`${showType ? "mb-16 md:mb-4" : ""}`}>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">{title}</h2>
 
-        <div
-          className={`w-full pt-2 pb-5 px-5 ${showType ? "flex items-start gap-4 overflow-x-auto snap-x" : "grid grid-cols-[repeat(auto-fit,300px)] justify-center gap-4"}`}
+        <button
+          onClick={toggleShowType}
+          className="cursor-pointer text-2xl hover:opacity-70"
         >
-          {content.map((item, key) => {
-            const { image, smallImage, largeImage } = item.images ?? {};
-            const img = image ? image : smallImage ? smallImage : largeImage;
-
-            return (
-              <MultimediaCard key={key} item={item}>
-                <div
-                  className="bg-gray-500 w-full h-full rounded-sm overflow-hidden cursor-pointer border"
-                  onClick={() => handleSelected(item)}
-                >
-                  {img && (
-                    <img
-                      src={img}
-                      alt="img"
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                </div>
-
-                <div className="bg-transparentBackground backdrop-blur-lg absolute bottom-2.5 left-2.5 right-2.5 rounded-b-sm py-2 px-1">
-                  <p className="border-b">{item.name}</p>
-                  <p>
-                    Temporadas: {item.actual_season ?? 0}/
-                    {item.total_seasons ?? 0}
-                  </p>
-                  <p>
-                    Capítulos: {item.actual_episode ?? 0}/{item.total_caps ?? 0}
-                  </p>
-                </div>
-              </MultimediaCard>
-            );
-          })}
-        </div>
+          {showType ? "▼" : "▲"}
+        </button>
       </div>
-    </article>
+
+      <div
+        className={`grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-[repeat(5,minmax(130px,1fr))] overflow-x-hidden ${showType ? "px-1 py-3" : "h-0 p-0"}`}
+      >
+        {content.map((item, key) => {
+          const { image, smallImage, largeImage } = item.images ?? {};
+          const img = image ? image : smallImage ? smallImage : largeImage;
+
+          return (
+            <MultimediaCard
+              key={key}
+              item={item}
+              onClick={() => handleSelected(item)}
+            >
+              {img && (
+                <img
+                  src={img}
+                  alt="img"
+                  className="inset-0 w-full object-cover duration-[0.45s] aspect-2/3 ease-initial transform group-hover:scale-105"
+                />
+              )}
+
+              <div className="w-full p-4 z-10">
+                <h3 className="text-[1rem] font-bold mb-[.45rem] display line-clamp-2 leading-5 min-h-[2.6rem]">
+                  {item.name}
+                </h3>
+                <p className="mb-2 flex">
+                  <span className="flex-1">Temp:</span>
+                  <span className="bg-background1 px-2.5 py-0.5 rounded-tl-[50px] rounded-bl-[50px] border-r border-card">
+                    {item.actual_season ?? 0}
+                  </span>
+                  <span className="bg-background1 px-2.5 py-0.5 rounded-tr-[50px] rounded-br-[50px]">
+                    {item.total_seasons ?? 0}
+                  </span>
+                </p>
+                <p className="flex">
+                  <span className="flex-1">Cap:</span>
+                  <span className="bg-background1 px-2.5 py-0.5 rounded-tl-[50px] rounded-bl-[50px] border-r border-card">
+                    {item.actual_episode ?? 0}
+                  </span>
+                  <span className="bg-background1 px-2.5 py-0.5 rounded-tr-[50px] rounded-br-[50px]">
+                    {item.total_caps ?? 0}
+                  </span>
+                </p>
+              </div>
+            </MultimediaCard>
+          );
+        })}
+      </div>
+    </section>
   );
 };
 export default RenderMultimediaType;

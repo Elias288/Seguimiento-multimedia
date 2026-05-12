@@ -2,19 +2,20 @@ import MultimediaCard from "./multimediaCard";
 
 const EmptySkeleton = ({ title }: { title: string }) => {
   return (
-    <article className="mb-4">
-      <div className="content__container bg-background2 w-full rounded-lg overflow-x-hidden">
-        <h2 className="text-2xl py-2 px-4">{title}</h2>
-
-        <div className="w-full pt-2 pb-5 px-5 flex gap-4 overflow-x-hidden">
-          <MultimediaCard />
-          <MultimediaCard />
-          <MultimediaCard />
-          <MultimediaCard />
-          <MultimediaCard />
-        </div>
+    <section className="mb-16 md:mb-4">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">{title}</h2>
       </div>
-    </article>
+
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-[repeat(5,200px)] px-1 py-3">
+        <MultimediaCard />
+        <MultimediaCard />
+        <MultimediaCard />
+        <MultimediaCard />
+        <MultimediaCard />
+        <MultimediaCard />
+      </div>
+    </section>
   );
 };
 
