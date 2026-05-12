@@ -22,11 +22,11 @@ podman build -t seguimiento-multimedia:vx.x.x -f src/containerfile .
 Exportar imagen a `.tar`
 
 ```sh
-podman save -o seguimiento-multimedia-vx.x.x.tar seguimiento-multimedia:vx.x.x
+podman save seguimiento-multimedia:vx.x.x | gzip > seguimiento-multimedia.tar.gz
 ```
 
 Cargar imagen desde archivo `.tar`
 
 ```sh
-podman load -i seguimiento-multimedia-vx.x.x.tar
+gunzip -c seguimiento-multimedia.tar.gz | podman load
 ```
