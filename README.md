@@ -16,17 +16,17 @@ Para el despliegue se utiliza un contendor ([containerFile](./src/containerFile)
 Generar la imagen
 
 ```sh
-podman build -t seguimiento-multimedia:vx.x.x -f src/containerfile .
+podman build -t seguimiento-multimedia:latest -f src/containerfile .
 ```
 
 Exportar imagen a `.tar`
 
 ```sh
-podman save seguimiento-multimedia:vx.x.x | gzip > seguimiento-multimedia.tar.gz
+podman save seguimiento-multimedia:latest | gzip > seguimiento-multimedia-vx.x.x.tar.gz
 ```
 
 Cargar imagen desde archivo `.tar`
 
 ```sh
-gunzip -c seguimiento-multimedia.tar.gz | podman load
+gunzip -c seguimiento-multimedia-vx.x.x.tar.gz | podman load
 ```
