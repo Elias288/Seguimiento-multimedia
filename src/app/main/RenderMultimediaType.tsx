@@ -50,12 +50,14 @@ export const RenderMultimediaType = ({ content, title, type }: Props) => {
                 item={item}
                 onClick={() => handleSelected(item)}
               >
-                {img && (
+                {img ? (
                   <img
                     src={img}
                     alt="img"
                     className="inset-0 w-full object-cover duration-[0.45s] aspect-2/3 ease-initial transform group-hover:scale-105"
                   />
+                ) : (
+                  <div className="bg-transparentBackground aspect-2/3"></div>
                 )}
 
                 <div className="w-full p-4 z-10">

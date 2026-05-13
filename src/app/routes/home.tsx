@@ -27,7 +27,7 @@ export default function Home() {
   }, []);
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
-    <main className="max-w-6xl flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 md:py-5 md:px-10 lg:mx-auto">
+    <main className="max-w-6xl flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 lg:py-5 md:px-10 md:mx-auto">
       {children}
     </main>
   );
@@ -37,7 +37,7 @@ export default function Home() {
   if (data && Object.values(data).every((arr) => arr.length === 0)) {
     return (
       <MainContainer>
-        <div className="flex-1 flex flex-col justify-center md:h-full">
+        <div className="flex-1 flex flex-col justify-center lg:h-full">
           <p className="text-2xl font-bold text-gray-400 text-center">
             Sin Contenido
           </p>
