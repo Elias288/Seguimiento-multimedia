@@ -1,18 +1,6 @@
-import type { Multimedia, MultimediaItem } from "@/types/data.type";
+import { CABECERAS, type Multimedia } from "@/types/data.type";
 
 export function jsonToCSV(data: Multimedia): string {
-  const cabeceras: (keyof MultimediaItem | "type")[] = [
-    "name",
-    "alternative_name",
-    "description",
-    "type",
-    "total_caps",
-    "total_seasons",
-    "actual_season",
-    "actual_episode",
-    "status",
-    "images",
-  ];
   const rows: string[] = [];
 
   Object.entries(data).forEach(([type, items]) => {
@@ -24,6 +12,7 @@ export function jsonToCSV(data: Multimedia): string {
         normalizeAndEscapeCSV(item.alternative_name),
         normalizeAndEscapeCSV(item.description),
         type,
+        item.timestamp,
         item.total_caps,
         item.total_seasons,
         item.actual_season,
@@ -38,7 +27,7 @@ export function jsonToCSV(data: Multimedia): string {
     });
   });
 
-  return [cabeceras.join(","), ...rows].join("\n");
+  return [CABECERAS.join(","), ...rows].join("\n");
 }
 
 function normalizeAndEscapeCSV(value: string) {

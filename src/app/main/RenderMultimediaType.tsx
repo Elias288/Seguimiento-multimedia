@@ -39,7 +39,7 @@ export const RenderMultimediaType = ({ content, title, type }: Props) => {
         className={`grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-[repeat(5,minmax(130px,1fr))] overflow-x-hidden ${showType ? "px-1 py-3" : "h-0 p-0"}`}
       >
         {content
-          .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
+          .sort((a, b) => (b.timestamp || "").localeCompare(a.timestamp || ""))
           .map((item, key) => {
             const { image, smallImage, largeImage } = item.images ?? {};
             const img = image ? image : smallImage ? smallImage : largeImage;

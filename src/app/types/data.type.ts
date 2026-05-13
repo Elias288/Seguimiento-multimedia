@@ -37,7 +37,7 @@ export interface MultimediaItem {
 export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
   alternative_name: "",
   description: "",
-  timestamp: "",
+  timestamp: new Date().toISOString(),
   total_caps: undefined,
   total_seasons: undefined,
   actual_season: undefined,
@@ -96,3 +96,17 @@ export const EMPTY_MULTIMEDIA = () => ({
   [MultimediaTypes.SERIES]: [],
   [MultimediaTypes.SIN_CATEGORIZAR]: [],
 });
+
+export const CABECERAS: (keyof MultimediaItem)[] = [
+  "name",
+  "alternative_name",
+  "description",
+  "type",
+  "timestamp",
+  "total_caps",
+  "total_seasons",
+  "actual_season",
+  "actual_episode",
+  "status",
+  "images",
+];

@@ -1,4 +1,5 @@
 import {
+  CABECERAS,
   mapToCategoria,
   MultimediaTypes,
   Status,
@@ -13,20 +14,6 @@ export function readCSVData(data: string): Promise<Multimedia> {
       header: false,
       skipEmptyLines: true,
       complete: ({ data: rows }) => {
-        const CABECERAS = [
-          "name",
-          "alternative_name",
-          "description",
-          "type",
-          "timestamp",
-          "total_caps",
-          "total_seasons",
-          "actual_season",
-          "actual_episode",
-          "status",
-          "images",
-        ] as const;
-
         const datos: Multimedia = {
           [MultimediaTypes.ANIMES]: [],
           [MultimediaTypes.COMICS]: [],

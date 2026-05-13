@@ -97,6 +97,7 @@ export const decompressMultimedia = (data: string): Multimedia => {
           smallImage: item.smi ?? DEFAULTS_VALUES.images?.smallImage,
           largeImage: item.lgi ?? DEFAULTS_VALUES.images?.largeImage,
         },
+        timestamp: item.t ?? DEFAULTS_VALUES.timestamp,
       }),
     );
   });
