@@ -50,20 +50,18 @@ const SearchInAPI = ({ apiLabel, close }: Props) => {
   };
 
   const selectItem = async (item: MultimediaItem) => {
-    if (item.id) {
-      try {
-        const info = await selectedApi?.getInfo(item.id);
-        selectMultimedia(info);
-        toggleOpenAddMultimedia();
-        close();
-      } catch (error: any) {
-        console.error(error);
-        setErrorMessage(error.message);
+    if (!selectedApi || !item.id) return;
 
-        selectMultimedia(item);
-        toggleOpenAddMultimedia();
-        close();
-      }
+    try {
+      const info = await selectedApi.getInfo(item.id);
+      selectMultimedia(info);
+      toggleOpenAddMultimedia();
+      close();
+    } catch (error: any) {
+      console.error(`${error.api}: ${error.message}`);
+      selectMultimedia(item);
+      toggleOpenAddMultimedia();
+      close();
     }
   };
 

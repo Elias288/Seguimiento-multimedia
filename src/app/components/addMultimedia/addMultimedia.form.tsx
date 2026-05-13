@@ -35,6 +35,7 @@ const AddMultimedia = ({}: Props) => {
     selectedMultimedia !== undefined,
   );
   const [actualApi, setActualApi] = useState<MediaApi | undefined>(undefined);
+  const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,6 +43,7 @@ const AddMultimedia = ({}: Props) => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
+    setErrorMsg(undefined);
 
     switch (name) {
       case "total_caps":
@@ -70,16 +72,27 @@ const AddMultimedia = ({}: Props) => {
     }
   };
 
+  const close = () => {
+    clearData();
+    toggleOpenAddMultimedia();
+  };
+
   const searchMultimedia = async (type: MultimediaTypes) => {
+    setErrorMsg(undefined);
     const value = formData.name.trim();
     setShowInfo(value.length !== 0);
+    if (!actualApi) {
+      setShowInfo(false);
+      return;
+    }
 
-    if (actualApi) {
-      setApiResult(await actualApi.search(value));
-    } else {
+    try {
+      setApiResult(await actualApi?.search(value));
+      inputRef.current?.focus();
+    } catch (error: any) {
+      setErrorMsg(`${error.api}:  ${error.message}`);
       setShowInfo(false);
     }
-    inputRef.current?.focus();
   };
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
@@ -94,10 +107,15 @@ const AddMultimedia = ({}: Props) => {
   };
 
   const selectOption = async (info: MultimediaItem) => {
-    if (actualApi && info.id) {
+    if (!actualApi || !info.id) return;
+
+    try {
       const multimediaData = await actualApi.getInfo(info.id);
       setFormData(multimediaData);
       setIsSelectedItem(true);
+      setShowInfo(false);
+    } catch (error: any) {
+      setErrorMsg(`${error.api}:  ${error.message}`);
       setShowInfo(false);
     }
 
@@ -112,6 +130,7 @@ const AddMultimedia = ({}: Props) => {
     clearError();
     setApiResult([]);
     selectMultimedia(undefined);
+    setErrorMsg(undefined);
   };
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -125,6 +144,7 @@ const AddMultimedia = ({}: Props) => {
 
   useEffect(() => {
     setActualApi(getApi("jikan_anime"));
+    setErrorMsg(undefined);
     inputRef.current?.focus();
   }, [formData.type]);
 
@@ -133,6 +153,7 @@ const AddMultimedia = ({}: Props) => {
       ...formData,
       timestamp: new Date().toISOString(),
     });
+    setErrorMsg(undefined);
   }, []);
 
   return (
@@ -232,6 +253,7 @@ const AddMultimedia = ({}: Props) => {
               customOption
             />
           )}
+          {errorMsg && <p className="text-red-600 mb-4">{errorMsg}</p>}
         </label>
 
         <label className="block col-span-full">
@@ -365,7 +387,7 @@ const AddMultimedia = ({}: Props) => {
           <button
             type="reset"
             className="col-start-1 row-start-1 px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70"
-            onClick={toggleOpenAddMultimedia}
+            onClick={close}
           >
             Cerrar
           </button>

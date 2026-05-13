@@ -24,11 +24,14 @@ export class IMDb implements MediaApi {
       );
 
       if (!res.ok) {
-        if (res.status === 404)
-          throw new ApiError("No encontrado", "NOT_FOUND", "IMDb");
-        if (res.status === 429)
-          throw new ApiError("Rate limit", "RATE_LIMIT", "IMDb");
-        throw new ApiError("Error desconocido", "UNKNOWN", "IMDb");
+        switch (res.status) {
+          case 404:
+            throw new ApiError("No encontrado", "NOT_FOUND", "IMDb_search");
+          case 429:
+            throw new ApiError("Rate limit", "RATE_LIMIT", "IMDb_search");
+          default:
+            throw new ApiError("Error desconocido", "UNKNOWN", "IMDb_search");
+        }
       }
 
       const data = await res.json();
@@ -65,11 +68,14 @@ export class IMDb implements MediaApi {
       );
 
       if (!res.ok) {
-        if (res.status === 404)
-          throw new ApiError("No encontrado", "NOT_FOUND", "IMDb");
-        if (res.status === 429)
-          throw new ApiError("Rate limit", "RATE_LIMIT", "IMDb");
-        throw new ApiError("Error desconocido", "UNKNOWN", "IMDb");
+        switch (res.status) {
+          case 404:
+            throw new ApiError("No encontrado", "NOT_FOUND", "IMDb_getInfo");
+          case 429:
+            throw new ApiError("Rate limit", "RATE_LIMIT", "IMDb_getInfo");
+          default:
+            throw new ApiError("Error desconocido", "UNKNOWN", "IMDb_getInfo");
+        }
       }
 
       const data = await res.json();
@@ -91,11 +97,11 @@ export class IMDb implements MediaApi {
       } as MultimediaItem;
     } catch (error: any) {
       if (error.name === "AbortError")
-        throw new ApiError("Timeout", "TIMEOUT", "IMDb");
+        throw new ApiError("Timeout", "TIMEOUT", "IMDb_getInfo");
 
       if (error instanceof ApiError) throw error;
 
-      throw new ApiError("Error de red", "NETWORK", "IMDb");
+      throw new ApiError("Error de red", "NETWORK", "IMDb_getInfo");
     }
   }
 }

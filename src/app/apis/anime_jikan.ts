@@ -31,11 +31,18 @@ export class AnimeJikan implements MediaApi {
       );
 
       if (!res.ok) {
-        if (res.status === 404)
-          throw new ApiError("No encontrado", "NOT_FOUND", "JikanApi");
-        if (res.status === 429)
-          throw new ApiError("Rate limit", "RATE_LIMIT", "JikanApi");
-        throw new ApiError("Error desconocido", "UNKNOWN", "JikanApi");
+        switch (res.status) {
+          case 404:
+            throw new ApiError("No encontrado", "NOT_FOUND", "JikanApi_search");
+          case 429:
+            throw new ApiError("Rate limit", "RATE_LIMIT", "JikanApi_search");
+          default:
+            throw new ApiError(
+              "Error desconocido",
+              "UNKNOWN",
+              "JikanApi_search",
+            );
+        }
       }
 
       const { data, pagination } = await res.json();
@@ -70,11 +77,22 @@ export class AnimeJikan implements MediaApi {
       );
 
       if (!res.ok) {
-        if (res.status === 404)
-          throw new ApiError("No encontrado", "NOT_FOUND", "JikanApi");
-        if (res.status === 429)
-          throw new ApiError("Rate limit", "RATE_LIMIT", "JikanApi");
-        throw new ApiError("Error desconocido", "UNKNOWN", "JikanApi");
+        switch (res.status) {
+          case 404:
+            throw new ApiError(
+              "No encontrado",
+              "NOT_FOUND",
+              "JikanApi_getInfo",
+            );
+          case 429:
+            throw new ApiError("Rate limit", "RATE_LIMIT", "JikanApi_getInfo");
+          default:
+            throw new ApiError(
+              "Error desconocido",
+              "UNKNOWN",
+              "JikanApi_getInfo",
+            );
+        }
       }
 
       const { data, pagination } = await res.json();
@@ -117,12 +135,12 @@ export class AnimeJikan implements MediaApi {
       } as MultimediaItem;
     } catch (error: any) {
       if (error.name === "AbortError")
-        throw new ApiError("Timeout", "TIMEOUT", "JikanApi");
+        throw new ApiError("Timeout", "TIMEOUT", "JikanApi_getInfo");
 
       if (error instanceof ApiError) throw error;
 
       console.error(error);
-      throw new ApiError("Error de red", "NETWORK", "JikanApi");
+      throw new ApiError("Error de red", "NETWORK", "JikanApi_getInfo");
     }
   }
 }
