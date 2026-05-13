@@ -202,7 +202,7 @@ const ShowMultimedia = ({}: Props) => {
           </select>
         </label>
 
-        <div className="border-t border-gray-700 pt-4 flex flex-row-reverse gap-2 col-span-full">
+        <div className="grid grid-cols-3 items-baseline border-t border-gray-700 pt-4 md:flex md:flex-row-reverse gap-2 col-span-full">
           <button
             type="submit"
             className="px-4 py-2 cursor-pointer bg-principal text-white rounded hover:opacity-70"
@@ -212,20 +212,20 @@ const ShowMultimedia = ({}: Props) => {
           <button
             onClick={() => handleDelete()}
             type="button"
-            className="px-4 py-2 cursor-pointer bg-blue-500 text-white rounded hover:opacity-70"
+            className="col-start-2 row-start-1 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded hover:opacity-70"
           >
             Eliminar
           </button>
 
           <button
             type="reset"
-            className="px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70"
+            className="col-start-1 row-start-1 px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70"
             onClick={close}
           >
-            Cancelar
+            Cerrar
           </button>
 
-          <span className="flex-1 text-gray-600">
+          <span className="flex-1 text-gray-600 col-span-full">
             {new Date(formData.timestamp).toLocaleString()}
           </span>
         </div>
