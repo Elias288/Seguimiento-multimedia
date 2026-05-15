@@ -13,6 +13,7 @@ import {
 } from "react";
 import CustomInput from "./CustomInputProps";
 import { useInterfaceContext } from "@/context/interfaceContext";
+import { NumberInput } from "./NumberInput";
 
 interface Props {}
 const ShowMultimedia = ({}: Props) => {
@@ -38,7 +39,6 @@ const ShowMultimedia = ({}: Props) => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-
     if (name === "image") {
       setFormData((prev) => ({
         ...prev,
@@ -88,6 +88,7 @@ const ShowMultimedia = ({}: Props) => {
       >
         <h2 className="text-2xl font-bold col-span-full">{formData.name}</h2>
 
+        {/* Nombre alternativo */}
         <label className="col-span-full row-start-2">
           <CustomInput
             title="Nombre alternativo"
@@ -98,6 +99,7 @@ const ShowMultimedia = ({}: Props) => {
           />
         </label>
 
+        {/* Descripción */}
         <label className="col-span-full row-start-3 md:col-start-2">
           <CustomInput
             title="Descripción"
@@ -108,6 +110,7 @@ const ShowMultimedia = ({}: Props) => {
           />
         </label>
 
+        {/* URL Imagen */}
         <label className="col-span-full row-start-4 md:col-start-2">
           <CustomInput
             title="Image"
@@ -118,6 +121,7 @@ const ShowMultimedia = ({}: Props) => {
           />
         </label>
 
+        {/* Imagen */}
         <div className="col-start-1 row-span-4 w-full overflow-hidden md:row-start-3 md:row-span-5 md:h-[400px]">
           {formData.images?.image && (
             <img
@@ -128,64 +132,55 @@ const ShowMultimedia = ({}: Props) => {
           )}
         </div>
 
-        <label>
-          <CustomInput
-            title="Capítulos"
-            type="number"
-            name="total_caps"
-            min={0}
-            value={formData.total_caps ?? 0}
-            onChange={handleInputChange}
-            onFocus={(e) => {
-              e.currentTarget.select();
-            }}
-          />
-        </label>
+        {/* Capítulos */}
+        <NumberInput
+          title="Capítulos"
+          name="total_caps"
+          min={0}
+          value={formData.total_caps ?? 0}
+          onChange={handleInputChange}
+          onFocus={(e) => {
+            e.currentTarget.select();
+          }}
+        />
 
-        <label>
-          <CustomInput
-            title="Temporadas"
-            type="number"
-            name="total_seasons"
-            min={0}
-            value={formData.total_seasons ?? 1}
-            onChange={handleInputChange}
-            onFocus={(e) => {
-              e.currentTarget.select();
-            }}
-          />
-        </label>
+        {/* Temporadas */}
+        <NumberInput
+          title="Temporadas"
+          name="total_seasons"
+          min={0}
+          value={formData.total_seasons ?? 1}
+          onChange={handleInputChange}
+          onFocus={(e) => {
+            e.currentTarget.select();
+          }}
+        />
 
-        <label>
-          <CustomInput
-            title="Temporada Actual"
-            type="number"
-            name="actual_season"
-            max={formData.total_seasons}
-            min={0}
-            value={formData.actual_season ?? 0}
-            onChange={handleInputChange}
-            onFocus={(e) => {
-              e.currentTarget.select();
-            }}
-          />
-        </label>
+        {/* Temporada actual */}
+        <NumberInput
+          title="Temporada Actual"
+          name="actual_season"
+          max={formData.total_seasons}
+          min={0}
+          value={formData.actual_season ?? 0}
+          onChange={handleInputChange}
+          onFocus={(e) => {
+            e.currentTarget.select();
+          }}
+        />
 
-        <label>
-          <CustomInput
-            title="Capítulo Actual"
-            type="number"
-            name="actual_episode"
-            max={formData.total_caps}
-            min={0}
-            value={formData.actual_episode ?? 0}
-            onChange={handleInputChange}
-            onFocus={(e) => {
-              e.currentTarget.select();
-            }}
-          />
-        </label>
+        {/* Capítulo actual */}
+        <NumberInput
+          title="Capítulo Actual"
+          name="actual_episode"
+          max={formData.total_caps ?? 0}
+          min={0}
+          value={Number(formData.actual_episode) ?? 0}
+          onChange={handleInputChange}
+          onFocus={(e) => e.currentTarget.select()}
+        />
 
+        {/* Estado */}
         <label className="col-span-full md:col-start-2">
           Estado
           <select
