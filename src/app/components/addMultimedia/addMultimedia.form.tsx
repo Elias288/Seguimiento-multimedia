@@ -166,7 +166,7 @@ const AddMultimedia = ({}: Props) => {
     >
       <form
         onSubmit={handleSubmit}
-        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-1 gap-x-3 overflow-auto md:grid-cols-[300px_auto_auto] md:w-auto"
+        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] grid-rows-[repeat(9_auto)] gap-y-1 gap-x-3 overflow-auto md:grid-cols-[300px_auto_auto] md:w-auto"
       >
         <h2 className="text-2xl font-bold col-span-full">
           Agregar
@@ -291,7 +291,7 @@ const AddMultimedia = ({}: Props) => {
         </label>
 
         {/* Imagen */}
-        <div className="col-start-1 row-span-4 w-full object-contain overflow-hidden md:row-start-4 md:row-span-5 md:h-[400px]">
+        <div className="col-start-1 row-span-4 w-full max-h-cardH object-contain overflow-hidden md:row-start-4 md:row-span-5 md:h-cardH">
           {formData.images?.image && (
             <img
               src={formData.images?.image}

@@ -26,7 +26,7 @@ const MainLayout = () => {
   return (
     <div className="min-h-screen min-w-screenMinWidth">
       <div
-        className={`min-h-screen flex flex-col lg:grid duration-100 ease-in-out grid-rows-[auto_1fr] ${showSideBar ? "lg:grid-cols-[350px_auto]" : "lg:grid-cols-[0_auto] "}`}
+        className={`min-h-screen flex flex-col lg:grid duration-100 ease-in-out grid-rows-[auto_1fr] lg:grid-cols-[350px_auto]`}
       >
         <Header sideBarOpen={showSideBar} setShowSideBar={setShowSideBar} />
         <SideBar isOpen={showSideBar} toggleSideBar={toggleSideBar} />

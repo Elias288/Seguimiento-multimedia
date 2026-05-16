@@ -27,7 +27,7 @@ export default function Home() {
   }, []);
 
   const MainContainer = ({ children }: { children: ReactNode }) => (
-    <main className="max-w-6xl w-[stretch] flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 lg:py-5 md:px-10 md:mx-auto">
+    <main className="max-w-6xl w-[stretch] flex-1 py-5 px-3 overflow-x-hidden flex flex-col gap-10 md:px-10 md:mx-auto lg:py-5 lg:col-start-2">
       {children}
     </main>
   );

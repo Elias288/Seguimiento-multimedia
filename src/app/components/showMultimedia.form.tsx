@@ -84,7 +84,7 @@ const ShowMultimedia = ({}: Props) => {
     >
       <form
         onSubmit={handleSubmit}
-        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] gap-y-2 gap-x-3 overflow-y-auto md:grid-cols-[300px_auto_auto] md:w-auto"
+        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] grid-rows-[repeat(10_auto)] gap-y-2 gap-x-3 overflow-y-auto md:grid-cols-[300px_auto_auto] md:w-auto"
       >
         <h2 className="text-2xl font-bold col-span-full">{formData.name}</h2>
 
@@ -122,7 +122,7 @@ const ShowMultimedia = ({}: Props) => {
         </label>
 
         {/* Imagen */}
-        <div className="col-start-1 row-span-4 w-full overflow-hidden md:row-start-3 md:row-span-5 md:h-[400px]">
+        <div className="col-start-1 row-span-4 w-full max-h-cardH overflow-hidden md:row-start-3 md:row-span-5 md:h-cardH">
           {formData.images?.image && (
             <img
               src={formData.images?.image}

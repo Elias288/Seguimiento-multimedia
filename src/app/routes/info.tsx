@@ -52,7 +52,7 @@ const Info = () => {
 
   const Main = ({ children }: { children: ReactNode }) => {
     return (
-      <main className="max-w-6xl w-[stretch] py-5 px-3 overflow-x-hidden flex flex-col gap-10 md:py-5 md:px-10 md:mx-auto">
+      <main className="max-w-6xl w-[stretch] py-5 px-3 overflow-x-hidden flex flex-col gap-10 md:py-5 md:px-10 md:mx-auto lg:col-start-2">
         {children}
       </main>
     );

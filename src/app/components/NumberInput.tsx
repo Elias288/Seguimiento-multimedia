@@ -46,7 +46,10 @@ export const NumberInput = ({
   };
 
   return (
-    <label htmlFor={name} className="grid grid-cols-[2rem_auto_2rem] gap-0.5">
+    <label
+      htmlFor={name}
+      className="grid grid-cols-[2rem_auto_2rem] h-min gap-0.5"
+    >
       <span className="col-span-full">{title}</span>
 
       <button

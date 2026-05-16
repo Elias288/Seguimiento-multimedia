@@ -20,7 +20,7 @@ const Header = ({ sideBarOpen, setShowSideBar }: Props) => {
 
         <button
           onClick={() => setShowSideBar(!sideBarOpen)}
-          className="hover:opacity-70 cursor-pointer"
+          className="hover:opacity-70 cursor-pointer lg:hidden"
         >
           <MenuIcon isOpen={sideBarOpen} />
         </button>

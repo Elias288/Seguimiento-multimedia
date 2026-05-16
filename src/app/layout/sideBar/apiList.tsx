@@ -15,7 +15,7 @@ const ApiList = () => {
     <div className="border-b border-gray-700 pb-4 relative">
       <h3 className="mb-2">Apis</h3>
 
-      <div className="grid grid-cols-2 md:flex md:flex-col gap-3 max-h-50 overflow-y-auto">
+      <div className="flex flex-col gap-3 max-h-50 overflow-y-auto md:grid md:grid-cols-2">
         {apis.map((api, key) => (
           <button
             key={key}
