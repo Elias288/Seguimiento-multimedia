@@ -39,7 +39,7 @@ const Info = () => {
           ),
       );
     }
-  }, []);
+  }, [data]);
 
   const Block = ({ title, value }: { title: string; value: number }) => {
     return (
@@ -52,7 +52,7 @@ const Info = () => {
 
   const Main = ({ children }: { children: ReactNode }) => {
     return (
-      <main className="py-5 px-3 overflow-x-hidden flex flex-col gap-10 md:py-5 md:px-10">
+      <main className="max-w-6xl w-[stretch] py-5 px-3 overflow-x-hidden flex flex-col gap-10 md:py-5 md:px-10 md:mx-auto">
         {children}
       </main>
     );
@@ -62,9 +62,9 @@ const Info = () => {
 
   if (!status.loaded)
     return (
-      <Main>
+      <main className="max-w-6xl w-[stretch] py-5 px-3 overflow-x-hidden flex flex-col justify-center items-center gap-10 md:py-5 md:px-10 md:mx-auto">
         <Spinner />
-      </Main>
+      </main>
     );
 
   return (
@@ -73,7 +73,7 @@ const Info = () => {
         <h2 className="text-2xl col-span-full">Información</h2>
 
         {categoriesCount && (
-          <section className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
+          <section className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             <h3 className="col-span-full">Categorías</h3>
 
             <Block title="Animes" value={categoriesCount["anime"]} />
@@ -84,13 +84,25 @@ const Info = () => {
         )}
 
         {statusCount && (
-          <section className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
+          <section className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             <h3 className="col-span-full">Estados</h3>
 
-            <Block title="Por ver" value={statusCount["por ver"]} />
-            <Block title="Vistos" value={statusCount["visto"]} />
-            <Block title="Viendo" value={statusCount["viendo"]} />
-            <Block title="Dejado" value={statusCount["dejado"]} />
+            <Block
+              title="Por ver"
+              value={statusCount["por ver"] ? statusCount["por ver"] : 0}
+            />
+            <Block
+              title="Vistos"
+              value={statusCount["visto"] ? statusCount["visto"] : 0}
+            />
+            <Block
+              title="Viendo"
+              value={statusCount["viendo"] ? statusCount["viendo"] : 0}
+            />
+            <Block
+              title="Dejado"
+              value={statusCount["dejado"] ? statusCount["dejado"] : 0}
+            />
           </section>
         )}
       </div>

@@ -7,7 +7,7 @@ const EmptySkeleton = ({ title }: { title: string }) => {
         <h2 className="text-2xl font-bold">{title}</h2>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-[repeat(5,200px)] px-1 py-3">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 px-1 py-3">
         <MultimediaCard />
         <MultimediaCard />
         <MultimediaCard />
