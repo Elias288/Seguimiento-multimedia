@@ -33,11 +33,13 @@ const ShowMultimedia = ({}: Props) => {
     total_seasons: selectedMultimedia?.total_seasons ?? 1,
     images: selectedMultimedia?.images,
   });
+  const [updated, setUpdated] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
+    setUpdated(true);
     const { name, value } = e.target;
     if (name === "image") {
       setFormData((prev) => ({
@@ -61,14 +63,21 @@ const ShowMultimedia = ({}: Props) => {
       ...formData,
       timestamp: new Date().toISOString(),
     });
-    close();
+    setUpdated(false);
   };
 
   const handleDelete = () => {
-    if (data && selectedMultimedia) {
+    if (!data || !selectedMultimedia) return;
+
+    if (confirm("Seguro que quiere eliminar?")) {
       deleteItem(selectedMultimedia);
       close();
     }
+  };
+
+  const handleClose = () => {
+    if (updated && !confirm("Seguro que quiere cerrar sin guardar?")) return;
+    close();
   };
 
   useEffect(() => {
@@ -84,7 +93,7 @@ const ShowMultimedia = ({}: Props) => {
     >
       <form
         onSubmit={handleSubmit}
-        className="bg-background1 border border-principal w-formW max-w-200 max-h-[90%] rounded-2xl p-4 grid grid-cols-[60%_1fr] grid-rows-[repeat(10_auto)] gap-y-2 gap-x-3 overflow-y-auto md:grid-cols-[300px_auto_auto] md:w-auto"
+        className="bg-background1 border border-principal w-formW max-w-200 max-h-screen rounded-2xl p-4 grid grid-cols-[60%_1fr] grid-rows-[repeat(10_auto)] gap-y-2 gap-x-3 overflow-y-auto md:grid-cols-[300px_auto_auto] mlg:max-h-[90%] d:w-auto"
       >
         <h2 className="text-2xl font-bold col-span-full">{formData.name}</h2>
 
@@ -214,10 +223,15 @@ const ShowMultimedia = ({}: Props) => {
 
           <button
             type="reset"
-            className="col-start-1 row-start-1 px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70"
-            onClick={close}
+            className="col-start-1 row-start-1 px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70 relative"
+            onClick={handleClose}
           >
             Cerrar
+            {updated && (
+              <span className="text-sm bg-red-900 size-4 rounded-[50%] flex justify-center items-center absolute -top-1.5 right-0 border">
+                !
+              </span>
+            )}
           </button>
 
           <span className="flex-1 text-gray-600 col-span-full">

@@ -74,6 +74,11 @@ const AddMultimedia = ({}: Props) => {
   };
 
   const close = () => {
+    if (formData.name !== "" && !confirm("Seguro que quiere cerrar?")) {
+      inputRef.current?.focus();
+      return;
+    }
+
     clearData();
     toggleOpenAddMultimedia();
   };
@@ -141,6 +146,12 @@ const AddMultimedia = ({}: Props) => {
       e.preventDefault();
       searchMultimedia(formData.type ? formData.type : MultimediaTypes.ANIMES);
     }
+  };
+
+  const handleClear = () => {
+    if (formData.name !== "" && !confirm("Seguro que quiere limpiar?")) return;
+    clearData();
+    inputRef.current?.focus();
   };
 
   useEffect(() => {
@@ -378,7 +389,7 @@ const AddMultimedia = ({}: Props) => {
           <button
             type="reset"
             className="col-start-2 row-start-1 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded hover:opacity-70"
-            onClick={clearData}
+            onClick={handleClear}
           >
             Limpiar
           </button>
