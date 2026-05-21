@@ -1,11 +1,16 @@
 import { useMediaFilterContext } from "@/context/mediaFilter";
 import { Status } from "@/types/data.type";
 
-const Filtros = () => {
+type Props = {
+  toggleSidebar: () => void;
+};
+const Filtros = ({ toggleSidebar }: Props) => {
   const { query, setQuery } = useMediaFilterContext();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setQuery(event.currentTarget.value);
+    toggleSidebar();
+  };
 
   return (
     <div className="border-b border-gray-700 pb-4">
@@ -16,7 +21,7 @@ const Filtros = () => {
           value={""}
           title="Todos"
           onClick={handleClick}
-          className={`block bg-input rounded-sm py-3 cursor-pointer hover:opacity-70 ${query === "" ? "border border-principal" : ""}`}
+          className={`block bg-input rounded-sm py-3 cursor-pointer hover:opacity-70 col-span-full ${query === "" ? "border border-principal" : ""}`}
         >
           Todos
         </button>

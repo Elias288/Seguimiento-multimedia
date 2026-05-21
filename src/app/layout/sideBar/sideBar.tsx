@@ -18,15 +18,15 @@ const SideBar = ({ isOpen, toggleSideBar }: Props) => {
       <div
         className={`bg-background2 col-1 overflow-x-hidden z-30 rounded-lg flex flex-col gap-4 h-full min-w-62.5 duration-200 ease-in-out ${isOpen ? "w-[80%] p-5" : "w-0"} lg:p-5 lg:w-full lg:mx-3 lg:my-5 lg:py-3 lg:h-auto`}
       >
-        <div className="lg:hidden flex justify-center border-b border-gray-700 pb-4">
+        <div className="md:hidden flex justify-center border-b border-gray-700 pb-4">
           <NavBar action={toggleSideBar} />
         </div>
 
-        <BuscadorMultimedia />
+        <BuscadorMultimedia toggleSidebar={toggleSideBar} />
 
-        <Filtros />
+        <Filtros toggleSidebar={toggleSideBar} />
 
-        <ApiList />
+        <ApiList toggleSidebar={toggleSideBar} />
       </div>
     </aside>
   );

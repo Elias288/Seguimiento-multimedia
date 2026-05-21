@@ -7,6 +7,7 @@ type Props = {
   setShowSideBar: (val: boolean) => void;
 };
 const Header = ({ sideBarOpen, setShowSideBar }: Props) => {
+  const closeSideBar = () => setShowSideBar(false);
   return (
     <header className="bg-principal py-2 px-4 h-header min-w-screenMinWidth font-bold sticky top-0 flex items-center justify-between z-20 col-span-full">
       <h1 className="text-2xl">
@@ -15,7 +16,7 @@ const Header = ({ sideBarOpen, setShowSideBar }: Props) => {
 
       <div className="flex gap-4">
         <div className="hidden md:flex md:items-center">
-          <NavBar action={(e: boolean) => setShowSideBar(e)} />
+          <NavBar action={closeSideBar} />
         </div>
 
         <button
@@ -29,20 +30,20 @@ const Header = ({ sideBarOpen, setShowSideBar }: Props) => {
   );
 };
 
-export const NavBar = ({ action }: { action: (e: boolean) => void }) => {
+export const NavBar = ({ action }: { action: () => void }) => {
   const { status, clearData, downloadData } = useMediaContext();
   return (
     <nav className="flex flex-wrap justify-center">
       <NavLink
         to={"/home"}
-        onClick={() => action(false)}
+        onClick={() => action()}
         className="px-2 hover:opacity-70 select-none"
       >
         Home
       </NavLink>{" "}
       <NavLink
         to="/info"
-        onClick={() => action(false)}
+        onClick={() => action()}
         className="px-2 hover:opacity-70 select-none"
       >
         Info
@@ -50,7 +51,7 @@ export const NavBar = ({ action }: { action: (e: boolean) => void }) => {
       <button
         onClick={() => {
           downloadData();
-          action(false);
+          action();
         }}
         title="La información se guarda en el navegador, guárdala para no perderla"
         className="px-2 cursor-pointer flex items-center gap-1 hover:opacity-70 select-none"

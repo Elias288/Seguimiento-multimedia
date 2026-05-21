@@ -4,9 +4,13 @@ import { useState, type SubmitEvent } from "react";
 import { useMediaSearchContext } from "@/context/mediaSearchContext";
 import { useInterfaceContext } from "@/context/interfaceContext";
 
-const BuscadorMultimedia = () => {
+type Props = {
+  toggleSidebar: () => void;
+};
+const BuscadorMultimedia = ({ toggleSidebar }: Props) => {
   const { filteredData, setQuery } = useMediaSearchContext();
-  const { selectMultimedia } = useInterfaceContext();
+  const { selectMultimedia, toggleOpenUpdateMultimedia } =
+    useInterfaceContext();
   const [searchInput, setSearchInput] = useState<string>("");
   const [openList, setOpenList] = useState<boolean>(false);
 
@@ -27,7 +31,11 @@ const BuscadorMultimedia = () => {
     }
   };
 
-  const openItem = (item: MultimediaItem) => selectMultimedia(item);
+  const openItem = (item: MultimediaItem) => {
+    selectMultimedia(item);
+    toggleOpenUpdateMultimedia();
+    toggleSidebar();
+  };
 
   return (
     <>

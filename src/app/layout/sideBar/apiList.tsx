@@ -3,7 +3,10 @@ import { getAvailableApis } from "@/apis/apiFactory";
 import { useInterfaceContext } from "@/context/interfaceContext";
 import { useEffect, useState } from "react";
 
-const ApiList = () => {
+type Props = {
+  toggleSidebar: () => void;
+};
+const ApiList = ({ toggleSidebar }: Props) => {
   const { setSelectedApi } = useInterfaceContext();
   const [apis, setApis] = useState<{ label: string; key: ApiOption }[]>([]);
 
@@ -19,7 +22,10 @@ const ApiList = () => {
         {apis.map((api, key) => (
           <button
             key={key}
-            onClick={() => setSelectedApi(api.key)}
+            onClick={() => {
+              setSelectedApi(api.key);
+              toggleSidebar();
+            }}
             className="bg-input block w-full rounded-sm py-3 cursor-pointer hover:opacity-70"
           >
             {api.label}
