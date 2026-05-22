@@ -40,11 +40,11 @@ const LoadFile = () => {
       return;
     }
 
+    const fileName = file.name.split(".csv")[0];
     const reader = new FileReader();
-
     reader.onload = async (e) => {
       try {
-        const res = await readCSVData(e.target?.result as string);
+        const res = await readCSVData(e.target?.result as string, fileName);
         setData(res);
         redirect("/home");
       } catch (err) {

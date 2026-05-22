@@ -12,10 +12,10 @@ const isEmpty = (value: any) =>
   value === "" || value === null || value === undefined || value.length === 0;
 
 export const compressMultimedia = (data: Multimedia): string => {
-  const result: CompressedMultimedia = {};
+  const result: CompressedMultimedia = { ft: data.fileName, m: {} };
 
-  Object.entries(data).forEach(([key, items]) => {
-    result[key] = items.map((item: MultimediaItem) => {
+  Object.entries(data.media).forEach(([key, items]) => {
+    result.m[key] = items.map((item: MultimediaItem) => {
       const compressed: Partial<CompressedMultimediaItem> = {
         n: item.name,
       };
@@ -79,10 +79,11 @@ export const compressMultimedia = (data: Multimedia): string => {
 
 export const decompressMultimedia = (data: string): Multimedia => {
   const result: Multimedia = EMPTY_MULTIMEDIA();
-  const dataObject = JSON.parse(data) as CompressedMultimediaItem;
+  const dataObject = JSON.parse(data) as CompressedMultimedia;
 
-  Object.entries(dataObject).forEach(([key, items]) => {
-    result[mapToCategoria(key)] = items.map(
+  result.fileName = dataObject.ft;
+  Object.entries(dataObject.m).forEach(([key, items]) => {
+    result.media[mapToCategoria(key)] = items.map(
       (item: Partial<CompressedMultimediaItem>) => ({
         name: item.n ?? "",
         alternative_name: item.an ?? "",

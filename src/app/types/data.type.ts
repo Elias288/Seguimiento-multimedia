@@ -1,8 +1,11 @@
-export type Multimedia = Record<MultimediaTypes, MultimediaItem[]>;
-export type CompressedMultimedia = Record<
-  string,
-  Partial<CompressedMultimediaItem>[]
->;
+export type Multimedia = {
+  fileName: string;
+  media: Record<MultimediaTypes, MultimediaItem[]>;
+};
+export type CompressedMultimedia = {
+  ft: string;
+  m: Record<string, Partial<CompressedMultimediaItem>[]>;
+};
 
 export enum MultimediaTypes {
   ANIMES = "anime",
@@ -34,10 +37,11 @@ export interface MultimediaItem {
   images?: { image?: string; smallImage?: string; largeImage?: string };
 }
 
-export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
+export const DEFAULTS_VALUES: MultimediaItem = {
   alternative_name: "",
   description: "",
   timestamp: new Date().toISOString(),
+  name: "",
   total_caps: undefined,
   total_seasons: undefined,
   actual_season: undefined,
@@ -52,6 +56,7 @@ export const DEFAULTS_VALUES: Partial<MultimediaItem> = {
 };
 
 export interface CompressedMultimediaItem {
+  ft: string;
   n: string;
   an?: string;
   d?: string;
@@ -89,12 +94,15 @@ export const EMPTY_FORMDATA: MultimediaItem = {
   images: { image: undefined },
 };
 
-export const EMPTY_MULTIMEDIA = () => ({
-  [MultimediaTypes.ANIMES]: [],
-  [MultimediaTypes.COMICS]: [],
-  [MultimediaTypes.MAGAS]: [],
-  [MultimediaTypes.SERIES]: [],
-  [MultimediaTypes.SIN_CATEGORIZAR]: [],
+export const EMPTY_MULTIMEDIA = (): Multimedia => ({
+  fileName: "",
+  media: {
+    [MultimediaTypes.ANIMES]: [],
+    [MultimediaTypes.COMICS]: [],
+    [MultimediaTypes.MAGAS]: [],
+    [MultimediaTypes.SERIES]: [],
+    [MultimediaTypes.SIN_CATEGORIZAR]: [],
+  },
 });
 
 export const CABECERAS: (keyof MultimediaItem)[] = [

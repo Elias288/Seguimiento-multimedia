@@ -34,7 +34,7 @@ export default function Home() {
 
   if (status.loaded && !data) return <Navigate to="/" />;
 
-  if (data && Object.values(data).every((arr) => arr.length === 0)) {
+  if (data && Object.values(data.media).every((arr) => arr.length === 0)) {
     return (
       <MainContainer>
         <div className="flex-1 flex flex-col justify-center lg:h-full">

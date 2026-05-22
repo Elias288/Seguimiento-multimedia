@@ -3,7 +3,7 @@ import { CABECERAS, type Multimedia } from "@/types/data.type";
 export function jsonToCSV(data: Multimedia): string {
   const rows: string[] = [];
 
-  Object.entries(data).forEach(([type, items]) => {
+  Object.entries(data.media).forEach(([type, items]) => {
     if (!items) return;
 
     items.forEach((item) => {

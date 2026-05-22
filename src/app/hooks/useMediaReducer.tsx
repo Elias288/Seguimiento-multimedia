@@ -65,16 +65,19 @@ const reducer = (state: State, action: Action): State => {
       };
 
     case "UPDATE_ITEM":
-      if (DEBUG_LOG) console.log("update_data");
+      if (DEBUG_LOG) console.log("update_data", action, state);
       const updatedItem = action.payload;
       if (!state.data || !updatedItem || !updatedItem.type) return state;
 
       const newData: Multimedia = {
         ...state.data,
-        [updatedItem.type]: state.data[updatedItem.type].map(
-          (i: MultimediaItem) =>
-            i.name === updatedItem.name ? updatedItem : i,
-        ),
+        media: {
+          ...state.data.media,
+          [updatedItem.type]: state.data.media[updatedItem.type].map(
+            (i: MultimediaItem) =>
+              i.name === updatedItem.name ? updatedItem : i,
+          ),
+        },
       };
 
       return {
@@ -96,9 +99,12 @@ const reducer = (state: State, action: Action): State => {
 
       const newData2: Multimedia = {
         ...state.data,
-        [item.type]: state.data[item.type].filter(
-          (i: MultimediaItem) => i.name !== item.name,
-        ),
+        media: {
+          ...state.data.media,
+          [item.type]: state.data.media[item.type].filter(
+            (i: MultimediaItem) => i.name !== item.name,
+          ),
+        },
       };
 
       return {
@@ -118,7 +124,7 @@ const reducer = (state: State, action: Action): State => {
       const data = action.payload;
       if (!state.data || !data.type) return state;
 
-      const exists = state.data[data.type].some(
+      const exists = state.data.media[data.type].some(
         (el) => el.name.toLowerCase() === data?.name.toLowerCase(),
       );
 
@@ -136,7 +142,10 @@ const reducer = (state: State, action: Action): State => {
 
       const newData3: Multimedia = {
         ...state.data,
-        [data.type]: [...state.data[data.type], data],
+        media: {
+          ...state.data.media,
+          [data.type]: [...state.data.media[data.type], data],
+        },
       };
 
       return {

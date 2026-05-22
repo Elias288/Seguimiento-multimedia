@@ -17,12 +17,15 @@ const useMediaFilter = (): MediaFilterType => {
     const normalize = (str: string) => str.toLowerCase().trim();
     const normalizedQuery = normalize(query);
 
-    return Object.fromEntries(
-      Object.entries(data).map(([type, items]) => [
-        type,
-        items.filter((item) => normalize(item.status) === normalizedQuery),
-      ]),
-    ) as Multimedia;
+    return {
+      ...data,
+      media: Object.fromEntries(
+        Object.entries(data.media).map(([type, items]) => [
+          type,
+          items.filter((item) => normalize(item.status) === normalizedQuery),
+        ]),
+      ),
+    } as Multimedia;
   }, [data, query, setQuery]);
 
   return {

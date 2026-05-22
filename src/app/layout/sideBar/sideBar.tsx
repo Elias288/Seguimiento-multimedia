@@ -2,12 +2,15 @@ import BuscadorMultimedia from "@/layout/sideBar/buscador";
 import { NavBar } from "../header";
 import Filtros from "./filtros";
 import ApiList from "./apiList";
+import { useMediaContext } from "@/context/mediaContext";
 
 type Props = {
   isOpen: boolean;
   toggleSideBar: () => void;
 };
 const SideBar = ({ isOpen, toggleSideBar }: Props) => {
+  const { data } = useMediaContext();
+
   return (
     <aside
       onMouseDown={(e) => {
@@ -27,6 +30,9 @@ const SideBar = ({ isOpen, toggleSideBar }: Props) => {
         <Filtros toggleSidebar={toggleSideBar} />
 
         <ApiList toggleSidebar={toggleSideBar} />
+
+        <div className="flex-1"></div>
+        <p className="text-center text-gray-500">{data?.fileName}</p>
       </div>
     </aside>
   );

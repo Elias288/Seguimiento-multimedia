@@ -23,12 +23,12 @@ const Info = () => {
     if (data) {
       setCategoriesCount(
         Object.fromEntries(
-          Object.entries(data).map(([key, value]) => [key, value.length]),
+          Object.entries(data.media).map(([key, value]) => [key, value.length]),
         ),
       );
 
       setStatusCount(
-        Object.values(data)
+        Object.values(data.media)
           .flat()
           .reduce(
             (acc, item) => {

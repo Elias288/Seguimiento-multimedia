@@ -17,7 +17,7 @@ const useMediaSearch = (): MediaSearchType => {
     const normalize = (str: string) => str.toLowerCase().trim();
     const q = normalize(query);
 
-    return Object.entries(data)
+    return Object.entries(data.media)
       .flatMap(([type, items]) => items.map((item) => ({ ...item, type })))
       .filter(
         (item) =>

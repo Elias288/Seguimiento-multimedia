@@ -6,25 +6,26 @@ const MainContent = () => {
   const { filteredData: data } = useMediaFilterContext();
 
   if (!data) return;
+  const medias = data.media;
   return (
     <>
       <RenderMultimediaType
-        content={data.anime}
+        content={medias.anime}
         type={MultimediaTypes.ANIMES}
         title="Anime"
       />
       <RenderMultimediaType
-        content={data.serie}
+        content={medias.serie}
         type={MultimediaTypes.SERIES}
         title="Serie"
       />
       <RenderMultimediaType
-        content={data.manga}
+        content={medias.manga}
         type={MultimediaTypes.MAGAS}
         title="Manga"
       />
       <RenderMultimediaType
-        content={data.comic}
+        content={medias.comic}
         type={MultimediaTypes.COMICS}
         title="Comic"
       />

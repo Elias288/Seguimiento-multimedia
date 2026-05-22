@@ -1,26 +1,24 @@
 import {
   CABECERAS,
+  EMPTY_MULTIMEDIA,
   mapToCategoria,
-  MultimediaTypes,
   Status,
   type Multimedia,
   type MultimediaItem,
 } from "@/types/data.type";
 import Papa from "papaparse";
 
-export function readCSVData(data: string): Promise<Multimedia> {
+export function readCSVData(
+  data: string,
+  filename: string,
+): Promise<Multimedia> {
   return new Promise((resolve, reject) => {
     Papa.parse<string[]>(data, {
       header: false,
       skipEmptyLines: true,
       complete: ({ data: rows }) => {
-        const datos: Multimedia = {
-          [MultimediaTypes.ANIMES]: [],
-          [MultimediaTypes.COMICS]: [],
-          [MultimediaTypes.MAGAS]: [],
-          [MultimediaTypes.SERIES]: [],
-          [MultimediaTypes.SIN_CATEGORIZAR]: [],
-        };
+        const datos: Multimedia = EMPTY_MULTIMEDIA();
+        datos.fileName = filename;
 
         const parseNumber = (v: string) => {
           const n = Number(v);
@@ -82,7 +80,7 @@ export function readCSVData(data: string): Promise<Multimedia> {
             }
           });
 
-          datos[category].push(objeto);
+          datos.media[category].push(objeto);
         });
 
         resolve(datos);
