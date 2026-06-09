@@ -40,7 +40,7 @@ function normalizeAndEscapeCSV(value: string) {
   return str;
 }
 
-const defaultFileName = `data_${new Date().toISOString()}.csv`;
+const defaultFileName = `seguimientoMultimedia_v${__APP_VERSION__}_${new Date().toISOString()}.csv`;
 export function downloadCSV(csv: string, filename = defaultFileName) {
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
