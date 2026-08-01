@@ -9,7 +9,7 @@ type NumberInputProps = {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ) => void;
-  onFocus: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
 };
 export const NumberInput = ({
   title,
@@ -48,7 +48,7 @@ export const NumberInput = ({
   return (
     <label
       htmlFor={name}
-      className="grid grid-cols-[2rem_auto_2rem] h-min gap-0.5"
+      className="grid grid-cols-[2.5rem_auto_2.5rem] grid-rows-[auto_2.5rem] h-min gap-0.5"
     >
       <span className="col-span-full">{title}</span>
 

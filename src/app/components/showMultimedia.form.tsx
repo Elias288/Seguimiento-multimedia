@@ -15,6 +15,13 @@ import CustomInput from "./CustomInputProps";
 import { useInterfaceContext } from "@/context/interfaceContext";
 import { NumberInput } from "./NumberInput";
 
+const statusColor: Record<Status, string> = {
+  [Status.VIENDO]: "bg-viendo border-viendo",
+  [Status.DEJADO]: "bg-dejado border-dejado",
+  [Status.POR_VER]: "bg-porVer border-porVer",
+  [Status.VISTO]: "bg-visto border-visto",
+};
+
 interface Props {}
 const ShowMultimedia = ({}: Props) => {
   const { selectedMultimedia, selectMultimedia, toggleOpenUpdateMultimedia } =
@@ -36,11 +43,9 @@ const ShowMultimedia = ({}: Props) => {
   const [updated, setUpdated] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ) => {
+  const updateFormData = ({ name, value }: { name: string; value: any }) => {
     setUpdated(true);
-    const { name, value } = e.target;
+
     if (name === "image") {
       setFormData((prev) => ({
         ...prev,
@@ -86,157 +91,273 @@ const ShowMultimedia = ({}: Props) => {
 
   return (
     <div
-      className="fixed top-0 left-0 z-30 flex items-center justify-center w-full min-w-screenMinWidth h-full bg-transparentBackground"
+      className="fixed inset-0 z-30 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
       onClick={(e) => {
-        if (e.target === e.currentTarget) close();
+        if (e.target === e.currentTarget) handleClose();
       }}
     >
       <form
         onSubmit={handleSubmit}
-        className="bg-background1 border border-principal w-formW max-w-200 max-h-screen rounded-2xl p-4 grid grid-cols-[60%_1fr] grid-rows-[repeat(10_auto)] gap-y-2 gap-x-3 overflow-y-auto md:grid-cols-[300px_auto_auto] mlg:max-h-[90%] d:w-auto"
+        className="animate-in fade-in zoom-in-95 duration-200 bg-background1 border border-principal/30 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto p-6"
       >
-        <h2 className="text-2xl font-bold col-span-full">{formData.name}</h2>
+        {/* HEADER */}
+        <div className="mb-6">
+          <div>
+            <h2 className="text-3xl font-bold">{formData.name}</h2>
 
-        {/* Nombre alternativo */}
-        <label className="col-span-full row-start-2">
-          <CustomInput
-            title="Nombre alternativo"
-            type="text"
-            name="alternative_name"
-            value={formData.alternative_name}
-            onChange={handleInputChange}
-          />
-        </label>
+            <p className="text-sm text-gray-400">{formData.alternative_name}</p>
+          </div>
 
-        {/* Descripción */}
-        <label className="col-span-full row-start-3 md:col-start-2">
-          <CustomInput
-            title="Descripción"
-            type="textarea"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-          />
-        </label>
-
-        {/* URL Imagen */}
-        <label className="col-span-full row-start-4 md:col-start-2">
-          <CustomInput
-            title="Image"
-            type="url"
-            name="image"
-            value={formData.images?.image ?? ""}
-            onChange={handleInputChange}
-          />
-        </label>
-
-        {/* Imagen */}
-        <div className="col-start-1 row-span-4 w-full max-h-cardH overflow-hidden md:row-start-3 md:row-span-5 md:h-cardH">
-          {formData.images?.image && (
-            <img
-              src={formData.images?.image}
-              alt=""
-              className="w-full h-full aspect-3/4 object-contain"
-            />
+          {updated && (
+            <span className="text-yellow-400 font-medium flex-1 col-span-full">
+              ⚠ Cambios sin guardar
+            </span>
           )}
         </div>
 
-        {/* Capítulos */}
-        <NumberInput
-          title="Capítulos"
-          name="total_caps"
-          min={0}
-          value={formData.total_caps ?? 0}
-          onChange={handleInputChange}
-          onFocus={(e) => {
-            e.currentTarget.select();
-          }}
-        />
+        {/* CONTENIDO */}
+        <div className="grid md:grid-cols-[220px_1fr] gap-6">
+          {/* PORTADA */}
+          <div className="space-y-4">
+            <div className="aspect-3/4 overflow-hidden rounded-xl border border-gray-700">
+              {formData.images?.image ? (
+                <img
+                  src={formData.images.image}
+                  alt={formData.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-500">
+                  Sin imagen
+                </div>
+              )}
+            </div>
+          </div>
 
-        {/* Temporadas */}
-        <NumberInput
-          title="Temporadas"
-          name="total_seasons"
-          min={0}
-          value={formData.total_seasons ?? 1}
-          onChange={handleInputChange}
-          onFocus={(e) => {
-            e.currentTarget.select();
-          }}
-        />
+          {/* DATOS */}
+          <div className="space-y-4">
+            <CustomInput
+              title="Nombre alternativo"
+              type="text"
+              name="alternative_name"
+              value={formData.alternative_name}
+              onChange={(e) =>
+                updateFormData({
+                  name: "alternative_name",
+                  value: e.target.value,
+                })
+              }
+            />
 
-        {/* Temporada actual */}
-        <NumberInput
-          title="Temporada Actual"
-          name="actual_season"
-          max={formData.total_seasons}
-          min={0}
-          value={formData.actual_season ?? 0}
-          onChange={handleInputChange}
-          onFocus={(e) => {
-            e.currentTarget.select();
-          }}
-        />
+            <CustomInput
+              title="Descripción"
+              type="textarea"
+              name="description"
+              value={formData.description}
+              onChange={(e) =>
+                updateFormData({ name: "description", value: e.target.value })
+              }
+            />
 
-        {/* Capítulo actual */}
-        <NumberInput
-          title="Capítulo Actual"
-          name="actual_episode"
-          max={formData.total_caps ?? 0}
-          min={0}
-          value={Number(formData.actual_episode) ?? 0}
-          onChange={handleInputChange}
-          onFocus={(e) => e.currentTarget.select()}
-        />
+            <CustomInput
+              title="Imagen"
+              type="url"
+              name="image"
+              value={formData.images?.image ?? ""}
+              onChange={(e) =>
+                updateFormData({ name: "image", value: e.target.value })
+              }
+            />
+          </div>
 
-        {/* Estado */}
-        <label className="col-span-full md:col-start-2">
-          Estado
-          <select
-            name="status"
-            id="status"
-            value={formData.status}
-            onChange={handleInputChange}
-            className="block w-full text-gray-400 rounded-sm outline-gray-700 focus-visible:outline-0 bg-input p-2 cursor-pointer"
-          >
-            <option value={Status.POR_VER}>Por ver</option>
-            <option value={Status.VIENDO}>Viendo</option>
-            <option value={Status.VISTO}>Visto</option>
-            <option value={Status.DEJADO}>Dejado</option>
-          </select>
-        </label>
+          {/* Estado */}
+          <div className="flex flex-wrap gap-2 col-span-full">
+            {Object.values(Status).map((status) => (
+              <button
+                key={status}
+                type="button"
+                name="status"
+                value={status}
+                onClick={() =>
+                  updateFormData({ name: "status", value: status })
+                }
+                className={`px-4 py-2 cursor-pointer rounded-full border ${formData.status === status ? `text-white ${statusColor[status]}` : "border-gray-700"}`}
+              >
+                {status}
+              </button>
+            ))}
+          </div>
 
-        <div className="grid grid-cols-3 items-baseline border-t border-gray-700 pt-4 md:flex md:flex-row-reverse gap-2 col-span-full">
+          {/* ESTADÍSTICAS */}
+          <div className="grid gap-y-4 md:gap-x-16 md:gap-y-0 md:grid-cols-2 md:col-span-full">
+            {/* Capítulos */}
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span>Capítulos</span>
+
+                <span>
+                  {formData.actual_episode} / {formData.total_caps}
+                </span>
+              </div>
+
+              <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-principal"
+                  style={{
+                    width: `${
+                      formData.total_caps
+                        ? (Number(formData.actual_episode) /
+                            Number(formData.total_caps)) *
+                          100
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateFormData({
+                      name: "actual_episode",
+                      value: Math.max(0, Number(formData.actual_episode) - 1),
+                    })
+                  }
+                  className="cursor-pointer size-10 rounded-full bg-gray-700"
+                >
+                  -
+                </button>
+
+                <span className="text-xl font-bold">
+                  {formData.actual_episode}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateFormData({
+                      name: "actual_episode",
+                      value: Math.min(
+                        Number(formData.total_caps),
+                        Number(formData.actual_episode) + 1,
+                      ),
+                    })
+                  }
+                  className="cursor-pointer size-10 rounded-full bg-gray-700"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Temporadas */}
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span>Temporadas</span>
+
+                <span>
+                  {formData.actual_season} / {formData.total_seasons}
+                </span>
+              </div>
+
+              <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-principal"
+                  style={{
+                    width: `${
+                      formData.total_seasons
+                        ? (Number(formData.actual_season) /
+                            Number(formData.total_seasons)) *
+                          100
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateFormData({
+                      name: "actual_season",
+                      value: Math.max(0, Number(formData.actual_season) - 1),
+                    })
+                  }
+                  className="cursor-pointer size-10 rounded-full bg-gray-700"
+                >
+                  -
+                </button>
+
+                <span className="text-xl font-bold">
+                  {formData.actual_season}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateFormData({
+                      name: "actual_season",
+                      value: Math.min(
+                        Number(formData.total_seasons),
+                        Number(formData.actual_season) + 1,
+                      ),
+                    })
+                  }
+                  className="cursor-pointer size-10 rounded-full bg-gray-700"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <NumberInput
+              title="Total capítulos"
+              name="total_caps"
+              min={0}
+              value={formData.total_caps ?? 0}
+              onChange={(e) =>
+                updateFormData({ name: "total_caps", value: e.target.value })
+              }
+            />
+
+            <NumberInput
+              title="Total temporadas"
+              name="total_seasons"
+              min={0}
+              value={formData.total_seasons ?? 0}
+              onChange={(e) =>
+                updateFormData({ name: "total_seasons", value: e.target.value })
+              }
+            />
+          </div>
+        </div>
+
+        {/* FOOTER */}
+        <div className="flex justify-end gap-2 mt-8 border-t border-gray-700 pt-4">
           <button
-            type="submit"
-            className="px-4 py-2 cursor-pointer bg-principal text-white rounded hover:opacity-70"
-          >
-            Actualizar
-          </button>
-          <button
-            onClick={() => handleDelete()}
             type="button"
-            className="col-start-2 row-start-1 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded hover:opacity-70"
+            onClick={handleClose}
+            className="cursor-pointer flex-1 md:flex-none px-4 py-2 bg-gray-700 rounded"
+          >
+            Cerrar
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="cursor-pointer flex-1 md:flex-none px-4 py-2 bg-red-700 rounded"
           >
             Eliminar
           </button>
 
           <button
-            type="reset"
-            className="col-start-1 row-start-1 px-4 py-2 cursor-pointer bg-red-900 text-white rounded hover:opacity-70 relative"
-            onClick={handleClose}
+            type="submit"
+            className="cursor-pointer flex-1 md:flex-none px-4 py-2 bg-principal rounded"
           >
-            Cerrar
-            {updated && (
-              <span className="text-sm bg-red-900 size-4 rounded-[50%] flex justify-center items-center absolute -top-1.5 right-0 border">
-                !
-              </span>
-            )}
+            Guardar
           </button>
-
-          <span className="flex-1 text-gray-600 col-span-full">
-            {new Date(formData.timestamp).toLocaleString()}
-          </span>
         </div>
       </form>
     </div>
