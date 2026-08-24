@@ -7,8 +7,14 @@ interface Props {
   content: MultimediaItem[];
   title: string;
   type: MultimediaTypes;
+  toggleShow?: boolean;
 }
-export const RenderMultimediaType = ({ content, title, type }: Props) => {
+export const RenderMultimediaType = ({
+  content,
+  title,
+  type,
+  toggleShow = true,
+}: Props) => {
   const { selectMultimedia, toggleOpenUpdateMultimedia } =
     useInterfaceContext();
   const [showType, setShowType] = useState<boolean>(true);
@@ -27,12 +33,14 @@ export const RenderMultimediaType = ({ content, title, type }: Props) => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">{title}</h2>
 
-        <button
-          onClick={toggleShowType}
-          className="cursor-pointer text-2xl hover:opacity-70"
-        >
-          {showType ? "▼" : "▲"}
-        </button>
+        {toggleShow && (
+          <button
+            onClick={toggleShowType}
+            className="cursor-pointer text-2xl hover:opacity-70"
+          >
+            {showType ? "▼" : "▲"}
+          </button>
+        )}
       </div>
 
       <div

@@ -233,13 +233,10 @@ export const useMediaReducer = (): MediaContextType => {
     if (stored) {
       try {
         const decompressed = decompressMultimedia(stored);
-
         dispatch({ type: "LOAD_FROM_STORAGE", payload: decompressed });
       } catch {
         dispatch({ type: "CLEAR_DATA" });
       }
-    } else {
-      dispatch({ type: "CLEAR_DATA" });
     }
 
     dispatch({ type: "SET_DIFFERENT", payload: updatedFlag === "true" });

@@ -3,6 +3,7 @@ import { NavBar } from "@/layout/Header";
 import Filtros from "./Filtros";
 import ApiList from "./ApiList";
 import { useMediaContext } from "@/context/mediaContext";
+import { CategoriesNav } from "./CategoriesNav";
 
 type Props = {
   isOpen: boolean;
@@ -26,6 +27,8 @@ const SideBar = ({ isOpen, toggleSideBar }: Props) => {
         </div>
 
         <BuscadorMultimedia toggleSidebar={toggleSideBar} />
+
+        <CategoriesNav toggleSidebar={toggleSideBar} />
 
         <Filtros toggleSidebar={toggleSideBar} />
 
