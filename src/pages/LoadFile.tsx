@@ -1,7 +1,7 @@
 import { useMediaContext } from "@/context/mediaContext";
 import { useEffect, useState } from "react";
 import { readCSVData } from "@/bin/readCSVData";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { EMPTY_MULTIMEDIA } from "@/types/data.type";
 import Spinner from "@/icons/spinner";
 import IconNew from "@/icons/iconNew";
@@ -65,6 +65,8 @@ const LoadFile = () => {
         <Spinner size={100} />
       </Main>
     );
+
+  if (localLoaded && data) return <Navigate to="/home" />;
 
   return (
     <Main>
